@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>지도 테스트</title>
+</head>
+<body>
+
+<input type="file" id="fileInput" accept=".xlsx">
+<button onclick="readExcelAndDisplay()">Read Excel and Display</button>
+
+<div id="map" style="width:70%;height:350px;"></div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=65ebde6ef56b62ee5550e04abf379f36&libraries=services"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+function readExcelAndDisplay() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+
+            const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            // Assuming 'Address' is the column where addresses are stored
+            const addresses = excelData.map(row => row[5]); // Change index as per your Excel structure
+
+            displayAddressesOnMap(addresses);
+        };
+
+        reader.readAsArrayBuffer(file);
+    } else {
+        console.error('No file selected.');
+    }
+}
+
+function displayAddressesOnMap(addresses) {
+    var mapContainer = document.getElementById('map');
+    var mapOption = {
+        center: new kakao.maps.LatLng(36.62079683, 127.2889181), // Default center
+        level: 3
+    };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    addresses.forEach(address => {
+        geocoder.addressSearch(address, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+                map.setCenter(coords);
+            } else {
+                console.error('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    });
+}
+</script>
+</body>
+</html>
