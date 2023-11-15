@@ -1,0 +1,45 @@
+        .sejonginfo_title {position:relative;}
+        .title_name {font-size:18px; color:#555;  font-weight: bold; margin-bottom: 18px;}
+        .title_date {position:absolute; right:10px; bottom:0; font-size:15px; font-weight: bold; color:#0d62ce;}
+
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .chart-box {
+            flex-basis: 50%;
+            max-width: 50%;
+            box-sizing: border-box;
+        }
+        canvas {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+         .status-board {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .status-item {
+            text-align: center;
+            flex-grow: 1;
+        }
+        .status-item:not(:last-child) {
+            border-right: 1px solid #dee2e6;
+        }
+        .status-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        .status-value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }

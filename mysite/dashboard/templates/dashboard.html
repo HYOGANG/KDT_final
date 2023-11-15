@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>대시보드</title>
+    <link rel="stylesheet" href="\static\styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sejonginfo_title">
+            <div class="title_name">세종특별자치시 지역정보</div>
+            <div class="title_date">
+                <script type="text/javascript">
+                    var today = new Date();
+
+                    var year = today.getFullYear();
+                    var month = ('0' + (today.getMonth()+1)).slice(-2);
+                    var day = ('0' + today.getDate()).slice(-2);
+
+                    var dateString = year + '.' + month + '.' + day;
+                    document.write("일자 : " + dateString);
+                </script>
+            </div>
+    </div>
+
+    <div class="status-board">
+        <div class="status-item">
+            <div class="status-label">총인구수</div>
+            <div class="status-value">
+                    {% load humanize %}
+                    {{ total_pop.total__sum | intcomma }}
+            </div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">의사수</div>
+            <div class="status-value">
+                {% load humanize %}
+                    {{ doc_pop.doctor__sum | intcomma }}
+            </div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">간호사수</div>
+            <div class="status-value">
+                {% load humanize %}
+                    {{ nur_pop.nurse__sum | intcomma }}
+            </div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">병상수</div>
+            <div class="status-value">
+                 {% load humanize %}
+                    {{ pat_pop.patient__sum | intcomma }}
+            </div>
+        </div>
+    </div>
+    <div class="chart-container">
+
+        <div class="chart-box">
+            <canvas id="popChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="hospitalChart"></canvas>
+        </div>
+         <div class="chart-box">
+            <canvas id="medicineChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="countsChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const ctxPop = document.getElementById('popChart').getContext('2d');
+          const popChart = new Chart(ctxPop, {
+            type: 'bar',
+            data: {
+                labels: {{ pop_types|safe }},
+                datasets: [
+                    {
+                        label: 'Male Population',
+                        data: {{ pop_ms|safe }},
+                        backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Female Population',
+                        data: {{ pop_fs|safe }},
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    },
+                },plugins: {
+            title: {
+                display: true,
+                text: '인구통계',
+                padding: {
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
+            }
+        });
+        // Hospital Chart
+            const ctxHospital = document.getElementById('hospitalChart').getContext('2d');
+            const hospitalChart = new Chart(ctxHospital, {
+                type: 'line',
+                data: {
+                    labels: {{ hospital_types|safe }},
+                    datasets: [
+                        {
+                            label: 'Hospitals',
+                            data: {{ hospital_hospitals|safe }},
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            fill: true,
+                            borderWidth: 2,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Doctors',
+                            data: {{ hospital_doctors|safe }},
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            fill: true,
+                            borderWidth: 2,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+
+                            },
+                            beginAtZero: true
+                        }
+                    },plugins: {
+            title: {
+                display: true,
+                text: '진료과목별 의료기관과 전문의수 비교현황',
+                padding: {
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
+                }
+            });
+        // Medicine Chart
+            const ctxMedicine = document.getElementById('medicineChart').getContext('2d');
+            const medicineChart = new Chart(ctxMedicine, {
+                type: 'line',
+                data: {
+                    labels: {{ medicine_ages|safe }},
+                    datasets: [
+                        {
+                            label: 'January',
+                            data: {{ medicine_m1s|safe }},
+                            borderColor: 'rgba(255, 051, 051, 1)',
+                            fill: true,
+                            borderWidth: 2,
+
+                        },
+                        {
+                            label: 'February',
+                            data: {{ medicine_m2s|safe }},
+                            borderColor: 'rgba(255, 153, 000, 1)',
+                            fill: true,
+                            borderWidth: 2,
+
+                        },
+                        {
+
+                            label: 'March',
+                            data: {{ medicine_m3s|safe }},
+                            borderColor: 'rgba(255, 255, 000, 1)',
+                            fill: true,
+                            borderWidth: 2,
+
+                        },
+                       {
+                            label: 'April',
+                            data: {{ medicine_m4s|safe }},
+                            borderColor: 'rgba(000, 255, 000, 1)',
+                            fill: true,
+                            borderWidth: 2
+
+                        },
+                        {
+                            label: 'May',
+                            data: {{ medicine_m5s|safe }},
+                            borderColor: 'rgba(000, 051, 255, 1)',
+                            fill: true,
+                            borderWidth: 2,
+
+                        },
+                        {
+                            label: 'June',
+                            data: {{ medicine_m6s|safe }},
+                            borderColor: 'rgba(153, 051, 225, 1)',
+                            fill: true,
+                            borderWidth: 2,
+
+                        },
+                        {
+                            label: 'July',
+                            data: {{ medicine_m7s|safe }},
+                            borderColor: 'rgba(102, 255, 204, 1)',
+                            fill: true,
+                            borderWidth: 2,
+
+                        },
+                        {
+                            label: 'August',
+                            data: {{ medicine_m8s|safe }},
+                            borderColor: 'rgba(204, 051, 102, 1)',
+                            fill: true,
+                            borderWidth: 2,
+
+                        },
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Age Group'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Usage'
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '연령대별 월별 의약품 사용현황',
+                            padding: {
+                                top: 10,
+                                bottom: 10
+                            }
+                        }
+                    }
+                }
+            });
+
+        const ctxCounts = document.getElementById('countsChart').getContext('2d');
+            const countsChart = new Chart(ctxCounts, {
+                type: 'bar',
+                data: {
+                    labels: {{counts_regions|safe}},
+                    datasets: [
+                        {
+                            label: '병의원',
+                            data: {{counts_clinics|safe}},
+                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                            borderColor: 'rgba(0, 123, 255, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '보건소',
+                            data: {{counts_healthcenters|safe}},
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '약국',
+                            data: {{ counts_pharmacys|safe }},
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '치과',
+                            data: {{ counts_dentists|safe }},
+                            backgroundColor: 'rgba(255, 206, 86, 0.5)',
+                            borderColor: 'rgba(255, 206, 86, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: '한의원',
+                            data:{{ counts_orientals|safe }},
+                            backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                            borderColor: 'rgba(153, 102, 255, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '읍면동별 의료기관 현황',
+                            padding: {
+                                top: 10,
+                                bottom: 10
+                            }
+                        }
+                    }
+                }
+            });
+</script>
+</body>
+</html>
+
+
