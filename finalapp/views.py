@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Hospital, Medicine, Population, Medicalinfo, Counts
+from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong
 from django.db.models import Sum
 
 def dashboard_view(request):
@@ -66,3 +66,7 @@ def dashboard_view(request):
     }
 
     return render(request, 'finalapp/dashboard.html', context)
+
+def map(request):
+    sejong = Sejong.objects.all()
+    return render(request, 'finalapp/map.html', {'sejong' : sejong})
