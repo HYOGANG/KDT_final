@@ -1,0 +1,169 @@
+<!-- https://blogpack.tistory.com/1018 -->
+<!-- https://me-in-journey.com/entry/HTMLCSS-%EC%82%AC%EC%9D%B4%EB%93%9C%EB%B0%94-%EB%A9%94%EB%89%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-%EB%8A%98%EC%96%B4%EB%82%98%EB%8A%94-2%EC%B0%A8-%EB%A9%94%EB%89%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0-feat-overflow-hidden -->
+{% extends 'base.html' %}
+{% block content %}
+
+ <div id="name" style="display: none">
+        {% for i in sejong %}
+                {{ i.name }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div id="address" style="display: none">
+        {% for i in sejong %}
+                {{ i.address1 }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div id="type" style="display: none">
+        {% for i in sejong %}
+                {{ i.type }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div id="department" style="display: none">
+        {% for i in sejong %}
+                {{ i.department }}{% if not forloop.last %}|{% endif %}
+        {% endfor %}
+    </div>
+
+ <div id="sidebar">
+     <ul>
+         <li>
+                <div>
+                    <div><a href="/board"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/board">main</a></div>
+                </div>
+         </li>
+     <li>
+    <div>
+        <div><i class="fa-regular fa-map"></i></div>
+        <div>진료과목별 의료기관</div>
+    </div>
+
+    <ul id="category">
+        <li id="외과" data-order="0">
+            <span class="category_bg pharmacy"></span>
+            외과
+        </li>
+        <li id="내과" data-order="1">
+            <span class="category_bg pharmacy"></span>
+            내과
+        </li>
+        <li id="산부인과" data-order="2">
+            <span class="category_bg pharmacy"></span>
+            산부인과
+        </li>
+        <li id="신경과" data-order="3">
+            <span class="category_bg pharmacy"></span>
+            신경과
+        </li>
+        <li id="안과" data-order="4">
+            <span class="category_bg pharmacy"></span>
+            안과
+        </li>
+        <li id="이비인후과" data-order="5">
+            <span class="category_bg pharmacy"></span>
+            이비인후과
+        </li>
+        <li id="치과" data-order="6">
+            <span class="category_bg pharmacy"></span>
+            치과
+        </li>
+        <li id="피부과" data-order="7">
+            <span class="category_bg pharmacy"></span>
+            피부과
+        </li>
+        <li id="정신건강의학과" data-order="8">
+            <span class="category_bg pharmacy"></span>
+            정신건강의학과
+        </li>
+        <li id="가정의학과" data-order="9">
+            <span class="category_bg pharmacy"></span>
+            가정의학과
+        </li>
+        <li id="결핵과" data-order="10">
+            <span class="category_bg pharmacy"></span>
+            결핵과
+        </li>
+        <li id="비뇨기과" data-order="11">
+            <span class="category_bg pharmacy"></span>
+            비뇨기과
+        </li>
+        <li id="소아청소년과" data-order="12">
+            <span class="category_bg pharmacy"></span>
+            소아청소년과
+        </li>
+        <li id="재활의학과" data-order="13">
+            <span class="category_bg pharmacy"></span>
+            재활의학과
+        </li>
+        <li id="한방" data-order="14">
+            <span class="category_bg pharmacy"></span>
+            한방
+        </li>
+    </ul>
+     </li>
+
+
+     <li>
+    <div>
+        <div><i class="fa-regular fa-map"></i></div>
+        <div>종별 의료기관</div>
+    </div>
+    <ul id="category2">
+        <li id="종합병원" data-order="15">
+            <span class="category_bg pharmacy"></span>
+            종합병원
+        </li>
+        <li id="병원" data-order="16">
+            <span class="category_bg pharmacy"></span>
+            병원
+        </li>
+        <li id="의원" data-order="17">
+            <span class="category_bg pharmacy"></span>
+            의원
+        </li>
+        <li id="치과병원" data-order="18">
+            <span class="category_bg pharmacy"></span>
+            치과병원
+        </li>
+        <li id="치과의원" data-order="19">
+            <span class="category_bg pharmacy"></span>
+            치과의원
+        </li>
+        <li id="한방병원" data-order="20">
+            <span class="category_bg pharmacy"></span>
+            한방병원
+        </li>
+        <li id="한의원" data-order="21">
+            <span class="category_bg pharmacy"></span>
+            한의원
+        </li>
+        <li id="요양병원" data-order="22">
+            <span class="category_bg pharmacy"></span>
+            요양병원
+        </li>
+        <li id="정신병원" data-order="23">
+            <span class="category_bg pharmacy"></span>
+            정신병원
+        </li>
+        <li id="보건진료소" data-order="24">
+            <span class="category_bg pharmacy"></span>
+            보건진료소
+        </li>
+        <li id="보건지소" data-order="25">
+            <span class="category_bg pharmacy"></span>
+            보건지소
+        </li>
+        <li id="약국" data-order="26">
+            <span class="category_bg pharmacy"></span>
+            약국
+        </li>
+    </ul>
+     </li>
+     </ul>
+</div>
+
+ <div class="map_wrap">
+    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+</div>
+<script type="text/javascript" src="/static/js/map.js"></script>
+{% endblock %}
