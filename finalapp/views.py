@@ -65,8 +65,8 @@ def dashboard_view(request):
         'counts_orientals': counts_orientals,
     }
 
-    return render(request, 'finalapp/dashboard.html', context)
+    return render(request, 'dashboard.html', context)
 
 def map(request):
     sejong = Sejong.objects.all()
-    return render(request, 'finalapp/map.html', {'sejong' : sejong})
+    return render(request, 'map.html', {'sejong' : sejong})
