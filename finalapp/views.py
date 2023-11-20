@@ -70,3 +70,22 @@ def dashboard_view(request):
 def map(request):
     sejong = Sejong.objects.all()
     return render(request, 'map.html', {'sejong' : sejong})
+
+def test(request):
+    counts = Counts.objects.all().order_by('region')
+    cln = counts.aggregate(Sum('clinic'))
+    h_c = counts.aggregate(Sum('healthcenter'))
+    pha = counts.aggregate(Sum('pharmacy'))
+    den = counts.aggregate(Sum('dentist'))
+    ori = counts.aggregate(Sum('oriental'))
+
+    result = {
+        'counts' : counts,
+        'cln' : cln,
+        'h_c' : h_c,
+        'pha' : pha,
+        'den' :den,
+        'ori' : ori
+    }
+
+    return render(request, 'test.html', result)
