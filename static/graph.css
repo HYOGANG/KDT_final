@@ -38,6 +38,17 @@
             font-weight: bold;
         }
 
+        .tables-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+
+        .chart_container {
+            width: 25%;  /* Adjust this value as needed */
+            max-width: 25%;  /* This ensures that the container does not grow beyond 25% width */
+            min-width: 200px;  /* Optional, for responsiveness */
+        }
 
 
         @media (max-width: 768px) {
@@ -45,3 +56,5 @@
                 flex-basis: 100%;
             }
         }
+
+
