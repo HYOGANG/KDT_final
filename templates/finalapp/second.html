@@ -149,12 +149,13 @@
         {% if d %}
         <div class="chart_container">
             <h4 class="text-center"><u>다빈도상병(외래)</u></h4><br>
-            <table class="table table-dark table-striped">
+            <table class="table table-sm table-dark">
                 <thead>
                     <tr>
                         <th>rank</th>
                         <th>disease</th>
                         <th>count</th>
+                        <th>percent</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -163,6 +164,7 @@
                         <td>{{ i.rank }}</td>
                         <td>{{ i.disease }}</td>
                         <td>{{ i.count }}</td>
+                        <td>{{ i.percent }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -173,12 +175,13 @@
         {% if c %}
         <div class="chart_container">
             <h4 class="text-center"><u>다빈도상병(입원)</u></h4><br>
-            <table class="table table-dark table-striped">
+            <table class="table table-sm table-dark">
                 <thead>
                     <tr>
                         <th>rank</th>
                         <th>disease</th>
                         <th>count</th>
+                        <th>percent</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -187,6 +190,7 @@
                         <td>{{ i.rank }}</td>
                         <td>{{ i.disease }}</td>
                         <td>{{ i.count }}</td>
+                        <td>{{ i.percent }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
