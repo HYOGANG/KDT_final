@@ -6,4 +6,5 @@ urlpatterns = [
     path('board', views.dashboard_view, name='dashboard'),
     path('map', views.map),
     path('test', views.test),
+    path('t', views.bubble),
 ]

@@ -1,6 +1,14 @@
 from django.shortcuts import render
 from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong
-from django.db.models import Sum
+from django.db.models import F,Sum
+
+
+
+def bubble(request):
+    cn = Counts.objects.all()
+    pf = [cnt.to_hp/cnt.to_people for cnt in cn]
+    return render(request, 'finalapp/bubble.html', {'cn': cn,'pf':pf})
+
 
 def test(request):
     counts = Counts.objects.all().order_by('region')

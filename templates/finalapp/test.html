@@ -5,52 +5,13 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
     <title>TEST</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-      }
-      .chartMenu {
-        width: 100vw;
-        height: 40px;
-        background: #1A1A1A;
-        color: rgba(255, 26, 104, 1);
-      }
-      .chartMenu p {
-        padding: 10px;
-        font-size: 20px;
-      }
-      .chartCard {
-        width: 100vw;
-        height: calc(100vh - 40px);
-        background: rgba(54, 162, 235, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .chartBox {
-        width: 700px;
-        padding: 20px;
-        border-radius: 20px;
-        border: solid 3px rgba(54, 162, 235, 1);
-        background: white;
-      }
-    </style>
+
 </head>
 <body>
-
-<div class="chartMenu"></div>
-    <div class="chartCard">
-      <div class="chartBox">
-        <canvas id="myChart"></canvas>
-      </div>
-    </div>
+    <canvas id="hpChart"></canvas>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
-
-
     <script>
-        const coordinates = {
+          const coordinates = {
           top: 0,
           bottom : 0,
           left : 0,
@@ -123,12 +84,16 @@
         backgroundColor: [
           browserData[0].color,
           browserData[1].color,
-          browserData[2].color
+          browserData[2].color,
+          browserData[3].color,
+          browserData[4].color
         ],
         borderColor: [
           browserData[0].color,
           browserData[1].color,
-          browserData[2].color
+          browserData[2].color,
+          browserData[3].color,
+          browserData[4].color
         ],
         borderWidth: 2
       }]
@@ -138,7 +103,7 @@
     const resetButton = {
       id : 'resetButton',
       beforeDraw(chart, args, options){
-        if(myChart.config.data.datasets[0].label !== '동별 의료기관 현황'){
+        if(hpChart.config.data.datasets[0].label !== '동별 의료기관 현황'){
 
             const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
             ctx.save();
@@ -186,7 +151,7 @@
           }
         },
         onHover: (event, chartElement) => {
-            if(myChart.config.data.datasets[0].label === '동별 의료기관 현황')
+            if(hpChart.config.data.datasets[0].label === '동별 의료기관 현황')
             {
             event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
         } else {
@@ -207,16 +172,16 @@
     };
 
     // render init block
-    const ctx = document.getElementById('myChart');
-    const myChart = new Chart(
+    const ctx = document.getElementById('hpChart');
+    const hpChart = new Chart(
       ctx,
       config
     );
 
     function changeChart(browser){
 
-        myChart.config.options.parsing.xAxisKey = 'versionData.version';
-        myChart.config.options.parsing.yAxisKey = 'versionData.users';
+        hpChart.config.options.parsing.xAxisKey = 'versionData.version';
+        hpChart.config.options.parsing.yAxisKey = 'versionData.users';
 
         const vColor = [];
         const vUsers = [];
@@ -226,18 +191,18 @@
             return labels.version;
         })
         console.log(vLabels)
-        myChart.config.data.datasets[0].data = vUsers;
-        myChart.config.data.labels = vLabels;
-        myChart.config.data.datasets[0].backgroundColor = vColor;
-        myChart.config.data.datasets[0].borderColor = vColor;
-        myChart.config.data.datasets[0].label = browserData[browser].browser;
-        myChart.update();
+        hpChart.config.data.datasets[0].data = vUsers;
+        hpChart.config.data.labels = vLabels;
+        hpChart.config.data.datasets[0].backgroundColor = vColor;
+        hpChart.config.data.datasets[0].borderColor = vColor;
+        hpChart.config.data.datasets[0].label = browserData[browser].browser;
+        hpChart.update();
     }
 
     function clickHandler(click){
-        if (myChart.config.data.datasets[0].label === '동별 의료기관 현황'){
+        if (hpChart.config.data.datasets[0].label === '동별 의료기관 현황'){
 
-        const bar = myChart.getElementsAtEventForMode(click, 'nearest',
+        const bar = hpChart.getElementsAtEventForMode(click, 'nearest',
             {intersect: true}, true);
         console.log(bar);
         if(bar.length){
@@ -249,8 +214,8 @@
 
     function resetChart(){
       console.log('clicked reset button!');
-      myChart.config.options.parsing.xAxisKey = 'browser';
-      myChart.config.options.parsing.yAxisKey = 'marketshare';
+      hpChart.config.options.parsing.xAxisKey = 'browser';
+      hpChart.config.options.parsing.yAxisKey = 'marketshare';
 
       const bColor = [];
       const bMarketshare = [];
@@ -260,13 +225,13 @@
         return browser.browser;
       });
 
-      myChart.config.data.datasets[0].backgroundColor = bColor;
-      myChart.config.data.datasets[0].borderColor = bColor;
-      myChart.config.data.labels = bLabels;
-      myChart.config.data.datasets[0].label = '동별 의료기관 현황';
-      myChart.config.data.datasets[0].data = bMarketshare;
+      hpChart.config.data.datasets[0].backgroundColor = bColor;
+      hpChart.config.data.datasets[0].borderColor = bColor;
+      hpChart.config.data.labels = bLabels;
+      hpChart.config.data.datasets[0].label = '동별 의료기관 현황';
+      hpChart.config.data.datasets[0].data = bMarketshare;
 
-      myChart.update();
+      hpChart.update();
     };
 
 
@@ -274,7 +239,7 @@
       const x = mousemove.offsetX;
       const y = mousemove.offsetY;
 
-      if(myChart.config.data.datasets[0].label !== '동별 의료기관 현황'){
+      if(hpChart.config.data.datasets[0].label !== '동별 의료기관 현황'){
           if ( x > coordinates.left && x < coordinates.right && y > coordinates.top && y
                < coordinates.bottom){
                 canvas.style.cursor = 'pointer';
@@ -298,12 +263,12 @@
     ctx.onclick = clickHandler;
 
     ctx.addEventListener('mousemove', (e) => {
-      myChart.resize();
+      hpChart.resize();
       mousemoveHandler(ctx, e);
     });
 
     ctx.addEventListener('click', (e) => {
-      myChart.resize();
+      hpChart.resize();
       clickButtonHandler(ctx,e);
     })
     </script>

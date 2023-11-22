@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Hospital(models.Model):
     type=models.TextField(max_length=255)
     hospital=models.IntegerField()
@@ -36,6 +37,8 @@ class Counts(models.Model):
     pharmacy = models.IntegerField()
     dentist = models.IntegerField()
     oriental = models.IntegerField()
+    to_hp = models.IntegerField(default=0)
+    to_people = models.IntegerField(default=0)
 
 
 class Sejong(models.Model):
