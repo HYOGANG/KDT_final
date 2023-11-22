@@ -1,0 +1,33 @@
+ yAxes : [{
+           id: 'left-y-axis',
+           type: 'bar',
+           position: 'left',
+           display: true,
+           title: {
+                   display: true,
+                   text: '진료수(건)'
+                   }
+           }, 
+           {
+            id: 'right-y-axis',
+            type: 'linear',
+            position: 'right',
+            display: true,
+            title: {
+                    display: true,
+                    text: '진료비(천원)'
+                   }
+            }]
+
+
+
+
+yAxes: [{
+                id: 'left-y-axis',
+                type: 'linear',
+                position: 'left'
+            }, {
+                id: 'right-y-axis',
+                type: 'linear',
+                position: 'right'
+            }]

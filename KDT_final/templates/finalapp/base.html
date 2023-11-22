@@ -1,0 +1,160 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css?after">
+    <link rel="stylesheet" type="text/css" href="/static/graph.css?after">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+         #sidebar {
+                    list-style: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 50px;
+                    height: 200px;
+                    border-radius: 5px;
+                    border: 1px solid #909090;
+                    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+                    background: #fff;
+                    overflow: hidden;
+                    z-index: 2;
+                    /*transition: width 0.3s ease;*/
+                    transition: .5s;
+        }
+        a {
+          color: inherit;
+          text-decoration: none;
+            }
+        ul {list-style: none;
+            padding-inline-start: 0px;
+            }
+        #sidebar:hover {
+            width: 250px;
+            overflow: visible;
+        }
+
+        #sidebar ul > li:hover > div {
+            background-color: #ccc
+            }
+
+        #sidebar ul > li:hover > ul {
+            display: block;
+            }
+
+
+        #sidebar ul > li > div {
+            padding: 10px;
+            cursor: pointer;
+              color: black;
+              white-space: nowrap;
+        }
+        #sidebar ul > li > div > div:last-child {
+                opacity: 0;
+                transition: .5s .1s;
+            }
+
+        #sidebar:hover > ul > li > div > div:last-child {
+        opacity: 1;
+        }
+
+        #sidebar ul > li > ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #sidebar ul > li > ul > li {
+            border-bottom: 1px solid #acacac;
+            padding: 13.3px 1px;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            position: relative;
+        }
+
+        ul ul {
+                  display: none;
+                  position: absolute;
+                  top: 0;
+                  left: 100%;
+                  width: 100%;
+                  background-color: #fff;
+        }
+
+        #sidebar ul > li > ul > li.on {
+            background: #eee;
+        }
+
+        #sidebar ul > li > ul > li:hover {
+            background: #ccc;
+            border-left: 1px solid #acacac;
+            margin-left: 0;
+        }
+
+        #sidebar ul > li > ul > li:last-child {
+            margin-right: 0;
+            border-right: 0;
+            border-bottom: 0;
+        }
+
+        /*아이콘 넣어보기...!!!!!!!!!!*/
+        #sidebar ul > li > div {
+            color : inherit;
+            text-decoration: none;
+        }
+
+        .map_wrap, .map_wrap * {margin:0; padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+        .map_wrap {position:relative;width:100%;height:700px;}
+
+        #sidebar ul > li > ul > li span {
+          display: block;
+          margin: 0 auto 3px;
+          width: 27px;
+          height: 28px;
+          margin-right: 8px;
+          margin-left: 30px;
+        }
+
+        #sidebar ul > li > ul > li .category_bg {
+          background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png) no-repeat;
+        }
+
+        #sidebar ul > li > ul > li .pharmacy {
+          background-position: -10px -72px;
+        }
+
+        #sidebar ul > li > ul > li.on .category_bg {
+          background-position-x: -46px;
+        }
+        /*
+        .placeinfo_wrap {position:absolute;bottom:28px;left:-150px;width:300px;}
+        .placeinfo {position:relative;width:100%;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;padding-bottom: 10px;background: #fff;}
+        .placeinfo:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+        .placeinfo_wrap .after {content:'';position:relative;margin-left:-12px;left:50%;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+        .placeinfo a, .placeinfo a:hover, .placeinfo a:active{color:#fff;text-decoration: none;}
+        .placeinfo a, .placeinfo span {display: block;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+        .placeinfo span {margin:5px 5px 0 5px;cursor: default;font-size:13px;}
+        .placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+        .placeinfo .tel {color:#0f7833;}
+        .placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
+        */
+    </style>
+</head>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+<body>
+{% block content %}
+{% endblock %}
+</body>
+</html>
