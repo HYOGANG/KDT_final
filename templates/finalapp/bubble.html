@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>test1</title>
+
+  </head>
+<body>
+<canvas id="bubbleChart" width="700" height="500"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script>
+
+ const backgroundcolor = [];
+ const bordercolor = [];
+
+let r, g, b;
+ {% for count in cn %}
+    r= Math.floor(Math.random() * 250);
+    g= Math.floor(Math.random() * 250);
+    b= Math.floor(Math.random() * 250);
+    backgroundcolor.push('rgba('+r+', '+g+', '+b+', 0.3)');
+    bordercolor.push('rgba('+r+', '+g+', '+b+', 1)');
+ {% endfor %}
+
+<!--{% load mathfilters %}-->
+ const data = {
+      datasets: [{
+        label: '인구 수와 병원 수 간의 상관 관계',
+        data: [
+            {% for a in cn%}
+                { x : {{a.to_people}},
+                  y : {{a.to_hp}},
+                  r : 12,
+                  dong: '{{a.region}}' }
+                {% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        backgroundColor: backgroundcolor,
+        borderColor: bordercolor,
+        borderWidth: 1
+      }]
+    };
+
+    // config
+    const config = {
+      type: 'bubble',
+      data,
+      options: {
+        responsive : false,
+        plugins : {
+            tooltip:{
+                callbacks : {
+                    label: (context) => {
+                        console.log(context);
+                        return `${context.raw.dong}` ;
+                    },
+                    afterLabel : (context) => {
+                        return ` 인구수 : ${context.raw.x}, 병원수: ${context.raw.y}`
+                    },
+                }
+            }
+        },
+
+        layout : {
+            padding: {
+                right:10,
+                top:5,
+            }
+        },
+        scales: {
+            x: {
+                title : {
+                    display: true,
+                    text : '동별 인구 수'
+                }
+<!--            type : 'time',-->
+<!--            time : {-->
+<!--                unit : 'month'-->
+<!--            }-->
+             },
+          y: {
+            beginAtZero: true,
+            title : {
+                display : true,
+                text : '동별 병원 수'
+            }
+          }
+        }
+      }
+    };
+
+    // render init block
+    const myChart = new Chart(
+      document.getElementById('bubbleChart'),
+      config
+    );
+
+
+
+    </script>
+  </body>
+</html>
