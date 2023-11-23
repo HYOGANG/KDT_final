@@ -74,12 +74,12 @@
             marketshare: {{ mage10s }}+{{ fage10s }},
             versionData: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.mage10s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             versionData1: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.fage10s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ]},
             {
@@ -88,82 +88,82 @@
             marketshare: {{ mage20s }}+{{ fage20s }},
             versionData: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.mage20s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             versionData1: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.fage20s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ]},
             {
             browser: '30-39세',
             color: 'rgba(222, 222, 239, 1)',
-            marketshare: {{ mage0s }}+{{ fage0s }},
+            marketshare: {{ mage30s }}+{{ fage30s }},
             versionData: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.mage30s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             versionData1: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.fage30s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ]},
             {
             browser: '40-49세',
             color: 'rgba(222, 239, 255, 1)',
-            marketshare: {{ mage0s }}+{{ fage0s }},
+            marketshare: {{ mage40s }}+{{ fage40s }},
             versionData: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.mage40s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             versionData1: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.fage40s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ]},
             {
             browser: '50-59세',
             color: 'rgba(222, 255, 255, 1)',
-            marketshare: {{ mage0s }}+{{ fage0s }},
+            marketshare: {{ mage50s }}+{{ fage50s }},
             versionData: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.mage50s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             versionData1: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.fage50s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ]},
             {
             browser: '60-69세',
             color: 'rgba(239, 222, 239, 1)',
-            marketshare: {{ mage0s }}+{{ fage0s }},
+            marketshare: {{ mage60s }}+{{ fage60s }},
             versionData: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.mage60s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             versionData1: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.fage60s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ]},
             {
             browser: '70세 이상',
             color: 'rgba(255, 222, 222, 1)',
-            marketshare: {{ mage0s }}+{{ fage0s }},
+            marketshare: {{ mage70s }}+{{ fage70s }},
             versionData: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.mage70s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ],
             versionData1: [
                 {% for i in regionpop %}
-                    { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    { version: '{{ i.regions }}', users: {{ i.fage70s }} }{% if not forloop.last %},{% endif %}
                 {% endfor %}
             ]}
         ];
