@@ -11,9 +11,12 @@
                     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
                     background: #fff;
                     overflow: hidden;
+
+
                     z-index: 2;
                     /*transition: width 0.3s ease;*/
                     transition: .5s;
+
         }
         ul {list-style: none;
             padding-inline-start: 0px;
@@ -21,10 +24,12 @@
         #sidebar:hover {
             width: 250px;
             overflow: visible;
+
         }
 
         #sidebar ul > li:hover > div {
             background-color: #ccc
+
             }
 
         #sidebar ul > li:hover > ul {
@@ -50,7 +55,13 @@
         #sidebar ul > li > ul {
             list-style: none;
             padding: 0;
+            height : 500px;
+            overflow-y: auto;
+
         }
+
+
+
 
         #sidebar ul > li > ul > li {
             border-bottom: 1px solid #acacac;
@@ -62,6 +73,8 @@
             justify-content: flex-start;
             width: 100%;
             position: relative;
+
+
         }
 
         ul ul {
@@ -81,6 +94,7 @@
             background: #ccc;
             border-left: 1px solid #acacac;
             margin-left: 0;
+
         }
 
         #sidebar ul > li > ul > li:last-child {

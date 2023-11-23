@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong
+from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong, Doctor
 from django.db.models import Sum
 
 def dashboard_view(request):
@@ -71,21 +71,47 @@ def map(request):
     sejong = Sejong.objects.all()
     return render(request, 'map.html', {'sejong' : sejong})
 
-def test(request):
-    counts = Counts.objects.all().order_by('region')
-    cln = counts.aggregate(Sum('clinic'))
-    h_c = counts.aggregate(Sum('healthcenter'))
-    pha = counts.aggregate(Sum('pharmacy'))
-    den = counts.aggregate(Sum('dentist'))
-    ori = counts.aggregate(Sum('oriental'))
+def test2(request):
+    doctora = Doctor.objects.filter(id__in=[22, 1, 11, 2, 3, 20, 14])
+    doctorb = Doctor.objects.filter(id__in=[15, 10, 8, 6, 7, 12, 4, 13, 5])
+    doctorc = Doctor.objects.filter(id__in=[9, 17, 18, 16, 23, 24, 19, 21])
 
-    result = {
-        'counts' : counts,
-        'cln' : cln,
-        'h_c' : h_c,
-        'pha' : pha,
-        'den' :den,
-        'ori' : ori
+    doctor = Doctor.objects.all()
+
+    context = {
+        # 'a': a,
+        'doctor': doctor,
+        'doctora': doctora,
+        'doctorb': doctorb,
+        'doctorc': doctorc,
+
     }
+    return render(request, 'test2.html', context)
 
-    return render(request, 'test.html', result)
+def test(request):
+    lista = ['가정의학과', '내과', '소아청소년과', '신경과', '정신건강의학과', '재활의학과', '피부과'];
+    listb = ['비뇨의학과', '산부인과', '성형외과', '신경외과', '심장혈관흉부외과', '안과', '외과', '이비인후과', '정형외과'];
+    listc = ['마취통증의학과', '방사선종양학과', '병리과', '영상의학과', '응급의학과',  '직업환경의학과','진단검사의학과', '핵의학과'];
+
+    a = [22, 1, 11, 2, 3, 20, 14]
+    b = [15, 10, 8, 6, 7, 12, 4, 13, 5]
+    c = [9, 17, 18, 16, 23, 24, 19, 21]
+
+    suma = ""
+
+    doctora = Doctor.objects.filter(id__in=[22, 1, 11, 2, 3, 20, 14])
+    doctorb = Doctor.objects.filter(id__in=[15, 10, 8, 6, 7, 12, 4, 13, 5])
+    doctorc = Doctor.objects.filter(id__in=[9, 17, 18, 16, 23, 24, 19, 21])
+
+    doctor = Doctor.objects.all()
+
+    context = {
+        #'a': a,
+        'suma' : suma,
+        'doctor': doctor,
+        'doctora': doctora,
+        'doctorb': doctorb,
+        'doctorc': doctorc,
+
+    }
+    return render(request, 'test.html',context)
