@@ -1,0 +1,6 @@
+user  upgrade 쪽에서 체크 모두 해제
+         단축키 모두 설치
+         use for free
+         운영체제를 나중에 설치하는 항목 선택 ( I will install the operating system later ......)
+     * 설치 공간 만들어진 이후에
+ - 게스트 운영체제 : Linux 선택 고럼 종류가 나올 텐데 64bit 누르고 설치
