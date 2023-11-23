@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong
+from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong, Regionpop
 from django.db.models import Sum
 
 def dashboard_view(request):
@@ -70,3 +70,47 @@ def dashboard_view(request):
 def map(request):
     sejong = Sejong.objects.all()
     return render(request, 'finalapp/map.html', {'sejong' : sejong})
+
+def test(request):
+    medicine = Medicine.objects.all()
+    jan = medicine.aggregate(Sum('m1'))
+    feb = medicine.aggregate(Sum('m2'))
+    mar = medicine.aggregate(Sum('m3'))
+    apr = medicine.aggregate(Sum('m4'))
+    may = medicine.aggregate(Sum('m5'))
+    jun = medicine.aggregate(Sum('m6'))
+    jul = medicine.aggregate(Sum('m7'))
+    aug = medicine.aggregate(Sum('m8'))
+
+    context = {'medicine': medicine,
+               'jan': jan, 'feb': feb, 'mar': mar, 'apr': apr,
+               'may': may, 'jun': jun, 'jul': jul, 'aug': aug}
+
+    return render(request, 'finalapp/test.html', context)
+
+def test1(request):
+    regionpop = Regionpop.objects.all().values()
+    mage0s = regionpop.aggregate(Sum('mage0s'))['mage0s__sum']
+    fage0s = regionpop.aggregate(Sum('fage0s'))['fage0s__sum']
+    mage10s = regionpop.aggregate(Sum('mage10s'))['mage10s__sum']
+    fage10s = regionpop.aggregate(Sum('fage10s'))['fage10s__sum']
+    mage20s = regionpop.aggregate(Sum('mage20s'))['mage20s__sum']
+    fage20s = regionpop.aggregate(Sum('fage20s'))['fage20s__sum']
+    mage30s = regionpop.aggregate(Sum('mage30s'))['mage30s__sum']
+    fage30s = regionpop.aggregate(Sum('fage30s'))['fage30s__sum']
+    mage40s = regionpop.aggregate(Sum('mage40s'))['mage40s__sum']
+    fage40s = regionpop.aggregate(Sum('fage40s'))['fage40s__sum']
+    mage50s = regionpop.aggregate(Sum('mage50s'))['mage50s__sum']
+    fage50s = regionpop.aggregate(Sum('fage50s'))['fage50s__sum']
+    mage60s = regionpop.aggregate(Sum('mage60s'))['mage60s__sum']
+    fage60s = regionpop.aggregate(Sum('fage60s'))['fage60s__sum']
+    mage70s = regionpop.aggregate(Sum('mage70s'))['mage70s__sum']
+    fage70s = regionpop.aggregate(Sum('fage70s'))['fage70s__sum']
+    context = {'regionpop': regionpop, 'mage0s': mage0s, 'fage0s': fage0s,
+               'mage10s': mage10s, 'fage10s': fage10s, 'mage20s': mage20s, 'fage20s': fage20s,
+               'mage30s': mage30s, 'fage30s': fage30s, 'mage40s': mage40s, 'fage40s': fage40s,
+               'mage50s': mage50s, 'fage50s': fage50s, 'mage60s': mage60s, 'fage60s': fage60s, 'mage70s': mage70s, 'fage70s': fage70s}
+    return render(request, 'finalapp/test1.html', context)
+
+def stacked(request):
+    return render(request, 'finalapp/stacked.html')
