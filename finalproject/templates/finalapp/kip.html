@@ -1,0 +1,411 @@
+{% extends 'finalapp/base.html' %}
+{% block content %}
+<div id = "container" style="height:100vh;">
+<div id="sidebar">
+     <ul>
+         <li>
+                <div>
+                    <div><a href="/board"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/board">main</a></div>
+                </div>
+         </li>
+     <li>
+                <div>
+                    <div><a href="/map"><i class="fa-regular fa-map"></i></a></div>
+                    <div><a href="/map">map</a></div>
+                </div>
+     </li>
+
+     </ul>
+
+
+</div>
+    <div class="sejonginfo_title">
+            <div class="title_name">세종특별자치시 지역정보</div>
+            <div class="title_date">
+                <script type="text/javascript">
+                    var today = new Date();
+
+                    var year = today.getFullYear();
+                    var month = ('0' + (today.getMonth()+1)).slice(-2);
+                    var day = ('0' + today.getDate()).slice(-2);
+
+                    var dateString = year + '.' + month + '.' + day;
+                    document.write("일자 : " + dateString);
+                </script>
+            </div>
+    </div>
+
+    <!-- 세종시 지역정보데이터 -->
+    <div class="status-board">
+        <div class="status-item">
+            <div class="status-label">총인구수</div>
+            <div class="status-value">
+                    {% load humanize %}
+                    {{ total_pop.total__sum | intcomma }}
+             </div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">의사수</div>
+            <div class="status-value">
+                {% load humanize %}
+                    {{ doc_pop.doctor__sum | intcomma }}
+            </div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">간호사수</div>
+            <div class="status-value">
+                {% load humanize %}
+                    {{ nur_pop.nurse__sum | intcomma }}
+            </div>
+        </div>
+        <div class="status-item">
+            <div class="status-label">병상수</div>
+            <div class="status-value">
+                 {% load humanize %}
+                    {{ pat_pop.patient__sum | intcomma }}
+            </div>
+        </div>
+    </div>
+
+    <!-- 연령대별 인구수 데이터 전처리 -->
+    <div id="pop" style="display:none">
+        {% for i in table %}
+            {{ i.total }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div id="mpop" style="display:none">
+        {% for i in table %}
+            {{ i.m }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div id="fpop" style="display: none">
+        {% for j in table %}
+            {{ j.f }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <script type="text/javascript">
+        var pop = document.getElementById('pop').innerText.split(',');
+        var mpop = document.getElementById('mpop').innerText.split(',');
+        var fpop = document.getElementById('fpop').innerText.split(',');
+
+        var sum_0 = 0; var sum_10 = 0; var sum_20 = 0; var sum_30 = 0;
+        var sum_40 = 0; var sum_50 = 0; var sum_60 = 0; var sum_70 = 0;
+        var msum_0 = 0; var msum_10 = 0; var msum_20 = 0; var msum_30 = 0;
+        var msum_40 = 0; var msum_50 = 0; var msum_60 = 0; var msum_70 = 0;
+        var fsum_0 = 0; var fsum_10 = 0; var fsum_20 = 0; var fsum_30 = 0;
+        var fsum_40 = 0; var fsum_50 = 0; var fsum_60 = 0; var fsum_70 = 0;
+
+        for (let i=0; i<mpop.length; i++){
+            if(i<10) {
+                sum_0 += Number(pop[i]);
+                msum_0 += Number(mpop[i]);
+                fsum_0 += Number(fpop[i]);
+            } else if (i<20) {
+                sum_10 += Number(pop[i]);
+                msum_10 += Number(mpop[i]);
+                fsum_10 += Number(fpop[i]);
+            } else if (i<30) {
+                sum_20 += Number(pop[i]);
+                msum_20 += Number(mpop[i]);
+                fsum_20 += Number(fpop[i]);
+            } else if (i<40) {
+                sum_30 += Number(pop[i]);
+                msum_30 += Number(mpop[i]);
+                fsum_30 += Number(fpop[i]);
+            } else if (i<50) {
+                sum_40 += Number(pop[i]);
+                msum_40 += Number(mpop[i]);
+                fsum_40 += Number(fpop[i]);
+            } else if (i<60) {
+                sum_50 += Number(pop[i]);
+                msum_50 += Number(mpop[i]);
+                fsum_50 += Number(fpop[i]);
+            } else if (i<70) {
+                sum_60 += Number(pop[i]);
+                msum_60 += Number(mpop[i]);
+                fsum_60 += Number(fpop[i]);
+            } else {
+                sum_70 += Number(pop[i]);
+                msum_70 += Number(mpop[i]);
+                fsum_70 += Number(fpop[i]);
+            }}
+    </script>
+
+<div class="grid" style="--bs-columns: 3; ">
+<!-- 연령대별 인구수 표 -->
+        <div class="first" style="float: left; width: 25%; padding:12px; margin-left:50px ">
+                    <span class="table_ym">(기준년월 : 2023.09)</span>
+                    <table class="table auto text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>구분</th>
+                                <th>인구 수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 0 ~ 9세 </td>
+                                <td><script type="text/javascript">document.write(sum_0.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> 10 ~ 19세 </td>
+                                <td><script type="text/javascript">document.write(sum_10.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> 20 ~ 29세 </td>
+                                <td><script type="text/javascript">document.write(sum_20.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> 30 ~ 39세 </td>
+                                <td><script type="text/javascript">document.write(sum_30.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> 40 ~ 49세 </td>
+                                <td><script type="text/javascript">document.write(sum_40.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> 50 ~ 59세 </td>
+                                <td><script type="text/javascript">document.write(sum_50.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> 60 ~ 69세 </td>
+                                <td><script type="text/javascript">document.write(sum_60.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> 70세 이상 </td>
+                                <td><script type="text/javascript">document.write(sum_70.toLocaleString())</script></td>
+                            </tr>
+                            <tr>
+                                <td> - </td>
+                                <td> - </td>
+                            </tr>
+                            <tr>
+                                <td> - </td>
+                                <td> - </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+<!--다빈도 병상 표-->
+
+    {% if d or c %}
+        <div class="second" style="float: right; width: 35%; padding:10px;">
+        {% if d %}
+            <span class="text-center">다빈도상병(외래)</span><br>
+            <table class="table w-auto text-center ">
+                <thead class="table-dark">
+                    <tr>
+                        <th>순위</th>
+                        <th>질병</th>
+                        <th>발생수</th>
+                        <th>백분율</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in d %}
+                    <tr>
+                        <td>{{ i.rank }}</td>
+                        <td class="text-left">{{ i.disease }}</td>
+                        <td>{{ i.count }}</td>
+                        <td>{{ i.percent }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        </div>
+        <div class="third" style="float: right; width: 35%; padding:10px;">
+        {% if c %}
+            <span class="text-center">다빈도상병(입원)</span><br>
+            <table class="table w-auto text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>순위</th>
+                        <th>질병</th>
+                        <th>발생수</th>
+                        <th>백분율</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in c %}
+                    <tr>
+                        <td>{{ i.rank }}</td>
+                        <td class="text-left">{{ i.disease }}</td>
+                        <td>{{ i.count }}</td>
+                        <td>{{ i.percent }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        </div>
+    {% endif %}
+</div>
+<!-- 그냥 빈칸 채울 용 -->
+<div id ="chart" style="padding:10; margin:20;">
+
+
+<!--진료 건수와 진료비 bar + line chart-->
+<div id ="b_line" style="float:right; padding-right:100">
+    <canvas id="tocostChart" width="800" height="500"></canvas>
+    <script>
+// CountCost Chart
+    window.onload = function () {
+        var mixedChart = document.getElementById('tocostChart').getContext('2d');
+        var tocostChart = new Chart(mixedChart, {
+            type: 'bar',
+            data: {
+                labels: ['1998년', '1999년', '2000년', '2001년', '2002년'],
+                datasets: [
+                    {
+                    type: 'bar',
+                    label: '진료수(건)',
+                    yAxisID: 'y-axis-numtres',
+                    data: {{ numtre_numtres|safe }},
+                    backgroundColor: 'rgba(0, 123, 255, 0.5)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                    }, {
+                    type: 'line',
+                    label: '진료비(천원)',
+                    yAxisID: 'y-axis-tocosts',
+                    data: {{ tocost_tocosts|safe }},
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    }
+                ],
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    'y-axis-numtres' : {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        id: 'y-axis-numtres',
+                    },
+                    'y-axis-tocosts' : {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        id: 'y-axis-tocosts',
+                        grid:{
+                            drawOnChartArea:false,
+                             }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '진료 건수와 진료비 추이',
+                        padding: {
+                            top: 10,
+                            bottom: 10
+                        }
+                    }
+                }
+            }
+        });
+    };
+        </script>
+</div>
+
+<div id="test"  style="float:left; padding-left:70">
+<canvas id="bubbleChart" width="800" height="500"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script>
+
+ const backgroundcolor = [];
+ const bordercolor = [];
+
+let r, g, b;
+ {% for count in cn %}
+    r= Math.floor(Math.random() * 250);
+    g= Math.floor(Math.random() * 250);
+    b= Math.floor(Math.random() * 250);
+    backgroundcolor.push('rgba('+r+', '+g+', '+b+', 0.3)');
+    bordercolor.push('rgba('+r+', '+g+', '+b+', 1)');
+ {% endfor %}
+
+<!--{% load mathfilters %}-->
+ const data = {
+      datasets: [{
+        label: '인구 수와 병원 수 간의 상관 관계',
+        data: [
+            {% for a in cn%}
+                { x : {{a.to_people}},
+                  y : {{a.to_hp}},
+                  r : 12,
+                  dong: '{{a.region}}' }
+                {% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ],
+        backgroundColor: backgroundcolor,
+        borderColor: bordercolor,
+        borderWidth: 1
+      }]
+    };
+
+    // config
+    const config = {
+      type: 'bubble',
+      data,
+      options: {
+        responsive : false,
+        plugins : {
+            tooltip:{
+                callbacks : {
+                    label: (context) => {
+                        console.log(context);
+                        return `${context.raw.dong}` ;
+                    },
+                    afterLabel : (context) => {
+                        return ` 인구수 : ${context.raw.x}, 병원수: ${context.raw.y}`
+                    },
+                }
+            }
+        },
+
+        layout : {
+            padding: {
+                right:10,
+                top:5,
+            }
+        },
+        scales: {
+            x: {
+                title : {
+                    display: true,
+                    text : '동별 인구 수'
+                }
+             },
+          y: {
+            beginAtZero: true,
+            title : {
+                display : true,
+                text : '동별 병원 수'
+            }
+          }
+        }
+      }
+    };
+
+    // render init block
+    const myChart = new Chart(
+      document.getElementById('bubbleChart'),
+      config
+    );
+    </script>
+</div>
+
+
+</div>
+{% endblock %}
