@@ -14,14 +14,35 @@
   </div>
 
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
 
   <script>
     // 다빈도상병(입원)
+
+    // hoverLabel plugin block
+    const hoverLabel = {
+      id : 'hoverLabel',
+      afterDraw(chart, args, options){
+        const {ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
+        ctx.save();
+
+        if(chart._active.length > 0) {
+          const textLabel = chart.config.data.labels[chart._active[0].index];
+          const numberLabel = chart.config.data.datasets[chart._active[0].datasetIndex].data[chart._active[0].index];
+          const color = chart.config.data.datasets[chart._active[0].datasetIndex].borderColor[chart._active[0].index];
+
+          ctx.font = 'bolder 15px Arial';
+          ctx.fillStyle = color;
+          ctx.textAlign = 'center';
+          ctx.fillText(`${textLabel} : ${numberLabel}`, width/2, height/2+top)
+        }
+        ctx.restore();
+      }
+    }
+
     const inrankPieChartCtx = document.querySelector('#inrankPieChart').getContext('2d');
     const inrankPieChart = new Chart(inrankPieChartCtx, {
-      type: 'pie',
+      type: 'doughnut',
       data: {
         labels: [
           {% for i in inrank %}
@@ -57,11 +78,13 @@
             'rgba(75, 192, 192, 1)',
             'rgba(153, 102, 255, 1)',
           ],
+          cutout: '80%'
         }]
       },
       options: {
         plugins: {
           legend: {
+            display: false,
             position: 'bottom'
           },
           title: {
@@ -75,12 +98,12 @@
             render: 'percentage',
             fontColor: 'black',
             fontStyle: 'bolder',
-            position: 'outside',
+            position: 'inside',
             textMargin: 6
           }
         }
       },
-      plugins: [ChartDataLabels]
+      plugins: [hoverLabel]
     });
 
     // 다빈도상병(외래)
@@ -122,11 +145,13 @@
             'rgba(75, 192, 192, 1)',
             'rgba(153, 102, 255, 1)',
           ],
+          cutout: '80%'
         }]
       },
       options: {
         plugins: {
           legend: {
+            display: false,
             position: 'bottom'
           },
           title: {
@@ -140,12 +165,17 @@
             render: 'percentage',
             fontColor: 'black',
             fontStyle: 'bolder',
-            position: 'outside',
+            position: 'inside',
             textMargin: 6
+          },
+          tooltip: {
+            callbacks: {
+              display: false
+            }
           }
         }
       },
-      plugins: [ChartDataLabels]
+      plugins: [hoverLabel]
     });
   </script>
   </body>
