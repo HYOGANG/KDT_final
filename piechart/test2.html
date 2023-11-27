@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TEST</title>
+  </head>
+  <body>
+  <div style="max-width: 500px;">
+    <canvas id="inrankPieChart"></canvas>
+  </div>
+  <div style="max-width: 500px;">
+    <canvas id="outrankPieChart"></canvas>
+  </div>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
+
+  <script>
+    // 다빈도상병(입원)
+    const inrankPieChartCtx = document.querySelector('#inrankPieChart').getContext('2d');
+    const inrankPieChart = new Chart(inrankPieChartCtx, {
+      type: 'pie',
+      data: {
+        labels: [
+          {% for i in inrank %}
+            '{{ i.disease }}'{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        ],
+        datasets: [{
+          label: '입원 수 ',
+          data: [
+            {% for i in inrank %}
+              {{ i.count }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ],
+          backgroundColor: [
+            'rgba(255, 26, 104, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+          borderWidth: 1,
+          hoverBackgroundColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: '다빈도 상병(입원)'
+          },
+          layout: {
+            padding: 10
+          },
+          labels: {
+            render: 'percentage',
+            fontColor: 'black',
+            fontStyle: 'bolder',
+            position: 'outside',
+            textMargin: 6
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+
+    // 다빈도상병(외래)
+    const outrankPieChartCtx = document.querySelector('#outrankPieChart').getContext('2d');
+    const outrankPieChart = new Chart(outrankPieChartCtx, {
+      type: 'pie',
+      data: {
+        labels: [
+          {% for i in outrank %}
+            '{{ i.disease }}'{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        ],
+        datasets: [{
+          label: '외래 수 ',
+          data: [
+            {% for i in outrank %}
+              {{ i.count }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ],
+          backgroundColor: [
+            'rgba(255, 26, 104, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+          borderWidth: 1,
+          hoverBackgroundColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: '다빈도 상병(외래)'
+          },
+          layout: {
+            padding: 10
+          },
+          labels: {
+            render: 'percentage',
+            fontColor: 'black',
+            fontStyle: 'bolder',
+            position: 'outside',
+            textMargin: 6
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
+    });
+  </script>
+  </body>
+</html>
