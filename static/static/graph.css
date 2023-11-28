@@ -1,0 +1,34 @@
+       .status-board {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .status-item {
+            text-align: center;
+            flex-grow: 1;
+        }
+        .status-item:not(:last-child) {
+            border-right: 1px solid #dee2e6;
+        }
+        .status-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        .status-value {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+
+        @media (max-width: 768px) {
+            .table1, .table2, .table3, .chart-box {
+                flex-basis: 100%;
+            }
+        }
+
+
+
