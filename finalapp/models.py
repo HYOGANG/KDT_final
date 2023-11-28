@@ -1,21 +1,10 @@
 from django.db import models
 
-
 class Hospital(models.Model):
     type=models.TextField(max_length=255)
     hospital=models.IntegerField()
     doctor=models.IntegerField()
 
-class Medicine(models.Model):
-    age = models.TextField(max_length=10)
-    m1 = models.IntegerField()
-    m2 = models.IntegerField()
-    m3 = models.IntegerField()
-    m4 = models.IntegerField()
-    m5 = models.IntegerField()
-    m6 = models.IntegerField()
-    m7 = models.IntegerField()
-    m8 = models.IntegerField()
 
 class Population(models.Model):
     age = models.TextField()
@@ -37,8 +26,6 @@ class Counts(models.Model):
     pharmacy = models.IntegerField()
     dentist = models.IntegerField()
     oriental = models.IntegerField()
-    to_hp = models.IntegerField(default=0)
-    to_people = models.IntegerField(default=0)
 
 
 class Sejong(models.Model):
@@ -50,3 +37,15 @@ class Sejong(models.Model):
     address = models.TextField()
     address1 = models.TextField()
     department = models.TextField()
+
+
+class Doctor(models.Model):
+    department = models.TextField()  # 진료과목별
+    sum = models.IntegerField()  # 합계
+    genhos = models.IntegerField()  # 종합병원
+    hos = models.IntegerField()  # 병원
+    nurs = models.IntegerField()  # 요양병원
+    mental = models.IntegerField()  # 정신병원
+    clinic = models.IntegerField()  # 의원
+    Public = models.IntegerField()  # 보건지소
+
