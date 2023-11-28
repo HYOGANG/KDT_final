@@ -796,7 +796,7 @@
             hpChart.update();
         }
 
-        function clickHandler(click){
+        function click1Handler(click){
             if (hpChart.config.data.datasets[0].label === '동별 의료기관 현황'){
 
             var bar = hpChart.getElementsAtEventForMode(click, 'nearest',
@@ -831,7 +831,7 @@
         };
 
 
-        function mousemoveHandler(canvas, mousemove ) {
+        function mousemove1Handler(canvas, mousemove ) {
           var x = mousemove.offsetX;
           var y = mousemove.offsetY;
 
@@ -846,7 +846,7 @@
           };
 
 
-        function clickButtonHandler(canvas, click){
+        function clickButton1Handler(canvas, click){
           var x = click.offsetX;
           var y = click.offsetY;
 
@@ -856,16 +856,16 @@
           };
         }
 
-        ctx.onclick = clickHandler;
+        ctx.onclick = click1Handler;
 
         ctx.addEventListener('mousemove', (e) => {
           hpChart.resize();
-          mousemoveHandler(ctx, e);
+          mousemove1Handler(ctx, e);
         });
 
         ctx.addEventListener('click', (e) => {
           hpChart.resize();
-          clickButtonHandler(ctx,e);
+          clickButton1Handler(ctx,e);
         })
     </script>
     {% endblock %}
