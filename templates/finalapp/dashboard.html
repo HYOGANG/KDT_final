@@ -180,64 +180,7 @@
                     </table>
                 </div>
             </div>
-        <!-- 종별 병원수 표 -->
-                <div class="table2">
-                    <div class="table1_title">종별 요양기관 수
-                        <table class="table1_body">
-                            <thead>
-                                <tr>
-                                    <th>구분</th>
-                                    <th>병원수</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for hos in medical %}
-                                {% if hos.id < 8 %}
-                                    <tr>
-                                        <td>{{ hos.type }}</td>
-                                        <td>{{ hos.hospital }}</td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="table3">
-                    <div class="table1_title">
-                        <table class="table1_body">
-                            <thead>
-                                <tr>
-                                    <th>구분</th>
-                                    <th>병원수</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for hos in medical %}
-                                {% if hos.id >= 8 %}
-                                    <tr>
-                                        <td>{{ hos.type }}</td>
-                                        <td>{{ hos.hospital }}</td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                                <tr>
-                                    <td> - </td>
-                                    <td> - </td>
-                                </tr>
-                                <tr>
-                                    <td> - </td>
-                                    <td> - </td>
-                                </tr>
-                                <tr>
-                                    <td> - </td>
-                                    <td> - </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+
 
     <!-- 차트그리기 -->
     <div class="chart-container">
@@ -294,7 +237,60 @@
                 }
             }
         });
+    </script>
+    {% if d or c %}
+        <div class="tables-container">
+            {% if d %}
+            <div class="chart_container">
+                <h4 class="text-center"><u>다빈도상병(외래)</u></h4><br>
+                <table class="table table-sm table-dark">
+                    <thead>
+                        <tr>
+                            <th>rank</th>
+                            <th>disease</th>
+                            <th>count</th>
+                            <th>percent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in d %}
+                        <tr>
+                            <td>{{ i.rank }}</td>
+                            <td>{{ i.disease }}</td>
+                            <td>{{ i.count }}</td>
+                            <td>{{ i.percent }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
 
-
-</script>
+            {% if c %}
+            <div class="chart_container">
+                <h4 class="text-center"><u>다빈도상병(입원)</u></h4><br>
+                <table class="table table-sm table-dark">
+                    <thead>
+                        <tr>
+                            <th>rank</th>
+                            <th>disease</th>
+                            <th>count</th>
+                            <th>percent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in c %}
+                        <tr>
+                            <td>{{ i.rank }}</td>
+                            <td>{{ i.disease }}</td>
+                            <td>{{ i.count }}</td>
+                            <td>{{ i.percent }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}
