@@ -85,6 +85,12 @@ def map(request):
 def second_view(request):
 
     counts = Counts.objects.all().order_by('region')
+    counts_regions = [data.region for data in counts]
+    counts_clinics = [data.clinic for data in counts]
+    counts_healthcenters = [data.healthcenter for data in counts]
+    counts_pharmacys = [data.pharmacy for data in counts]
+    counts_dentists = [data.dentist for data in counts]
+    counts_orientals = [data.oriental for data in counts]
     cln = counts.aggregate(Sum('clinic'))
     h_c = counts.aggregate(Sum('healthcenter'))
     pha = counts.aggregate(Sum('pharmacy'))
@@ -96,10 +102,6 @@ def second_view(request):
     hospital_hospitals = [data.hospital for data in hospital_data]
     hospital_doctors = [data.doctor for data in hospital_data]
 
-    medical = Medicalinfo.objects.all().values()
-    doc_pop = medical.aggregate(Sum('doctor'))
-    nur_pop = medical.aggregate(Sum('nurse'))
-    pat_pop = medical.aggregate(Sum('patient'))
 
     doctora = Doctor.objects.filter(id__in=[22, 1, 11, 2, 3, 20, 14])
     doctorb = Doctor.objects.filter(id__in=[15, 10, 8, 6, 7, 12, 4, 13, 5])
@@ -107,33 +109,38 @@ def second_view(request):
 
     doctor = Doctor.objects.all()
 
-    context = {
-        'counts' : counts,
-        'cln' : cln,
-        'h_c' : h_c,
-        'pha' : pha,
-        'den' :den,
-        'ori' : ori,
+    try:
+        df3 = pd.read_csv("C:/finalproject/static/csv/devices.csv")
+        json_records = df3.reset_index().to_json(orient='records')
+        v = json.loads(json_records)
+    except Exception as e:
+        v = None
+        print(f"An error occurred: {e}")
 
-        # 'a': a,
+    context = {
+
+        'counts_regions': counts_regions,
+        'counts_clinics': counts_clinics,
+        'counts_healthcenters': counts_healthcenters,
+        'counts_pharmacys': counts_pharmacys,
+        'counts_dentists': counts_dentists,
+        'counts_orientals': counts_orientals,
+        'hospital_types': hospital_types,
+        'hospital_hospitals': hospital_hospitals,
+        'hospital_doctors': hospital_doctors,
+        'counts': counts,
+        'cln': cln,
+        'h_c': h_c,
+        'pha': pha,
+        'den': den,
+        'ori': ori,
+        'v':v,
         'doctor': doctor,
         'doctora': doctora,
         'doctorb': doctorb,
         'doctorc': doctorc,
-
-
-
-        'medical': medical,
-        'doc_pop': doc_pop,
-        'nur_pop': nur_pop,
-        'pat_pop': pat_pop,
-
-        'hospital_types': hospital_types,
-        'hospital_hospitals': hospital_hospitals,
-        'hospital_doctors': hospital_doctors,
     }
     return render(request, 'finalapp/second.html', context)
-
 
 
 

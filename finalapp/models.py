@@ -30,6 +30,7 @@ class Medicalinfo(models.Model):
     nurse = models.IntegerField()
     patient = models.IntegerField()
 
+# 읍면동별 의료기관 현황
 class Counts(models.Model):
     region=models.TextField()
     clinic=models.IntegerField()
@@ -50,3 +51,54 @@ class Sejong(models.Model):
     address = models.TextField()
     address1 = models.TextField()
     department = models.TextField()
+
+class NumTre(models.Model):
+    year = models.IntegerField()
+    numtre = models.IntegerField()
+
+class ToCost(models.Model):
+    year = models.IntegerField()
+    tocost = models.IntegerField()
+
+class Regionpop(models.Model):
+    regions = models.TextField()
+    mage0s = models.IntegerField()
+    mage10s = models.IntegerField()
+    mage20s = models.IntegerField()
+    mage30s = models.IntegerField()
+    mage40s = models.IntegerField()
+    mage50s = models.IntegerField()
+    mage60s = models.IntegerField()
+    mage70s = models.IntegerField()
+    fage0s = models.IntegerField()
+    fage10s = models.IntegerField()
+    fage20s = models.IntegerField()
+    fage30s = models.IntegerField()
+    fage40s = models.IntegerField()
+    fage50s = models.IntegerField()
+    fage60s = models.IntegerField()
+    fage70s = models.IntegerField()
+    total = models.IntegerField()
+
+
+class Doctor(models.Model):
+    department = models.TextField()  # 진료과목별
+    sum = models.IntegerField()  # 합계
+    genhos = models.IntegerField()  # 종합병원
+    hos = models.IntegerField()  # 병원
+    nurs = models.IntegerField()  # 요양병원
+    mental = models.IntegerField()  # 정신병원
+    clinic = models.IntegerField()  # 의원
+    Public = models.IntegerField()  # 보건지소
+
+class Inpatrank(models.Model):
+    rank = models.TextField()
+    disease = models.TextField()
+    count = models.IntegerField()
+    percent = models.IntegerField()
+
+class Outpatrank(models.Model):
+    rank = models.TextField()
+    disease = models.TextField()
+    count = models.IntegerField()
+    percent = models.IntegerField()
