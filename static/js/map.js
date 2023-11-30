@@ -3,7 +3,7 @@ var addresses= document.getElementById('address').innerHTML.split(',')
 var types= document.getElementById('type').innerHTML.split(',');
 var deps= document.getElementById('department').innerHTML.split('|');
 
-Category = ['외과','내과', '산부인과', '신경과', '안과', '이비인후과','치과', '피부과', '정신건강의학과', '가정의학과', '결핵과', '비뇨기과', '소아청소년과', '재활의학과',   '한방']
+Category = ['외과','내과', '산부인과', '신경과', '안과', '이비인후과','치과', '피부과', '정신건강의학과', '가정의학과', '결핵과', '비뇨', '소아청소년과', '재활의학과',   '한방']
 Category2 = ['종합병원', '병원', '의원', '치과병원', '치과의원', '한방병원', '한의원', '요양병원', '정신병원', '보건진료소', '보건지소', '약국']
 
 
@@ -49,6 +49,10 @@ function addEventHandle(target, type, callback) {
     }
 }
 
+var img = ['/static/img/dot9.png', '/static/img/dot10.png', '/static/img/dot11.png', '/static/img/dot12.png', '/static/img/dot13.png', '/static/img/dot14.png','/static/img/dot3.png', '/static/img/dot15.png', '/static/img/dot8.png', '/static/img/dot16.png', '/static/img/dot17.png', '/static/img/dot18.png', '/static/img/dot19.png', '/static/img/dot20.png','/static/img/dot5.png']
+var img2 = ['/static/img/dot1.png', '/static/img/dot1-1.png', '/static/img/dot4.png', '/static/img/dot3.png', '/static/img/dot3-3.png', '/static/img/dot5.png', '/static/img/dot5-5.png', '/static/img/dot2.png', '/static/img/dot8.png', '/static/img/dot7.png', '/static/img/dot7-7.png', '/static/img/dot6.png']
+
+
 for (let i = 0; i < Category.length; i++) {
     for (let j = 0; j < names.length; j++) {
                 if (deps[j].includes(Category[i])) {
@@ -58,7 +62,7 @@ for (let i = 0; i < Category.length; i++) {
                         if (status === kakao.maps.services.Status.OK) {
 
                             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                            var imageSrc = '/static/img/dot.png',
+                            var imageSrc = img[i],
                                 imageSize = new kakao.maps.Size(21, 23);
                             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
                             var marker = new kakao.maps.Marker({
@@ -68,7 +72,7 @@ for (let i = 0; i < Category.length; i++) {
 
 
                             allcoords[i].push(coords);
-
+                            markers[i].push(marker);
 
                             kakao.maps.event.addListener(marker, 'click', function() {
                             displayPlaceInfo(names[j], coords);
@@ -89,7 +93,7 @@ for (let i = 0; i < Category2.length; i++) {
 
                             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                            var imageSrc = '/static/img/dot.png',
+                            var imageSrc = img2[i],
                                 imageSize = new kakao.maps.Size(21, 23);
                             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
 
@@ -115,7 +119,11 @@ for (let i = 0; i < Category2.length; i++) {
 var currMarker =""
 
 function displayPlaceInfo (name, coord) {
-    var content = '<div class="placeinfo">' + name+ '</div>';
+    var content = '<div class="placeinfo">' +
+                    '<a href="https://map.kakao.com/link/map/'+name+','+coord.Ma+','+coord.La +'" target="_blank">' +
+    '<span class="title">'+ name +'</span>'+
+    '</a>' +
+    '</div>';
 
     contentNode.innerHTML = content;
     placeOverlay.setPosition(coord);
@@ -144,7 +152,6 @@ function searchPlaces() {
         var currentOrder = document.getElementById(currentCategory).getAttribute('data-order');
           for ( var j=0; j < allcoords[currentOrder].length; j++ ) {
             markers[currentOrder][j].setMap(map);
-
             }
     }
  }
@@ -201,7 +208,7 @@ function changeCategoryClass(el) {
 
         el.classList.remove('on');
     } else {
-   
+
         el.classList.add('on');
     }
 }

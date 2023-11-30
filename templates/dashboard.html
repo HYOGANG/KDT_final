@@ -1,26 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="/static/css/board.css">
 
 <div id="sidebar">
      <ul>
          <li>
                 <div>
                     <div><a href="/board"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
-                    <div><a href="/board">main</a></div>
+                    <div><a href="/board">의료이용현황</a></div>
                 </div>
          </li>
-     <li>
+         <li>
+                <div>
+                    <div><a href="/second"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/second">의료자원현황</a></div>
+                </div>
+         </li>
+         <li>
                 <div>
                     <div><a href="/map"><i class="fa-regular fa-map"></i></a></div>
-                    <div><a href="/map">map</a></div>
+                    <div><a href="/map">우리동네병원찾기</a></div>
                 </div>
      </li>
+
      </ul>
+
+
 </div>
-    <div class="sejonginfo_title">
-            <div class="title_name">세종특별자치시 지역정보</div>
-            <div class="title_date">
+
+    <div class="sejonginfo_title"
+         style="position:relative;padding:8;">
+            <div class="title_name"
+                 style="font-size:20px ; color:#555; font-weight: bold; margin-left:4%;">
+                세종특별자치시 의료이용현황</div>
+            <div class="title_date"
+                 style="position:absolute; right:4.5%; bottom:3; font-size:16px; font-weight: bold; color:#0d62ce;">
                 <script type="text/javascript">
                     var today = new Date();
 
@@ -35,37 +48,56 @@
     </div>
 
     <!-- 세종시 지역정보데이터 -->
-    <div class="status-board">
-        <div class="status-item">
-            <div class="status-label">총인구수</div>
-            <div class="status-value">
-                    {% load humanize %}
-                    {{ total_pop.total__sum | intcomma }}
-        </div>
-    </div>
-    <div class="status-item">
-        <div class="status-label">의사수</div>
-        <div class="status-value">
+<div style="display:flex; float:right; margin-right:2%">
+    <div class="flex-container stretch"
+         style="padding:5px;
+                width:200px; height:90vh">
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:20%;
+                    text-align:center;  line-height: 50px;
+                    margin:0px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">총 인구 수</div>
+                {% load humanize %}
+                {{ total_pop.total__sum | intcomma }}
+         </div>
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:20%;
+                    text-align:center;  line-height: 50px;
+                    margin:40px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">의사 수 </div>
             {% load humanize %}
-                {{ doc_pop.doctor__sum | intcomma }}
+            {{ doc_pop.doctor__sum | intcomma }}
         </div>
-    </div>
-    <div class="status-item">
-        <div class="status-label">간호사수</div>
-        <div class="status-value">
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:20%;
+                    text-align:center;  line-height: 50px;
+                    margin:40px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">간호사수 </div>
             {% load humanize %}
                 {{ nur_pop.nurse__sum | intcomma }}
         </div>
-    </div>
-        <div class="status-item">
-            <div class="status-label">병상수</div>
-            <div class="status-value">
-                 {% load humanize %}
-                    {{ pat_pop.patient__sum | intcomma }}
-            </div>
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:20%;
+                    text-align:center;  line-height: 50px;
+                    margin:40px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">병상수 </div>
+             {% load humanize %}
+                {{ pat_pop.patient__sum | intcomma }}
         </div>
     </div>
-
+</div>
     <!-- 연령대별 인구수 데이터 전처리 -->
     <div id="pop" style="display:none">
         {% for i in table %}
@@ -130,419 +162,619 @@
             }}
     </script>
 
+<div id ="chart_all" >
 
-    <!-- 지역정보 표 부분 -->
-        <div class="sejonginfo_table">
-            <!-- 연령대별 인구수 표 -->
-            <div class="table1">
-                <div class="table1_title">인구통계적 구성
-                    <span class="table_ym">(기준년월 : 2023.09)</span>
-                    <table class="table1_body">
-                        <thead>
-                            <tr>
-                                <th>구분</th>
-                                <th>인구 수</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td> 0 ~ 9세 </td>
-                                <td><script type="text/javascript">document.write(sum_0.toLocaleString())</script></td>
-                            </tr>
-                            <tr>
-                                <td> 10 ~ 19세 </td>
-                                <td><script type="text/javascript">document.write(sum_10.toLocaleString())</script></td>
-                            </tr>
-                            <tr>
-                                <td> 20 ~ 29세 </td>
-                                <td><script type="text/javascript">document.write(sum_20.toLocaleString())</script></td>
-                            </tr>
-                            <tr>
-                                <td> 30 ~ 39세 </td>
-                                <td><script type="text/javascript">document.write(sum_30.toLocaleString())</script></td>
-                            </tr>
-                            <tr>
-                                <td> 40 ~ 49세 </td>
-                                <td><script type="text/javascript">document.write(sum_40.toLocaleString())</script></td>
-                            </tr>
-                            <tr>
-                                <td> 50 ~ 59세 </td>
-                                <td><script type="text/javascript">document.write(sum_50.toLocaleString())</script></td>
-                            </tr>
-                            <tr>
-                                <td> 60 ~ 69세 </td>
-                                <td><script type="text/javascript">document.write(sum_60.toLocaleString())</script></td>
-                            </tr>
-                            <tr>
-                                <td> 70세 이상 </td>
-                                <td><scrapt type="text/javascript">document.write(sum_70.toLocaleString())</scrapt></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        <!-- 종별 병원수 표 -->
-                <div class="table2">
-                    <div class="table1_title">종별 요양기관 수
-                        <table class="table1_body">
-                            <thead>
-                                <tr>
-                                    <th>구분</th>
-                                    <th>병원수</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for hos in medical %}
-                                {% if hos.id < 8 %}
-                                    <tr>
-                                        <td>{{ hos.type }}</td>
-                                        <td>{{ hos.hospital }}</td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="table3">
-                    <div class="table1_title">
-                        <table class="table1_body">
-                            <thead>
-                                <tr>
-                                    <th>구분</th>
-                                    <th>병원수</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {% for hos in medical %}
-                                {% if hos.id >= 8 %}
-                                    <tr>
-                                        <td>{{ hos.type }}</td>
-                                        <td>{{ hos.hospital }}</td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                                <tr>
-                                    <td> - </td>
-                                    <td> - </td>
-                                </tr>
-                                <tr>
-                                    <td> - </td>
-                                    <td> - </td>
-                                </tr>
-                                <tr>
-                                    <td> - </td>
-                                    <td> - </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+<div id="line_1" style="display:flex;">
 
-    <!-- 차트그리기 -->
-    <div class="chart-container">
-        <div class="chart-box">
-            <canvas id="popChart"></canvas>
-        </div>
-        <div class="chart-box">
-            <canvas id="hospitalChart"></canvas>
-        </div>
-         <div class="chart-box">
-            <canvas id="medicineChart"></canvas>
-        </div>
-        <div class="chart-box">
-            <canvas id="countsChart"></canvas>
-        </div>
+ <!-- 연령대별 읍면동 분포 -->
+    <div id="age_dong"
+         class="chartBox"
+         style="margin-left:60px; padding:10px;
+                border-radius:30px;
+                border: solid 1px #ABB7D4;">
+    <canvas id="myChart" width="850" height="300px" ></canvas>
+
     </div>
+        <script>
+            const coordinates = {
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+            }
 
-    <script>
-        // Population Chart
+            const browserData = [{
+                browser: '0-9세',
+                color: '#F9F871',
+                marketshare: {{ mage0s }}+{{ fage0s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage0s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage0s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]},
+                {
+                browser: '10-19세',
+                color: '#FFC75F',
+                marketshare: {{ mage10s }}+{{ fage10s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage10s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage10s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]},
+                {
+                browser: '20-29세',
+                color: '#FF9671',
+                marketshare: {{ mage20s }}+{{ fage20s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage20s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage20s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]},
+                {
+                browser: '30-39세',
+                color: '#FF6F91',
+                marketshare: {{ mage30s }}+{{ fage30s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage30s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage30s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]},
+                {
+                browser: '40-49세',
+                color: '#D65DB1',
+                marketshare: {{ mage40s }}+{{ fage40s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage40s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage40s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]},
+                {
+                browser: '50-59세',
+                color: '#845EC2',
+                marketshare: {{ mage50s }}+{{ fage50s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage50s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage50s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]},
+                {
+                browser: '60-69세',
+                color: '#2C73D2',
+                marketshare: {{ mage60s }}+{{ fage60s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage60s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage60s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]},
+                {
+                browser: '70세 이상',
+                color: '#008E9B',
+                marketshare: {{ mage70s }}+{{ fage70s }},
+                versionData: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.mage70s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                versionData1: [
+                    {% for i in regionpop %}
+                        { version: '{{ i.regions }}', users: {{ i.fage70s }} }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]}
+            ];
 
-        Chart.defaults.font.size = 11;
-        var ctxPop = document.getElementById('popChart').getContext('2d');
-        var popChart = new Chart(ctxPop, {
-            type: 'bar',
-            data: {
-                labels: ['0~9', '10~19', '20~29', '30~39', '40~49', '50~59', '60~69', '70+'],
-                datasets: [
-                    {
-                        label: 'Male Population',
-                        data: [msum_0, msum_10, msum_20, msum_30, msum_40, msum_50, msum_60, msum_70],
-                        backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                        borderColor: 'rgba(0, 123, 255, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Female Population',
-                        data: [fsum_0, fsum_10, fsum_20, fsum_30, fsum_40, fsum_50, fsum_60, fsum_70],
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }
-                ]
+        // setup
+        const data = {
+          datasets: [{
+            label: '연령대별 읍면동 분포',
+            data: browserData,
+            backgroundColor: [
+                browserData[0].color,
+                browserData[1].color,
+                browserData[2].color,
+                browserData[3].color,
+                browserData[4].color,
+                browserData[5].color,
+                browserData[6].color,
+                browserData[7].color,
+            ],
+            borderColor: [
+                browserData[0].color,
+                browserData[1].color,
+                browserData[2].color,
+                browserData[3].color,
+                browserData[4].color,
+                browserData[5].color,
+                browserData[6].color,
+                browserData[7].color,
+            ],
+            borderWidth: 1,
+          },{
+            label: '',
+            data: '',
+            backgroundColor: '#00ff0000',
+            borderColor: '#00ff0000',
+          }]
+        };
+
+        // resetButton plugin
+        const resetButton = {
+            id: 'resetButton',
+            beforeDraw(chart, args, options){
+                if(myChart.config.data.datasets[0].label !== '연령대별 읍면동 분포'){
+
+                const{ctx, chartArea: {top, bottom, left, right, width, height}} = chart;
+                ctx.save();
+
+                const text = 'Back';
+                const thickBorder = 3;
+                const textWidth = ctx.measureText(text).width;
+
+                // draw background
+                ctx.fillStyle = 'rgba(0,0,0,0.1)';
+                ctx.fillRect(right-(textWidth+1+10), 5, textWidth+10, 20);
+
+                // draw text
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.fillText(text, right-(textWidth+1+5), 15);
+
+                // draw border
+                ctx.lineWidth = thickBorder + 'px';
+                ctx.strokeStyle = '#E1DDE3';
+                ctx.strokeRect(right-(textWidth+1+10), 5, textWidth+10, 20);
+
+                console.log(coordinates)
+                coordinates.top = 5;
+                coordinates.bottom = 25;
+                coordinates.left = right-(textWidth+1+10);
+                coordinates.right = right;
+
+                ctx.restore();
+                };
+            }
+        }
+
+        // config
+        const config = {
+          type: 'bar',
+          data,
+          options: {
+            plugins: {
+                tooltip: {
+                    yAlign: 'bottom'
+                }
             },
-            options: {
-                scales: {
-                    x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true,
-                        beginAtZero: true
-                    },
-                },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: '인구통계',
-                        padding: {
-                            top: 10,
-                            bottom: 10
-                        }
-                    }
+            onHover: (event, chartElement) => {
+                if(myChart.config.data.datasets[0].label === '연령대별 읍면동 분포') {
+                event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                } else {
+                event.native.target.style.cursor = 'default';
+                };
+            },
+            parsing: {
+                xAxisKey: 'browser',
+                yAxisKey: 'marketshare'
+            },
+            scales: {
+              x: {
+                stacked: true,
+              },
+              y: {
+                stacked: true,
+                beginAtZero: true
+              }
+            }
+          },
+          plugins: [resetButton]
+        };
+
+        // render init block
+        const ctx = document.getElementById('myChart');
+        const myChart = new Chart(
+          ctx,
+          config
+        );
+
+        function changeChart(browser){
+            myChart.config.options.parsing.xAxisKey = 'versionData.version';
+            myChart.config.options.parsing.yAxisKey = 'versionData.users';
+            myChart.config.options.scales.x.stacked = true;
+            myChart.config.options.scales.y.stacked = true;
+            myChart.config.options.scales.y.beginAtZero = true;
+
+            const vUsers = [];
+            const vLabels = browserData[browser].versionData.map(labels => {
+                vUsers.push(labels.users);
+                return labels.version;
+            })
+
+            const vUsers1 = [];
+            const vLabels1 = browserData[browser].versionData1.map(labels => {
+                vUsers1.push(labels.users);
+                return labels.version;
+            })
+
+            console.log(vLabels)
+            myChart.config.data.labels = vLabels;
+            myChart.config.data.datasets[0].data = vUsers;
+            myChart.config.data.datasets[1].data = vUsers1;
+            myChart.config.data.datasets[0].backgroundColor = 'rgba(177, 204, 240, 1)';
+            myChart.config.data.datasets[1].backgroundColor = 'rgba(255, 192, 203, 1)';
+            myChart.config.data.datasets[0].borderColor = 'rgba(177, 204, 240, 1)';
+            myChart.config.data.datasets[1].borderColor = 'rgba(255, 192, 203, 1)';
+            myChart.config.data.datasets[0].label = '남자';
+            myChart.config.data.datasets[1].label = '여자';
+            myChart.update();
+        }
+
+        function clickHandler(click){
+            if(myChart.config.data.datasets[0].label === '연령대별 읍면동 분포') {
+                const bar = myChart.getElementsAtEventForMode(click, 'nearest',
+                    {intersect: true}, true);
+                console.log(bar);
+                if(bar.length){
+                    console.log(bar[0].index);
+                    changeChart(bar[0].index);
                 }
             }
+        };
+
+        function resetChart(){
+            myChart.config.options.parsing.xAxisKey = 'browser';
+            myChart.config.options.parsing.yAxisKey = 'marketshare';
+
+            const bColor = [];
+            const bMarketshare = [];
+            const bLabels = browserData.map(browser => {
+                bColor.push(browser.color);
+                bMarketshare.push(browser.marketshare);
+                return browser.browser;
+            });
+
+            myChart.config.data.labels = bLabels;
+            myChart.config.data.datasets[0].data = bMarketshare;
+            myChart.config.data.datasets[1].data = '';
+            myChart.config.data.datasets[0].backgroundColor = bColor;
+            myChart.config.data.datasets[1].backgroundColor = '#00ff0000';
+            myChart.config.data.datasets[0].borderColor = bColor;
+            myChart.config.data.datasets[1].borderColor = '#00ff0000';
+            myChart.config.data.datasets[0].label = '연령대별 읍면동 분포';
+            myChart.config.data.datasets[1].label = '';
+
+            myChart.update();
+        };
+
+        function mousemoveHandler(canvas, mousemove){
+            const x = mousemove.offsetX;
+            const y = mousemove.offsetY;
+
+            if(myChart.config.data.datasets[0].label !== '연령대별 읍면동 분포'){
+            if(x > coordinates.left && x < coordinates.right && y > coordinates.top && y < coordinates.bottom){
+                canvas.style.cursor = 'pointer';
+            } else {
+                canvas.style.cursor = 'default';
+              };
+            };
+        };
+
+        function clickButtonHandler(canvas, click){
+            const x = click.offsetX;
+            const y = click.offsetY;
+
+            if (x > coordinates.left && x < coordinates.right && y > coordinates.top && y < coordinates.bottom){
+                resetChart();
+            };
+        };
+
+        ctx.onclick = clickHandler;
+
+        ctx.addEventListener('mousemove', (e) => {
+            myChart.resize();
+            mousemoveHandler(ctx, e);
         });
 
-        // Hospital Chart
-            var ctxHospital = document.getElementById('hospitalChart').getContext('2d');
-            var hospitalChart = new Chart(ctxHospital, {
-                type: 'line',
-                data: {
-                    labels: {{ hospital_types|safe }},
-                    datasets: [
-                        {
-                            label: 'Hospitals',
-                            data: {{ hospital_hospitals|safe }},
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            fill: true,
-                            borderWidth: 2,
-                            tension: 0.1
-                        },
-                        {
-                            label: 'Doctors',
-                            data: {{ hospital_doctors|safe }},
-                            borderColor: 'rgba(255, 206, 86, 1)',
-                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                            fill: true,
-                            borderWidth: 2,
-                            tension: 0.1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
+        ctx.addEventListener('click', (e) => {
+            myChart.resize();
+            clickButtonHandler(ctx, e);
+        });
+        </script>
 
-                            }
-                        },
-                        y: {
-                            display: true,
-                            title: {
-                                display: true,
+     <!--다빈도상병(입원)-->
+     <div class="chartBox"
+          style="margin-left:50px;
+                border-radius:30px;
+                border: solid 1px #ABB7D4;">
+        <canvas id="inrankPieChart" width="300px" height="300px"></canvas>
+      </div>
+ </div>
 
-                            },
-                            beginAtZero: true
-                        }
-                    },plugins: {
+<div id="line_2" class="row"
+    style="margin:20px; display:flex;">
+
+
+<!--진료 건수와 진료비 bar + line chart-->
+    <div id ="b_line"
+    class="chartBox"
+    style=" margin-left:38px; padding:10px;
+            border-radius:30px;
+            border: solid 1px #ABB7D4">
+    <canvas id="tocostChart" width="850" height="300px"></canvas>
+    </div>
+    <script>
+    // CountCost Chart
+    window.onload = function () {
+    var mixedChart = document.getElementById('tocostChart').getContext('2d');
+    var tocostChart = new Chart(mixedChart, {
+    type: 'bar',
+    data: {
+        labels: ['1998년', '1999년', '2000년', '2001년', '2002년'],
+        datasets: [
+            {
+            type: 'bar',
+            label: '진료수(건)',
+            yAxisID: 'y-axis-numtres',
+            data: {{ numtre_numtres|safe }},
+            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+            borderColor: 'rgba(0, 123, 255, 1)',
+            borderWidth: 1
+            }, {
+            type: 'line',
+            label: '진료비(천원)',
+            yAxisID: 'y-axis-tocosts',
+            data: {{ tocost_tocosts|safe }},
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            fill: true,
+            borderWidth: 2,
+            }
+        ],
+    },
+    options: {
+        responsive: true,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        scales: {
+            'y-axis-numtres' : {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                id: 'y-axis-numtres',
+            },
+            'y-axis-tocosts' : {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                id: 'y-axis-tocosts',
+                grid:{
+                    drawOnChartArea:false,
+                     }
+            }
+        },
+        plugins: {
             title: {
                 display: true,
-                text: '진료과목별 의료기관과 전문의수 비교현황',
+                text: '진료 건수와 진료비 추이',
                 padding: {
                     top: 10,
                     bottom: 10
                 }
             }
         }
-                }
-            });
-        // Medicine Chart
-            var ctxMedicine = document.getElementById('medicineChart').getContext('2d');
-            var medicineChart = new Chart(ctxMedicine, {
-                type: 'line',
-                data: {
-                    labels: {{ medicine_ages|safe }},
-                    datasets: [
-                        {
-                            label: 'January',
-                            data: {{ medicine_m1s|safe }},
-                            borderColor: 'rgba(255, 051, 051, 1)',
-                            fill: true,
-                            borderWidth: 2,
+    }
+    });
+    };
+    </script>
 
-                        },
-                        {
-                            label: 'February',
-                            data: {{ medicine_m2s|safe }},
-                            borderColor: 'rgba(255, 153, 000, 1)',
-                            fill: true,
-                            borderWidth: 2,
+<!--다빈도상병(외래)-->
+    <div class="chartBox"
+         style="margin-left:50px;
+                border-radius:30px;
+                border: solid 1px #ABB7D4;">
+    <canvas id="outrankPieChart" ></canvas>
+    </div>
+ <script>
+    // 다빈도상병(입원)
 
-                        },
-                        {
+    // hoverLabel plugin block
+    const hoverLabel = {
+      id : 'hoverLabel',
+      afterDraw(chart, args, options){
+        const {ctx, chartArea: {left, right, top, bottom, width, height}} = chart;
+        ctx.save();
 
-                            label: 'March',
-                            data: {{ medicine_m3s|safe }},
-                            borderColor: 'rgba(255, 255, 000, 1)',
-                            fill: true,
-                            borderWidth: 2,
+        if(chart._active.length > 0) {
+          const textLabel = chart.config.data.labels[chart._active[0].index];
+          const numberLabel = chart.config.data.datasets[chart._active[0].datasetIndex].data[chart._active[0].index];
+          const color = chart.config.data.datasets[chart._active[0].datasetIndex].borderColor[chart._active[0].index];
 
-                        },
-                       {
-                            label: 'April',
-                            data: {{ medicine_m4s|safe }},
-                            borderColor: 'rgba(000, 255, 000, 1)',
-                            fill: true,
-                            borderWidth: 2
+          ctx.font = 'bolder 20px Arial';
+          ctx.fillStyle = color;
+          ctx.textAlign = 'center';
+          ctx.fillText(`${textLabel}`, width/2, height/2+top, width/1.5);
+          ctx.fillText(`${numberLabel}`, width/2, height/2+top*2, width/1.5);
+          }
+        ctx.restore();
+      }
+    }
 
-                        },
-                        {
-                            label: 'May',
-                            data: {{ medicine_m5s|safe }},
-                            borderColor: 'rgba(000, 051, 255, 1)',
-                            fill: true,
-                            borderWidth: 2,
+    const inrankPieChartCtx = document.querySelector('#inrankPieChart').getContext('2d');
+    const inrankPieChart = new Chart(inrankPieChartCtx, {
+      type: 'doughnut',
+      data: {
+        labels: [
+          {% for i in inrank %}
+            '{{ i.disease }}'{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        ],
+        datasets: [{
+          label: '입원 수 ',
+          data: [
+            {% for i in inrank %}
+              {{ i.count }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ],
+          backgroundColor: [
+            'rgba(255, 26, 104, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+          borderWidth: 1,
+          hoverBackgroundColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+          cutout: '80%'
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: '다빈도 상병(입원)'
+          },
+          layout: {
+            padding: 10
+          },
+          labels: {
+            render: 'percentage',
+            fontColor: 'black',
+            fontStyle: 'bolder',
+            position: 'inside',
+            textMargin: 6
+          },
+          tooltips: {
+            enabled:false
+          }
+        }
+      },
+      plugins: [hoverLabel]
+    });
 
-                        },
-                        {
-                            label: 'June',
-                            data: {{ medicine_m6s|safe }},
-                            borderColor: 'rgba(153, 051, 225, 1)',
-                            fill: true,
-                            borderWidth: 2,
+    // 다빈도상병(외래)
+    const outrankPieChartCtx = document.querySelector('#outrankPieChart').getContext('2d');
+    const outrankPieChart = new Chart(outrankPieChartCtx, {
+      type: 'pie',
+      data: {
+        labels: [
+          {% for i in outrank %}
+            '{{ i.disease }}'{% if not forloop.last %},{% endif %}
+          {% endfor %}
+        ],
+        datasets: [{
+          label: '외래 수 ',
+          data: [
+            {% for i in outrank %}
+              {{ i.count }}{% if not forloop.last %},{% endif %}
+            {% endfor %}
+          ],
+          backgroundColor: [
+            'rgba(255, 26, 104, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+          borderWidth: 1,
+          hoverBackgroundColor: [
+            'rgba(255, 26, 104, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+          ],
+          cutout: '80%'
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            display: false,
+            position: 'bottom'
+          },
+          title: {
+            display: true,
+            text: '다빈도 상병(외래)'
+          },
+          layout: {
+            padding: 10
+          },
+          labels: {
+            render: 'percentage',
+            fontColor: 'black',
+            fontStyle: 'bolder',
+            position: 'inside',
+            textMargin: 8
+          },
+          tooltip: {
+            callbacks: {
+              display: false
+            }
+          }
+        }
+      },
+      plugins: [hoverLabel]
+    });
+  </script>
+</div>
 
-                        },
-                        {
-                            label: 'July',
-                            data: {{ medicine_m7s|safe }},
-                            borderColor: 'rgba(102, 255, 204, 1)',
-                            fill: true,
-                            borderWidth: 2,
-
-                        },
-                        {
-                            label: 'August',
-                            data: {{ medicine_m8s|safe }},
-                            borderColor: 'rgba(204, 051, 102, 1)',
-                            fill: true,
-                            borderWidth: 2,
-
-                        },
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Age Group'
-                            }
-                        },
-                        y: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Usage'
-                            },
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: '연령대별 월별 의약품 사용현황',
-                            padding: {
-                                top: 10,
-                                bottom: 10
-                            }
-                        }
-                    }
-                }
-            });
-        // Hospital counts Chart
-        var ctxCounts = document.getElementById('countsChart').getContext('2d');
-            var countsChart = new Chart(ctxCounts, {
-                type: 'bar',
-                data: {
-                    labels: {{counts_regions|safe}},
-                    datasets: [
-                        {
-                            label: '병의원',
-                            data: {{counts_clinics|safe}},
-                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                            borderColor: 'rgba(0, 123, 255, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: '보건소',
-                            data: {{counts_healthcenters|safe}},
-                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: '약국',
-                            data: {{ counts_pharmacys|safe }},
-                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: '치과',
-                            data: {{ counts_dentists|safe }},
-                            backgroundColor: 'rgba(255, 206, 86, 0.5)',
-                            borderColor: 'rgba(255, 206, 86, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: '한의원',
-                            data:{{ counts_orientals|safe }},
-                            backgroundColor: 'rgba(153, 102, 255, 0.5)',
-                            borderColor: 'rgba(153, 102, 255, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            stacked: true,
-                        },
-                        y: {
-                            stacked: true,
-                            beginAtZero: true
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: '읍면동별 의료기관 현황',
-                            padding: {
-                                top: 10,
-                                bottom: 10
-                            }
-                        }
-                    }
-                }
-            });
-
-</script>
 {% endblock %}
-
-

@@ -58,3 +58,43 @@ class Doctor(models.Model):
      clinic = models.IntegerField() #의원
      Public = models.IntegerField() #보건지소
 
+class NumTre(models.Model):
+    year = models.IntegerField()
+    numtre = models.IntegerField()
+
+class ToCost(models.Model):
+    year = models.IntegerField()
+    tocost = models.IntegerField()
+
+class Regionpop(models.Model):
+    regions = models.TextField()
+    mage0s = models.IntegerField()
+    mage10s = models.IntegerField()
+    mage20s = models.IntegerField()
+    mage30s = models.IntegerField()
+    mage40s = models.IntegerField()
+    mage50s = models.IntegerField()
+    mage60s = models.IntegerField()
+    mage70s = models.IntegerField()
+    fage0s = models.IntegerField()
+    fage10s = models.IntegerField()
+    fage20s = models.IntegerField()
+    fage30s = models.IntegerField()
+    fage40s = models.IntegerField()
+    fage50s = models.IntegerField()
+    fage60s = models.IntegerField()
+    fage70s = models.IntegerField()
+    total = models.IntegerField()
+
+
+class Inpatrank(models.Model):
+    rank = models.TextField()
+    disease = models.TextField()
+    count = models.IntegerField()
+    percent = models.IntegerField()
+
+class Outpatrank(models.Model):
+    rank = models.TextField()
+    disease = models.TextField()
+    count = models.IntegerField()
+    percent = models.IntegerField()
