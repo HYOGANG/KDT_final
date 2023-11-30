@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['192.168.0.32', '192.168.224.240',
 # Application definition
 
 INSTALLED_APPS = [
+
     'django.contrib.humanize',
     'finalapp',
     'django.contrib.admin',
