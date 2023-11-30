@@ -1,0 +1,901 @@
+{% extends 'finalapp/base.html' %}
+{% block content %}
+<div id="sidebar">
+     <ul>
+         <li>
+                <div>
+                    <div><a href="/board"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/board">의료이용현황</a></div>
+                </div>
+         </li>
+         <li>
+                <div>
+                    <div><a href="/second"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/second">의료자원현황</a></div>
+                </div>
+         </li>
+         <li>
+                <div>
+                    <div><a href="/map"><i class="fa-regular fa-map"></i></a></div>
+                    <div><a href="/map">우리동네병원찾기</a></div>
+                </div>
+         </li>
+
+     </ul>
+
+
+</div>
+    <div class="w3-main" style="margin-left:50px">
+        <div class="sejonginfo_title"
+             style="position:relative;padding:8;">
+                 <div class="title_name"
+                      style="font-size:20px ; color:#555; font-weight: bold; margin-left:4%;"> 세종특별자치시 의료자원현황</div>
+                    <div class="title_date"
+                         style="position:absolute; right:4.5%; bottom:3; font-size:16px; font-weight: bold; color:#0d62ce;">
+                        <script type="text/javascript">
+                            var today = new Date();
+                            var year = today.getFullYear();
+                            var month = ('0' + (today.getMonth()+1)).slice(-2);
+                            var day = ('0' + today.getDate()).slice(-2);
+                            var dateString = year + '.' + month + '.' + day;
+                            document.write("일자 : " + dateString);
+                        </script>
+                    </div>
+            </div>
+     </div>
+
+<div class="container" style="max-width: 100%; margin-left:50px">
+  <div style="display: inline-block; width: 600px; height:400px; vertical-align: top; margin-right: 20px;">
+    <div style="width: 100%; border-radius: 30px; border:solid 0.5px #ABB7D4; padding:10px">
+      <canvas id="myChart"></canvas>
+    </div>
+    <div style="width: 100%; margin-top:25px;border-radius: 30px; border:solid 0.5px #ABB7D4; padding:10px">
+      <canvas id="hpChart"></canvas>
+    </div>
+  </div>
+
+  <div style="display: inline-block; width: 380px;  vertical-align: top; margin-right: 20px;
+             border-radius: 30px; border:solid 0.5px #ABB7D4; padding:10px 10px 0px 10px">
+    {% if v %}
+      <center><h8 style="color:#808080;" ><b>시설 및 장비현황</b></h8><br></center>
+      <table class="table table-hover" style="font-size: small;margin-top:10px; margin-bottom:6px;">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>세종시</th>
+            <th>전국</th>
+            <th>비율</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in v %}
+            <tr>
+              <td>{{ i.device }}</td>
+              <td>{{ i.sejongsi }}</td>
+              <td>{{ i.korea }}</td>
+              <td>{{ i.percent }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="5">No data available</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No data to display.</p>
+    {% endif %}
+  </div>
+  <div style="display: inline-block;  padding:15px 5px 27px 5px;
+              border-radius: 30px; border:solid 0.5px #ABB7D4;">
+    <h8 style="position:absolute; right:7.5%; color:#808080"><b>읍면동별 인구대비 병원분포도</b></h8><br><hr>
+    <img src="static/map.png" alt="지도" id="map"
+         style="width: 400px; height: 550px;">
+  </div>
+</div>
+
+    <script>
+          var coordinate = {
+                  top: 0,
+                  bottom : 0,
+                  left : 0,
+                  right : 0,
+                }
+
+         var Data = [
+            {
+                dep: '내과계',
+                color: '#AFEEEE',
+                count:{{ doctor.22.genhos|add:doctor.1.genhos|add:doctor.11.genhos|add:doctor.2.genhos|add:doctor.3.genhos|add:doctor.20.genhos|add:doctor.14.genhos|add:doctor.22.hos|add:doctor.1.hos|add:doctor.11.hos|add:doctor.2.hos|add:doctor.3.hos|add:doctor.20.hos|add:doctor.14.hos|add:doctor.22.nurs|add:doctor.1.nurs|add:doctor.11.nurs|add:doctor.2.nurs|add:doctor.3.nurs|add:doctor.20.nurs|add:doctor.14.nurs|add:doctor.22.mental|add:doctor.1.mental|add:doctor.11.mental|add:doctor.2.mental|add:doctor.3.mental|add:doctor.20.mental|add:doctor.14.mental|add:doctor.22.clinic|add:doctor.1.clinic|add:doctor.11.clinic|add:doctor.2.clinic|add:doctor.3.clinic|add:doctor.20.clinic|add:doctor.14.clinic|add:doctor.22.Public|add:doctor.1.Public|add:doctor.11.Public|add:doctor.2.Public|add:doctor.3.Public|add:doctor.20.Public|add:doctor.14.Public }},
+                depData : [
+                        {   dep1: '가정의학과',
+                            color1: 'rgba(116, 238, 238,1)',
+                            count1: {{ doctor.22.genhos|add:doctor.22.hos|add:doctor.22.nurs|add:doctor.22.mental|add:doctor.22.clinic|add:doctor.22.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.22.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.22.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.22.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.22.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.22.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.22.Public }} }
+                            ] },
+
+                        {   dep1: '내과',
+                            color1: 'rgba(116, 238, 238, 0.9)',
+                            count1: {{ doctor.1.genhos|add:doctor.1.hos|add:doctor.1.nurs|add:doctor.1.mental|add:doctor.1.clinic|add:doctor.1.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.1.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.1.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.1.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.1.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.1.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.1.Public }} }
+                            ] },
+
+                        {   dep1: '소아청소년과',
+                            color1: 'rgba(116, 238, 238, 0.8)',
+                            count1: {{ doctor.11.genhos|add:doctor.11.hos|add:doctor.11.nurs|add:doctor.11.mental|add:doctor.11.clinic|add:doctor.11.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.11.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.11.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.11.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.11.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.11.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.11.Public }} }
+                            ] },
+                        {   dep1: '신경과',
+                            color1: 'rgba(116, 238, 238, 0.7)',
+                            count1: {{ doctor.2.genhos|add:doctor.2.hos|add:doctor.2.nurs|add:doctor.2.mental|add:doctor.2.clinic|add:doctor.2.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.2.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.2.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.2.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.2.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.2.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.2.Public }} }
+                            ] },
+                        {   dep1: '정신건강의학과',
+                            color1: 'rgba(116, 238, 238, 0.6)',
+                            count1: {{ doctor.3.genhos|add:doctor.3.hos|add:doctor.3.nurs|add:doctor.3.mental|add:doctor.3.clinic|add:doctor.3.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.3.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.3.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.3.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.3.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.3.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.3.Public }} }
+                            ] },
+                        {   dep1: '재활의학과',
+                            color1: 'rgba(116, 238, 238, 0.5)',
+                            count1: {{ doctor.20.genhos|add:doctor.20.hos|add:doctor.20.nurs|add:doctor.20.mental|add:doctor.20.clinic|add:doctor.20.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.20.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.20.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.20.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.20.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.20.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.20.Public }} }
+                            ] },
+                       {   dep1: '피부과',
+                            color1: 'rgba(116, 238, 238, 0.4)',
+                            count1: {{ doctor.14.genhos|add:doctor.14.hos|add:doctor.14.nurs|add:doctor.14.mental|add:doctor.14.clinic|add:doctor.14.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.14.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.14.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.14.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.14.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.14.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.14.Public }} }
+                            ]}
+                ]},
+            {
+                dep: '외과계',
+                color: '#95E6C9',
+                count: {{ doctor.15.genhos|add:doctor.10.genhos|add:doctor.8.genhos|add:doctor.6.genhos|add:doctor.7.genhos|add:doctor.12.genhos|add:doctor.4.genhos|add:doctor.13.genhos|add:doctor.5.genhos|add:doctor.15.hos|add:doctor.10.hos|add:doctor.8.hos|add:doctor.6.hos|add:doctor.7.hos|add:doctor.12.hos|add:doctor.4.hos|add:doctor.13.hos|add:doctor.5.hos|add:doctor.15.nurs|add:doctor.10.nurs|add:doctor.8.nurs|add:doctor.6.nurs|add:doctor.7.nurs|add:doctor.12.nurs|add:doctor.4.nurs|add:doctor.13.nurs|add:doctor.5.nurs|add:doctor.15.mental|add:doctor.10.mental|add:doctor.8.mental|add:doctor.6.mental|add:doctor.7.mental|add:doctor.12.mental|add:doctor.4.mental|add:doctor.13.mental|add:doctor.5.mental|add:doctor.15.clinic|add:doctor.10.clinic|add:doctor.8.clinic|add:doctor.6.clinic|add:doctor.7.clinic|add:doctor.12.clinic|add:doctor.4.clinic|add:doctor.13.clinic|add:doctor.5.clinic|add:doctor.15.Public|add:doctor.10.Public|add:doctor.8.Public|add:doctor.6.Public|add:doctor.7.Public|add:doctor.12.Public|add:doctor.4.Public|add:doctor.13.Public|add:doctor.5.Public }},
+                depData : [
+                        {   dep1: '비뇨의학과',
+                            color1: 'rgba(117, 226, 207, 1)',
+                            count1: {{ doctor.15.genhos|add:doctor.15.hos|add:doctor.15.nurs|add:doctor.15.mental|add:doctor.15.clinic|add:doctor.15.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.15.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.15.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.15.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.15.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.15.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.15.Public }} }
+                            ] },
+
+                        {   dep1: '산부인과',
+                            color1: 'rgba(117, 226, 207, 0.9)',
+                            count1: {{ doctor.10.genhos|add:doctor.10.hos|add:doctor.10.nurs|add:doctor.10.mental|add:doctor.10.clinic|add:doctor.10.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.10.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.10.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.10.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.10.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.10.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.10.Public }} }
+                            ] },
+
+                        {   dep1: '성형외과',
+                            color1: 'rgba(117, 226, 207, 0.8)',
+                            count1: {{ doctor.8.genhos|add:doctor.8.hos|add:doctor.8.nurs|add:doctor.8.mental|add:doctor.8.clinic|add:doctor.8.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.8.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.8.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.8.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.8.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.8.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.8.Public }} }
+                            ] },
+                        {   dep1: '신경외과',
+                            color1: 'rgba(117, 226, 207, 0.7)',
+                            count1: {{ doctor.6.genhos|add:doctor.6.hos|add:doctor.6.nurs|add:doctor.6.mental|add:doctor.6.clinic|add:doctor.6.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.6.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.6.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.6.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.6.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.6.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.6.Public }} }
+                            ] },
+                        {   dep1: '심장혈관흉부외과',
+                            color1: 'rgba(117, 226, 207, 0.6)',
+                            count1: {{ doctor.7.genhos|add:doctor.7.hos|add:doctor.7.nurs|add:doctor.7.mental|add:doctor.7.clinic|add:doctor.7.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.7.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.7.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.7.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.7.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.7.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.7.Public }} }
+                            ] },
+                        {   dep1: '안과',
+                            color1: 'rgba(117, 226, 207, 0.5)',
+                            count1: {{ doctor.12.genhos|add:doctor.12.hos|add:doctor.12.nurs|add:doctor.12.mental|add:doctor.12.clinic|add:doctor.12.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.12.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.12.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.12.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.12.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.12.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.12.Public }} }
+                            ] },
+                        {   dep1: '외과',
+                            color1: 'rgba(117, 226, 207, 0.4)',
+                            count1: {{ doctor.4.genhos|add:doctor.4.hos|add:doctor.4.nurs|add:doctor.4.mental|add:doctor.4.clinic|add:doctor.4.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.4.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.4.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.4.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.4.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.4.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.4.Public }} }
+                            ] },
+                        {   dep1: '이비인후과',
+                            color1: 'rgba(117, 226, 207, 0.3)',
+                            count1: {{ doctor.13.genhos|add:doctor.13.hos|add:doctor.13.nurs|add:doctor.13.mental|add:doctor.13.clinic|add:doctor.13.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.13.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.13.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.13.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.13.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.13.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.13.Public }} }
+                            ] },
+                        {   dep1: '정형외과',
+                            color1: 'rgba(117, 226, 207, 0.2)',
+                            count1: {{ doctor.5.genhos|add:doctor.5.hos|add:doctor.5.nurs|add:doctor.5.mental|add:doctor.5.clinic|add:doctor.5.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.5.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.5.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.5.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.5.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.5.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.5.Public }} }
+                            ] }
+                ]},
+            {
+                dep: '지원계',
+                color: '#A4A5DD',
+                count: {{ doctor.9.genhos|add:doctor.17.genhos|add:doctor.18.genhos|add:doctor.16.genhos|add:doctor.23.genhos|add:doctor.24.genhos|add:doctor.19.genhos|add:doctor.21.genhos|add:doctor.9.hos|add:doctor.17.hos|add:doctor.18.hos|add:doctor.16.hos|add:doctor.23.hos|add:doctor.24.hos|add:doctor.19.hos|add:doctor.21.hos|add:doctor.9.nurs|add:doctor.17.nurs|add:doctor.18.nurs|add:doctor.16.nurs|add:doctor.23.nurs|add:doctor.24.nurs|add:doctor.19.nurs|add:doctor.21.nurs|add:doctor.9.mental|add:doctor.17.mental|add:doctor.18.mental|add:doctor.16.mental|add:doctor.23.mental|add:doctor.24.mental|add:doctor.19.mental|add:doctor.21.mental|add:doctor.9.clinic|add:doctor.17.clinic|add:doctor.18.clinic|add:doctor.16.clinic|add:doctor.23.clinic|add:doctor.24.clinic|add:doctor.19.clinic|add:doctor.21.clinic|add:doctor.9.Public|add:doctor.17.Public|add:doctor.18.Public|add:doctor.16.Public|add:doctor.23.Public|add:doctor.24.Public|add:doctor.19.Public|add:doctor.21.Public }},
+                depData : [
+                        {   dep1: '마취통증의학과',
+                            color1: 'rgba(216, 216, 240,1)',
+                            count1: {{ doctor.9.genhos|add:doctor.9.hos|add:doctor.9.nurs|add:doctor.9.mental|add:doctor.9.clinic|add:doctor.9.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.9.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.9.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.9.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.9.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.9.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.9.Public }} }
+                            ] },
+
+                        {   dep1: '방사선종양학과',
+                            color1: 'rgba(216, 216, 240,0.9)',
+                            count1: {{ doctor.17.genhos|add:doctor.17.hos|add:doctor.17.nurs|add:doctor.17.mental|add:doctor.17.clinic|add:doctor.17.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.17.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.17.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.17.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.17.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.17.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.17.Public }} }
+                            ] },
+
+                        {   dep1: '병리과',
+                            color1: 'rgba(216, 216, 240,0.8)',
+                            count1: {{ doctor.18.genhos|add:doctor.18.hos|add:doctor.18.nurs|add:doctor.18.mental|add:doctor.18.clinic|add:doctor.18.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.18.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.18.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.18.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.18.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.18.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.18.Public }} }
+                            ] },
+                        {   dep1: '영상의학과',
+                            color1: 'rgba(216, 216, 240,0.7)',
+                            count1: {{ doctor.16.genhos|add:doctor.16.hos|add:doctor.16.nurs|add:doctor.16.mental|add:doctor.16.clinic|add:doctor.16.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.16.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.16.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.16.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.16.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.16.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.16.Public }} }
+                            ] },
+                        {   dep1: '응급의학과',
+                            color1: 'rgba(216, 216, 240, 0.6)',
+                            count1: {{ doctor.23.genhos|add:doctor.23.hos|add:doctor.23.nurs|add:doctor.23.mental|add:doctor.23.clinic|add:doctor.23.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.23.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.23.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.23.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.23.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.23.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.23.Public }} }
+                            ] },
+                        {   dep1: '직업환경의학과',
+                            color1: 'rgba(216, 216, 240, 0.5)',
+                            count1: {{ doctor.24.genhos|add:doctor.24.hos|add:doctor.24.nurs|add:doctor.24.mental|add:doctor.24.clinic|add:doctor.24.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.24.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.24.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.24.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.24.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.24.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.24.Public }} }
+                            ] },
+                        {   dep1: '진단검사의학과',
+                            color1: 'rgba(216, 216, 240, 0.4)',
+                            count1: {{ doctor.19.genhos|add:doctor.19.hos|add:doctor.19.nurs|add:doctor.19.mental|add:doctor.19.clinic|add:doctor.19.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.19.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.19.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.19.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.19.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.19.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.19.Public }} }
+                            ] },
+                        {   dep1: '핵의학과',
+                            color1: 'rgba(216, 216, 240, 0.3)',
+                            count1: {{ doctor.21.genhos|add:doctor.21.hos|add:doctor.21.nurs|add:doctor.21.mental|add:doctor.21.clinic|add:doctor.21.Public}},
+                            doctorData: [
+                                { dep2 : '종합병원', count2: {{ doctor.21.genhos }} },
+                                { dep2 : '병원', count2: {{ doctor.21.hos }} },
+                                { dep2 : '요양병원', count2: {{ doctor.21.nurs }} },
+                                { dep2 : '정신병원', count2: {{ doctor.21.mental }} },
+                                { dep2 : '의원', count2: {{ doctor.21.clinic }} },
+                                { dep2 : '보건지소', count2: {{ doctor.21.Public }} }
+                            ] }
+                ]}
+        ];
+
+        //구조 -> Data(dep, count) > depData(dep1, count1) > doctorData(dep2, count2)
+
+        // setup 기본 데이터 설정-> data, label 자주쓰이는 config.data.datasets[0].label여기 있음
+        var data = {
+            datasets: [{
+                label: '진료 과별 전문의 수',
+                data: Data,
+                backgroundColor: [
+                  Data[0].color,
+                  Data[1].color,
+                  Data[2].color
+                ],
+                borderColor: [
+                  Data[0].color,
+                  Data[1].color,
+                  Data[2].color
+                ],
+                borderWidth: 2
+              }]
+            };
+
+        var resetIndex = ''
+           // resetButton plugin
+        var resetButton = {
+            id : 'resetButton',
+            beforeDraw(chart, args, options){
+                if(myChart.config.data.datasets[0].label !== '진료 과별 전문의 수'){
+
+                    var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+                    ctx.save();
+
+                    var text = 'Back';
+                    var thickBorder = 3;
+                    var textWidth = ctx.measureText(text).width;
+
+                    // draw background
+                    // ctx.fillStyle = 'rgba(255, 28, 239, 0.21)';
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                    ctx.fillRect(right - (textWidth + 1 + 10), 5, textWidth + 10 , 20)
+
+                    // draw text
+                    ctx.fillStyle = '#666';
+                    ctx.font = '12px Arial';
+                    ctx.fillText(text,right - (textWidth + 1 + 5), 15);
+
+
+                    // draw border
+                    ctx.lineWidth = thickBorder + 'px';
+                    //ctx.strokeStyle = 'rgba(255,26,104,1)';
+                    ctx.strokeStyle = '#E1DDE3';
+                    ctx.strokeRect(right - (textWidth + 1 + 10), 5, textWidth + 10 , 20);
+
+                    //console.log(coordinate);
+                    coordinate.top = 5;
+                    coordinate.bottom = 25;
+                    coordinate.left = right - (textWidth + 1 + 10);
+                    coordinate.right = right;
+
+                    ctx.restore();
+                };
+              }
+            }
+
+        var labelList = ['진료 과별 전문의 수', '내과계', '외과계', '지원계']
+        var labelList1 = ['내과계', '외과계', '지원계']
+
+        // config 구성 설정
+        var config = {
+            type: 'bar',
+            data,
+            options: {
+                plugins : {
+                    tooltip : {
+                        yAlign : 'bottom'
+                    }
+                },
+                onHover: (event, chartElement) => {
+                    if(labelList.includes(myChart.config.data.datasets[0].label)) {
+                        event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                    } else {
+                        event.native.target.style.cursor = 'default';
+                    };
+                },
+                parsing: {
+                    xAxisKey: 'dep',
+                    yAxisKey: 'count'
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+            },
+            plugins : [resetButton]
+        };
+
+        // render init block
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(
+          ctx,
+          config
+        );
+
+        function changeChart(index){
+
+            if (myChart.config.data.datasets[0].label === '진료 과별 전문의 수') {
+
+                myChart.config.options.parsing.xAxisKey = 'depData.dep1';
+                myChart.config.options.parsing.yAxisKey = 'depData.count1';
+
+                var aColor = [];
+                var aUsers = [];
+                var aLabels = Data[index].depData.map(labels => {
+                    //aColor.push(Data[index].color);
+                    aColor.push(labels.color1);
+                    aUsers.push(labels.count1);
+                    return labels.dep1;
+                })
+                console.log(aLabels);
+                myChart.config.data.datasets[0].data = aUsers;
+                myChart.config.data.labels = aLabels;
+                myChart.config.data.datasets[0].backgroundColor = aColor;
+                myChart.config.data.datasets[0].borderColor = aColor;
+                myChart.config.data.datasets[0].label = Data[index].dep;
+                myChart.update();
+            }
+        }
+
+        var currIndex = ''
+        var currIndex1 = ''
+
+        function changeChart1(currIndex, index) {
+            myChart.config.options.parsing.xAxisKey = 'doctorData.dep2';
+            myChart.config.options.parsing.yAxisKey = 'doctorData.count2';
+
+            var bColor = [];
+            var bUsers = [];
+            var bLabels = Data[currIndex].depData[index].doctorData.map(labels => {
+                bColor.push(Data[currIndex].depData[index].color1);
+                bUsers.push(labels.count2);
+                return labels.dep2;
+            })
+            //console.log(bLabels)
+            myChart.config.data.datasets[0].data = bUsers;
+            myChart.config.data.labels = bLabels;
+            myChart.config.data.datasets[0].backgroundColor = bColor;
+            myChart.config.data.datasets[0].borderColor = bColor;
+            myChart.config.data.datasets[0].label = Data[currIndex].depData[index].dep1;
+            myChart.update();
+        }
+
+        function clickHandlers(click){
+            if (myChart.config.data.datasets[0].label === '진료 과별 전문의 수'){
+                var bar = myChart.getElementsAtEventForMode(click, 'nearest',
+                    {intersect: true}, true);
+                if(bar.length){
+                    //console.log(bar[0].index);
+                    changeChart(bar[0].index);
+                    currIndex = bar[0].index
+                }
+
+            } else if (labelList1.includes(myChart.config.data.datasets[0].label)) {
+                var bar = myChart.getElementsAtEventForMode(click, 'nearest',
+                    {intersect: true}, true);
+                //console.log(firstIndex);
+                //console.log(bar);
+                if(bar.length){
+                    //console.log(bar[0].index);
+                    changeChart1(currIndex, bar[0].index);
+                    currIndex1 = bar[0].index
+                }
+            }
+        };
+
+        function resetCharts(){
+            //console.log('clicked reset button!');
+            //console.log(currIndex,currIndex1 );
+            if (labelList1.includes(myChart.config.data.datasets[0].label)) {
+                myChart.config.options.parsing.xAxisKey = 'dep';
+                myChart.config.options.parsing.yAxisKey = 'count';
+
+                var cColor = [];
+                var cCount = [];
+                var cLabels = Data.map(labels => {
+                  cColor.push(labels.color);
+                  cCount.push(labels.count);
+                  return labels.dep;
+                });
+
+                myChart.config.data.datasets[0].backgroundColor = cColor;
+                myChart.config.data.datasets[0].borderColor = cColor;
+                myChart.config.data.labels = cLabels;
+                myChart.config.data.datasets[0].label = '진료 과별 전문의 수';
+                myChart.config.data.datasets[0].data = cCount;
+                myChart.update();
+            } else {
+                myChart.config.options.parsing.xAxisKey = 'dep1';
+                myChart.config.options.parsing.yAxisKey = 'count1';
+
+                var aColor = [];
+                var aCount = [];
+                var aLabels = Data[currIndex].depData.map(labels => {
+                    aColor.push(labels.color1);
+                    aCount.push(labels.count1);
+                    return labels.dep1;
+            });
+
+            myChart.config.data.datasets[0].backgroundColor = aColor;
+            myChart.config.data.datasets[0].borderColor = aColor;
+            myChart.config.data.labels = aLabels;
+            myChart.config.data.datasets[0].label = Data[currIndex].dep;
+            myChart.config.data.datasets[0].data = aCount;
+
+            myChart.update();
+          }
+        };
+
+
+        function mousemoveHandler(canvas, mousemove) {
+          var x = mousemove.offsetX;
+          var y = mousemove.offsetY;
+
+          if (!labelList.includes(myChart.config.data.datasets[0].label)){
+              if ( x > coordinate.left && x < coordinate.right && y > coordinate.top && y
+                   < coordinate.bottom){
+                    canvas.style.cursor = 'pointer';
+                   } else {
+                    canvas.style.cursor = 'default';
+                  };
+              };
+          };
+
+
+        function clickButtonHandler(canvas, click){
+          var x = click.offsetX;
+          var y = click.offsetY;
+
+          if (x > coordinate.left && x < coordinate.right && y > coordinate.top && y
+              < coordinate.bottom){
+                resetCharts();
+              };
+        }
+
+        ctx.onclick = clickHandlers;
+
+        ctx.addEventListener('mousemove', (e) => {
+          myChart.resize();
+          mousemoveHandler(ctx, e);
+        });
+
+        ctx.addEventListener('click', (e) => {
+          myChart.resize();
+          clickButtonHandler(ctx,e);
+        })
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+        var coordinates = {
+          top: 0,
+          bottom : 0,
+          left : 0,
+          right : 0,
+        }
+
+
+        var browserData = [
+            {
+            browser: '병의원',
+            color: 'rgba(0, 123, 255, 0.5)',
+            marketshare: {{ cln.clinic__sum}},
+            versionData: [
+                {% for a in counts%}
+                    { version : '{{a.region}}', users: {{a.clinic}} }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]},
+            {
+            browser: '보건소',
+            color: 'rgba(255, 99, 132, 0.5)',
+            marketshare: {{ h_c.healthcenter__sum}},
+            versionData: [
+                {% for a in counts%}
+                    { version : '{{a.region}}', users: {{a.healthcenter}} }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]},
+            {
+            browser: '약국',
+            color: 'rgba(75, 192, 192, 0.5)',
+            marketshare: {{ pha.pharmacy__sum }},
+            versionData: [
+                {% for a in counts %}
+                    { version : '{{ a.region }}', users: {{ a.pharmacy }} } {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]},
+            {
+            browser: '치과',
+            color: 'rgba(255, 206, 86, 0.5)',
+            marketshare: {{ den.dentist__sum }},
+            versionData: [
+                {% for a in counts %}
+                    { version : '{{a.region}}', users: {{a.dentist}} } {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]},
+            {
+            browser: '한의원',
+            color:  'rgba(153, 102, 255, 0.5)',
+            marketshare: {{ ori.oriental__sum }},
+            versionData: [
+                {% for a in counts%}
+                    { version : '{{a.region}}', users: {{a.oriental}} } {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]},
+        ];
+
+        // setup
+        var data = {
+          datasets: [{
+            label: '읍면동별 의료기관 현황',
+            data: browserData,
+            backgroundColor: [
+              browserData[0].color,
+              browserData[1].color,
+              browserData[2].color,
+              browserData[3].color,
+              browserData[4].color
+            ],
+            borderColor: [
+              browserData[0].color,
+              browserData[1].color,
+              browserData[2].color,
+              browserData[3].color,
+              browserData[4].color
+            ],
+            borderWidth: 2
+          }]
+        };
+
+       // resetButton plugin
+        var resethpButton = {
+          id : 'resethpButton',
+          beforeDraw(chart, args, options){
+            if(hpChart.config.data.datasets[0].label !== '읍면동별 의료기관 현황'){
+
+                var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+                ctx.save();
+
+                var text = 'Back';
+                var thickBorder = 3;
+                var textWidth = ctx.measureText(text).width;
+
+                // draw background
+                ctx.fillStyle = 'rgba(0,0,0,0.1)';
+                ctx.fillRect(right - (textWidth + 1 + 10), 5, textWidth + 10 , 20)
+
+                // draw text
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.fillText(text,right - (textWidth + 1 + 5), 15);
+
+                // draw border
+                ctx.lineWidth = thickBorder + 'px';
+                ctx.strokeStyle = '	#E1DDE3';
+                ctx.strokeRect(right - (textWidth + 1 + 10), 5, textWidth + 10 , 20);
+
+                console.log(coordinates)
+                coordinates.top = 5;
+                coordinates.bottom = 25;
+                coordinates.left = right - (textWidth + 1 + 10);
+                coordinates.right = right;
+
+                ctx.restore();
+            };
+          }
+        }
+
+        // config
+        var config = {
+          type: 'bar',
+          data,
+          options: {
+            plugins : {
+              tooltip : {
+                yAlign : 'bottom'
+              }
+            },
+            onHover: (event, chartElement) => {
+                if(hpChart.config.data.datasets[0].label === '읍면동별 의료기관 현황')
+                {
+                event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+            } else {
+                event.native.target.style.cursor = 'default';
+            };
+          },
+            parsing: {
+                xAxisKey: 'browser',
+                yAxisKey: 'marketshare'
+            },
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          },
+          plugins : [resethpButton]
+        };
+
+        // render init block
+        var ctx = document.getElementById('hpChart');
+        var hpChart = new Chart(
+          ctx,
+          config
+        );
+
+        function changehpChart(browser){
+
+            hpChart.config.options.parsing.xAxisKey = 'versionData.version';
+            hpChart.config.options.parsing.yAxisKey = 'versionData.users';
+
+            var dColor = [];
+            var dUsers = [];
+            var dLabels = browserData[browser].versionData.map(labels => {
+                dColor.push(browserData[browser].color);
+                dUsers.push(labels.users);
+                return labels.version;
+            })
+            console.log(dLabels)
+            hpChart.config.data.datasets[0].data = dUsers;
+            hpChart.config.data.labels = dLabels;
+            hpChart.config.data.datasets[0].backgroundColor = dColor;
+            hpChart.config.data.datasets[0].borderColor = dColor;
+            hpChart.config.data.datasets[0].label = browserData[browser].browser;
+            hpChart.update();
+        }
+
+        function click1Handler(click){
+            if (hpChart.config.data.datasets[0].label === '읍면동별 의료기관 현황'){
+
+            var bar = hpChart.getElementsAtEventForMode(click, 'nearest',
+                {intersect: true}, true);
+            console.log(bar);
+            if(bar.length){
+                console.log(bar[0].index);
+                changehpChart(bar[0].index);
+            }
+          }
+        };
+
+        function resethpChart(){
+          // console.log('clicked reset button!');
+          hpChart.config.options.parsing.xAxisKey = 'browser';
+          hpChart.config.options.parsing.yAxisKey = 'marketshare';
+
+          var eColor = [];
+          var eMarketshare = [];
+          var eLabels = browserData.map(browser => {
+            eColor.push(browser.color);
+            eMarketshare.push(browser.marketshare);
+            return browser.browser;
+          });
+
+          hpChart.config.data.datasets[0].backgroundColor = eColor;
+          hpChart.config.data.datasets[0].borderColor = eColor;
+          hpChart.config.data.labels = eLabels;
+          hpChart.config.data.datasets[0].label = '읍면동별 의료기관 현황';
+          hpChart.config.data.datasets[0].data = eMarketshare;
+          hpChart.update();
+        };
+
+
+        function mousemove1Handler(canvas, mousemove ) {
+          var x = mousemove.offsetX;
+          var y = mousemove.offsetY;
+
+          if(hpChart.config.data.datasets[0].label !== '읍면동별 의료기관 현황'){
+              if ( x > coordinates.left && x < coordinates.right && y > coordinates.top && y
+                   < coordinates.bottom){
+                    canvas.style.cursor = 'pointer';
+                   } else {
+                    canvas.style.cursor = 'default';
+                  };
+              };
+          };
+
+
+        function clickButton1Handler(canvas, click){
+          var x = click.offsetX;
+          var y = click.offsetY;
+
+          if (x > coordinates.left && x < coordinates.right && y > coordinates.top && y
+              < coordinates.bottom){
+                resethpChart();
+          };
+        }
+
+        ctx.onclick = click1Handler;
+
+        ctx.addEventListener('mousemove', (e) => {
+          hpChart.resize();
+          mousemove1Handler(ctx, e);
+        });
+
+        ctx.addEventListener('click', (e) => {
+          hpChart.resize();
+          clickButton1Handler(ctx,e);
+        })
+    </script>
+    {% endblock %}
