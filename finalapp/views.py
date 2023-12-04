@@ -5,7 +5,8 @@ import pandas as pd
 import json
 
 
-
+def home(request):
+    return render(request, 'home.html')
 
 def dashboard_view(request):
 
