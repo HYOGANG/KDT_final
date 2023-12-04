@@ -26,7 +26,7 @@ SECRET_KEY = 'ck$(ppg!=tadt@zrwc55jgt2nkw_p_0^pk@-&v54-gh81qk2^='
 DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.0.32', '192.168.224.240',
-                 '127.0.0.1']
+                 '127.0.0.1', ".ap-northeast-2.compute.amazonaws.com"]
 
 
 # Application definition
