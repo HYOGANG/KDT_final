@@ -46,124 +46,10 @@
             </div>
     </div>
 
-    <!-- 세종시 지역정보데이터 -->
-<div style="display:flex; float:right; margin-right:2%">
-    <div class="flex-container stretch"
-         style="padding:5px;
-                width:200px; height:90vh">
-        <div class="status-value"
-             style="font-size:30px; background-color: #F0F8FF;
-                    border-radius: 30px;
-                    border:solid 0.5px #B6CEFF; height:20%;
-                    text-align:center;  line-height: 50px;
-                    margin:0px 10px;">
-            <div id="status-label"
-                 style="font-size:20px; padding:10px 0px 0px 0px">총 인구 수</div>
-                {% load humanize %}
-                {{ total_pop.total__sum | intcomma }}
-         </div>
-        <div class="status-value"
-             style="font-size:30px; background-color: #F0F8FF;
-                    border-radius: 30px;
-                    border:solid 0.5px #B6CEFF; height:20%;
-                    text-align:center;  line-height: 50px;
-                    margin:40px 10px;">
-            <div id="status-label"
-                 style="font-size:20px; padding:10px 0px 0px 0px">의사 수 </div>
-            {% load humanize %}
-            {{ doc_pop.doctor__sum | intcomma }}
-        </div>
-        <div class="status-value"
-             style="font-size:30px; background-color: #F0F8FF;
-                    border-radius: 30px;
-                    border:solid 0.5px #B6CEFF; height:20%;
-                    text-align:center;  line-height: 50px;
-                    margin:40px 10px;">
-            <div id="status-label"
-                 style="font-size:20px; padding:10px 0px 0px 0px">간호사수 </div>
-            {% load humanize %}
-                {{ nur_pop.nurse__sum | intcomma }}
-        </div>
-        <div class="status-value"
-             style="font-size:30px; background-color: #F0F8FF;
-                    border-radius: 30px;
-                    border:solid 0.5px #B6CEFF; height:20%;
-                    text-align:center;  line-height: 50px;
-                    margin:40px 10px;">
-            <div id="status-label"
-                 style="font-size:20px; padding:10px 0px 0px 0px">병상수 </div>
-             {% load humanize %}
-                {{ pat_pop.patient__sum | intcomma }}
-        </div>
-    </div>
-</div>
-    <!-- 연령대별 인구수 데이터 전처리 -->
-    <div id="pop" style="display:none">
-        {% for i in table %}
-            {{ i.total }}{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </div>
-    <div id="mpop" style="display:none">
-        {% for i in table %}
-            {{ i.m }}{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </div>
-    <div id="fpop" style="display: none">
-        {% for j in table %}
-            {{ j.f }}{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </div>
-    <script type="text/javascript">
-        var pop = document.getElementById('pop').innerText.split(',');
-        var mpop = document.getElementById('mpop').innerText.split(',');
-        var fpop = document.getElementById('fpop').innerText.split(',');
+<div
+<div id ="chart_all"  >
 
-        var sum_0 = 0; var sum_10 = 0; var sum_20 = 0; var sum_30 = 0;
-        var sum_40 = 0; var sum_50 = 0; var sum_60 = 0; var sum_70 = 0;
-        var msum_0 = 0; var msum_10 = 0; var msum_20 = 0; var msum_30 = 0;
-        var msum_40 = 0; var msum_50 = 0; var msum_60 = 0; var msum_70 = 0;
-        var fsum_0 = 0; var fsum_10 = 0; var fsum_20 = 0; var fsum_30 = 0;
-        var fsum_40 = 0; var fsum_50 = 0; var fsum_60 = 0; var fsum_70 = 0;
-
-        for (let i=0; i<mpop.length; i++){
-            if(i<10) {
-                sum_0 += Number(pop[i]);
-                msum_0 += Number(mpop[i]);
-                fsum_0 += Number(fpop[i]);
-            } else if (i<20) {
-                sum_10 += Number(pop[i]);
-                msum_10 += Number(mpop[i]);
-                fsum_10 += Number(fpop[i]);
-            } else if (i<30) {
-                sum_20 += Number(pop[i]);
-                msum_20 += Number(mpop[i]);
-                fsum_20 += Number(fpop[i]);
-            } else if (i<40) {
-                sum_30 += Number(pop[i]);
-                msum_30 += Number(mpop[i]);
-                fsum_30 += Number(fpop[i]);
-            } else if (i<50) {
-                sum_40 += Number(pop[i]);
-                msum_40 += Number(mpop[i]);
-                fsum_40 += Number(fpop[i]);
-            } else if (i<60) {
-                sum_50 += Number(pop[i]);
-                msum_50 += Number(mpop[i]);
-                fsum_50 += Number(fpop[i]);
-            } else if (i<70) {
-                sum_60 += Number(pop[i]);
-                msum_60 += Number(mpop[i]);
-                fsum_60 += Number(fpop[i]);
-            } else {
-                sum_70 += Number(pop[i]);
-                msum_70 += Number(mpop[i]);
-                fsum_70 += Number(fpop[i]);
-            }}
-    </script>
-
-<div id ="chart_all" >
-
-<div id="line_1" style="display:flex;">
+<div id="line_1" style="display:inline-flex;">
 
  <!-- 연령대별 읍면동 분포 -->
     <div id="age_dong"
@@ -299,7 +185,7 @@
         // setup
         const data = {
           datasets: [{
-            label: '연령대별 읍면동 분포',
+            label: '연령대별 읍면동 분포(명)',
             data: browserData,
             backgroundColor: [
                 browserData[0].color,
@@ -334,7 +220,7 @@
         const resetButton = {
             id: 'resetButton',
             beforeDraw(chart, args, options){
-                if(myChart.config.data.datasets[0].label !== '연령대별 읍면동 분포'){
+                if(myChart.config.data.datasets[0].label !== '연령대별 읍면동 분포(명)'){
 
                 const{ctx, chartArea: {top, bottom, left, right, width, height}} = chart;
                 ctx.save();
@@ -379,7 +265,7 @@
                 }
             },
             onHover: (event, chartElement) => {
-                if(myChart.config.data.datasets[0].label === '연령대별 읍면동 분포') {
+                if(myChart.config.data.datasets[0].label === '연령대별 읍면동 분포(명)') {
                 event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
                 } else {
                 event.native.target.style.cursor = 'default';
@@ -442,7 +328,7 @@
         }
 
         function clickHandler(click){
-            if(myChart.config.data.datasets[0].label === '연령대별 읍면동 분포') {
+            if(myChart.config.data.datasets[0].label === '연령대별 읍면동 분포(명)') {
                 const bar = myChart.getElementsAtEventForMode(click, 'nearest',
                     {intersect: true}, true);
                 console.log(bar);
@@ -472,7 +358,7 @@
             myChart.config.data.datasets[1].backgroundColor = '#00ff0000';
             myChart.config.data.datasets[0].borderColor = bColor;
             myChart.config.data.datasets[1].borderColor = '#00ff0000';
-            myChart.config.data.datasets[0].label = '연령대별 읍면동 분포';
+            myChart.config.data.datasets[0].label = '연령대별 읍면동 분포(명)';
             myChart.config.data.datasets[1].label = '';
 
             myChart.update();
@@ -482,7 +368,7 @@
             const x = mousemove.offsetX;
             const y = mousemove.offsetY;
 
-            if(myChart.config.data.datasets[0].label !== '연령대별 읍면동 분포'){
+            if(myChart.config.data.datasets[0].label !== '연령대별 읍면동 분포(명)'){
             if(x > coordinates.left && x < coordinates.right && y > coordinates.top && y < coordinates.bottom){
                 canvas.style.cursor = 'pointer';
             } else {
@@ -523,7 +409,7 @@
  </div>
 
 <div id="line_2" class="row"
-    style="margin:20px; display:flex;">
+    style="margin:20px; display:inline-flex;">
 
 
 <!--진료 건수와 진료비 bar + line chart-->
@@ -541,7 +427,7 @@
     var tocostChart = new Chart(mixedChart, {
     type: 'bar',
     data: {
-        labels: ['1998년', '1999년', '2000년', '2001년', '2002년'],
+        labels: ['2018년', '2019년', '2020년', '2021년', '2022년'],
         datasets: [
             {
             type: 'bar',
@@ -694,7 +580,7 @@
             position: 'inside',
             textMargin: 6
           },
-          tooltips: {
+          tooltip: {
             enabled:false
           }
         }
@@ -765,15 +651,127 @@
             textMargin: 8
           },
           tooltip: {
-            callbacks: {
-              display: false
-            }
+            enabled:false
           }
         }
       },
       plugins: [hoverLabel]
     });
   </script>
+</div>
+        <!-- 세종시 지역정보데이터 -->
+<div style="display:inline-flex; position:absolute; top:50;">
+    <div class="flex-container stretch"
+         style="width:200px;">
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:130;
+                    text-align:center;  line-height: 50px;
+                    margin:0px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">총 인구 수</div>
+                {% load humanize %}
+                {{ total_pop.total__sum | intcomma }}
+         </div>
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:130;
+                    text-align:center;  line-height: 50px;
+                    margin:45px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">의사 수 </div>
+            {% load humanize %}
+            {{ doc_pop.doctor__sum | intcomma }}
+        </div>
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:130;
+                    text-align:center;  line-height: 50px;
+                    margin:45px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">간호사수 </div>
+            {% load humanize %}
+                {{ nur_pop.nurse__sum | intcomma }}
+        </div>
+        <div class="status-value"
+             style="font-size:30px; background-color: #F0F8FF;
+                    border-radius: 30px;
+                    border:solid 0.5px #B6CEFF; height:130;
+                    text-align:center;  line-height: 50px;
+                    margin:45px 10px;">
+            <div id="status-label"
+                 style="font-size:20px; padding:10px 0px 0px 0px">병상수 </div>
+             {% load humanize %}
+                {{ pat_pop.patient__sum | intcomma }}
+        </div>
+    </div>
+
+    <!-- 연령대별 인구수 데이터 전처리 -->
+    <div id="pop" style="display:none">
+        {% for i in table %}
+            {{ i.total }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div id="mpop" style="display:none">
+        {% for i in table %}
+            {{ i.m }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div id="fpop" style="display: none">
+        {% for j in table %}
+            {{ j.f }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <script type="text/javascript">
+        var pop = document.getElementById('pop').innerText.split(',');
+        var mpop = document.getElementById('mpop').innerText.split(',');
+        var fpop = document.getElementById('fpop').innerText.split(',');
+
+        var sum_0 = 0; var sum_10 = 0; var sum_20 = 0; var sum_30 = 0;
+        var sum_40 = 0; var sum_50 = 0; var sum_60 = 0; var sum_70 = 0;
+        var msum_0 = 0; var msum_10 = 0; var msum_20 = 0; var msum_30 = 0;
+        var msum_40 = 0; var msum_50 = 0; var msum_60 = 0; var msum_70 = 0;
+        var fsum_0 = 0; var fsum_10 = 0; var fsum_20 = 0; var fsum_30 = 0;
+        var fsum_40 = 0; var fsum_50 = 0; var fsum_60 = 0; var fsum_70 = 0;
+
+        for (let i=0; i<mpop.length; i++){
+            if(i<10) {
+                sum_0 += Number(pop[i]);
+                msum_0 += Number(mpop[i]);
+                fsum_0 += Number(fpop[i]);
+            } else if (i<20) {
+                sum_10 += Number(pop[i]);
+                msum_10 += Number(mpop[i]);
+                fsum_10 += Number(fpop[i]);
+            } else if (i<30) {
+                sum_20 += Number(pop[i]);
+                msum_20 += Number(mpop[i]);
+                fsum_20 += Number(fpop[i]);
+            } else if (i<40) {
+                sum_30 += Number(pop[i]);
+                msum_30 += Number(mpop[i]);
+                fsum_30 += Number(fpop[i]);
+            } else if (i<50) {
+                sum_40 += Number(pop[i]);
+                msum_40 += Number(mpop[i]);
+                fsum_40 += Number(fpop[i]);
+            } else if (i<60) {
+                sum_50 += Number(pop[i]);
+                msum_50 += Number(mpop[i]);
+                fsum_50 += Number(fpop[i]);
+            } else if (i<70) {
+                sum_60 += Number(pop[i]);
+                msum_60 += Number(mpop[i]);
+                fsum_60 += Number(fpop[i]);
+            } else {
+                sum_70 += Number(pop[i]);
+                msum_70 += Number(mpop[i]);
+                fsum_70 += Number(fpop[i]);
+            }}
+    </script>
 </div>
 
 {% endblock %}
