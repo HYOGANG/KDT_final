@@ -3,7 +3,7 @@ var addresses= document.getElementById('address').innerHTML.split(',')
 var types= document.getElementById('type').innerHTML.split(',');
 var deps= document.getElementById('department').innerHTML.split('|');
 
-Category = ['외과','내과', '산부인과', '신경과', '안과', '이비인후과','치과', '피부과', '정신건강의학과', '가정의학과', '결핵과', '비뇨기과', '소아청소년과', '재활의학과',   '한방']
+Category = ['외과','정형외과', '신경외과', '흉부외과', '성형외과', '내과', '산부인과', '신경과', '안과', '이비인후과','치과', '피부과', '정신건강의학과', '가정의학과', '결핵과', '비뇨', '소아청소년과', '재활의학과',   '한방']
 Category2 = ['종합병원', '병원', '의원', '치과병원', '치과의원', '한방병원', '한의원', '요양병원', '정신병원', '보건진료소', '보건지소', '약국']
 
 
@@ -22,11 +22,13 @@ var placeOverlay = new kakao.maps.CustomOverlay({zIndex:1}),
 var mapContainer = document.getElementById('map'),
     mapOption = {
         center: new kakao.maps.LatLng(36.5331357, 127.2454549),
-        level: 8
+        level: 8,
     };
 
 
 var map = new kakao.maps.Map(mapContainer, mapOption);
+
+
 
 var geocoder = new kakao.maps.services.Geocoder();
 
@@ -49,6 +51,10 @@ function addEventHandle(target, type, callback) {
     }
 }
 
+var img = ['/static/img/dot9.png', '/static/img/dot10.png', '/static/img/dot11.png', '/static/img/dot12.png', '/static/img/dot13.png', '/static/img/dot14.png','/static/img/dot3.png', '/static/img/dot15.png', '/static/img/dot8.png', '/static/img/dot16.png', '/static/img/dot17.png', '/static/img/dot18.png', '/static/img/dot19.png', '/static/img/dot20.png','/static/img/dot5.png']
+var img2 = ['/static/img/dot1.png', '/static/img/dot1-1.png', '/static/img/dot4.png', '/static/img/dot3.png', '/static/img/dot3-3.png', '/static/img/dot5.png', '/static/img/dot5-5.png', '/static/img/dot2.png', '/static/img/dot8.png', '/static/img/dot7.png', '/static/img/dot7-7.png', '/static/img/dot6.png']
+
+
 for (let i = 0; i < Category.length; i++) {
     for (let j = 0; j < names.length; j++) {
                 if (deps[j].includes(Category[i])) {
@@ -58,7 +64,7 @@ for (let i = 0; i < Category.length; i++) {
                         if (status === kakao.maps.services.Status.OK) {
 
                             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                            var imageSrc = '/static/img/dot.png',
+                            var imageSrc = img[i],
                                 imageSize = new kakao.maps.Size(21, 23);
                             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
                             var marker = new kakao.maps.Marker({
@@ -68,7 +74,7 @@ for (let i = 0; i < Category.length; i++) {
 
 
                             allcoords[i].push(coords);
-
+                            markers[i].push(marker);
 
                             kakao.maps.event.addListener(marker, 'click', function() {
                             displayPlaceInfo(names[j], coords);
@@ -89,7 +95,7 @@ for (let i = 0; i < Category2.length; i++) {
 
                             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                            var imageSrc = '/static/img/dot.png',
+                            var imageSrc = img2[i],
                                 imageSize = new kakao.maps.Size(21, 23);
                             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
 
@@ -99,8 +105,8 @@ for (let i = 0; i < Category2.length; i++) {
                             });
 
 
-                            allcoords[i+15].push(coords);
-                            markers[i+15].push(marker);
+                            allcoords[i+19].push(coords);
+                            markers[i+19].push(marker);
 
                             kakao.maps.event.addListener(marker, 'click', function() {
                             displayPlaceInfo(names[j], coords);
@@ -114,8 +120,35 @@ for (let i = 0; i < Category2.length; i++) {
       }
 var currMarker =""
 
+var clusterer = new kakao.maps.MarkerClusterer({
+  map: map,
+  averageCenter: true,
+  minLevel: 5,
+
+});
+
+/*  styles: [{
+        minWidth: '30px',
+        height: '30px',
+        padding: '0px 6px',
+        color: 'rgb(255, 255, 255)',
+        fontSize: '12px',
+        lineHeight: '26px',
+        textAlign: 'center',
+        border: '2px solid rgb(50, 108, 249)',
+        borderRadius: '30px',
+        backgroundColor: 'rgb(50, 108, 249)',
+        whiteSpace: 'nowrap',
+        position: 'relative',
+        zIndex: '2'
+    }]*/
+
 function displayPlaceInfo (name, coord) {
-    var content = '<div class="placeinfo">' + name+ '</div>';
+    var content = '<div class="placeinfo">' +
+                    '<a href="https://map.kakao.com/link/map/'+name+','+coord.Ma+','+coord.La +'" target="_blank">' +
+    '<span class="title">'+ name +'</span>'+
+    '</a>' +
+    '</div>';
 
     contentNode.innerHTML = content;
     placeOverlay.setPosition(coord);
@@ -144,17 +177,18 @@ function searchPlaces() {
         var currentOrder = document.getElementById(currentCategory).getAttribute('data-order');
           for ( var j=0; j < allcoords[currentOrder].length; j++ ) {
             markers[currentOrder][j].setMap(map);
-
+            clusterer.addMarker(markers[currentOrder][j]);
             }
+        // 모든 마커를 1차원 배열로 변환 후 클러스터에 추가
+
     }
  }
-
 
 
 function removeMarker(order) {
             for (var i = 0; i < markers[order].length; i++) {
                         markers[order][i].setMap(null);
-
+                        clusterer.removeMarker(markers[order][i]);
                     }
                 }
 
@@ -165,12 +199,17 @@ function addCategoryClickEvent() {
         children = category.children;
     var category2 = document.getElementById('category2'),
         children2 = category2.children;
+    var category3 = document.getElementById('category3'),
+        children3 = category3.children;
 
     for (var i=0; i<children.length; i++) {
         children[i].onclick = onClickCategory;
     }
     for (var i=0; i<children2.length; i++) {
         children2[i].onclick = onClickCategory;
+    }
+    for (var i=0; i<children3.length; i++) {
+        children3[i].onclick = onClickCategory;
     }
 }
 
@@ -201,7 +240,8 @@ function changeCategoryClass(el) {
 
         el.classList.remove('on');
     } else {
-   
+
         el.classList.add('on');
     }
 }
+

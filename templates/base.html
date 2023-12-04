@@ -8,15 +8,116 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="/static/css/graph.css">
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=65ebde6ef56b62ee5550e04abf379f36&libraries=services"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=65ebde6ef56b62ee5550e04abf379f36&libraries=services,clusterer"></script>
+    <style>
+
+         #sidebar {
+                    list-style: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 50px;
+                    height: 255px;
+                    border-radius: 5px;
+                    border: 1px solid #909090;
+                    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+                    background: #fff;
+                    overflow: hidden;
+                    z-index: 2;
+                    transition: .5s;
+        }
+        a {
+          color: inherit;
+          text-decoration: none;
+            }
+        ul {list-style: none;
+            padding-inline-start: 0px;
+            }
+        #sidebar:hover {
+            width: 150px;
+            overflow: visible;
+        }
+
+        #sidebar ul > li:hover > div {
+            background-color: #ccc
+            }
+
+
+
+        #sidebar ul > li > div {
+            padding: 12px 10px 12px 10px;
+            cursor: pointer;
+              color: black;
+              white-space: nowrap;
+        }
+        #sidebar ul > li > div > div:last-child {
+                opacity: 0;
+                transition: .5s .1s;
+            }
+
+        #sidebar:hover > ul > li > div > div:last-child {
+        opacity: 1;
+        }
+
+
+
+        /*아이콘 넣어보기...!!!!!!!!!!*/
+        #sidebar ul > li > div {
+            color : inherit;
+            text-decoration: none;
+        }
+
+
+    </style>
 </head>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <body>
+<div id="sidebar">
+     <ul>
+         <li>
+                <div>
+                    <div><a href="/home"><i class="fa-solid fa-house-chimney"></i></a></div>
+                    <div><a href="/home">home</a></div>
+                </div>
+         </li>
+         <li>
+                <div>
+                    <div><a href="/board"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/board">의료이용현황</a></div>
+                </div>
+         </li>
+         <li>
+                <div>
+                    <div><a href="/second"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/second">의료자원현황</a></div>
+                </div>
+         </li>
+         <li>
+                <div>
+                    <div><a href="/map"><i class="fa-regular fa-map"></i></a></div>
+                    <div><a href="/map">우리동네병원찾기</a></div>
+                </div>
+     </li>
+
+     </ul>
+
+
+</div>
 {% block content %}
 {% endblock %}
 </body>

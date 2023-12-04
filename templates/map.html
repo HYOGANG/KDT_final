@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<link rel="stylesheet" type="text/css" href="/static/css/map.css">
+ <link rel="stylesheet" type="text/css" href="/static/css/map.css">
 
  <div id="name" style="display: none">
         {% for i in sejong %}
@@ -27,8 +27,20 @@
      <ul>
          <li>
                 <div>
+                    <div><a href="/home"><i class="fa-solid fa-house-chimney"></i></a></div>
+                    <div><a href="/home">home</a></div>
+                </div>
+         </li>
+         <li>
+                <div>
                     <div><a href="/board"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
-                    <div><a href="/board">main</a></div>
+                    <div><a href="/board">의료이용현황</a></div>
+                </div>
+         </li>
+         <li>
+                <div>
+                    <div><a href="/second"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
+                    <div><a href="/second">의료자원현황</a></div>
                 </div>
          </li>
      <li>
@@ -39,63 +51,81 @@
 
     <ul id="category">
         <li id="외과" data-order="0">
-        <i class="fa-solid fa-circle-h"></i>
+        <i class="fa-solid fa-circle-h" style="color: #219400;"></i>
             외과
+                <ul id="category3">
+                    <li id="정형외과" data-order="1">
+                        <i class="fa-solid fa-circle-h" style="color: #219400;"></i>
+                            정형외과
+                    </li>
+                    <li id="신경외과" data-order="2">
+                        <i class="fa-solid fa-circle-h" style="color: #219400;"></i>
+                            신경외과
+                    </li>
+                    <li id="흉부외과" data-order="3">
+                        <i class="fa-solid fa-circle-h" style="color: #219400;"></i>
+                            흉부외과
+                    </li>
+                    <li id="성형외과" data-order="4">
+                        <i class="fa-solid fa-circle-h" style="color: #219400;"></i>
+                            성형외과
+                    </li>
+                </ul>
         </li>
-        <li id="내과" data-order="1">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="내과" data-order="5">
+        <i class="fa-solid fa-circle-h" style="color: #94005d;"></i>
             내과
         </li>
-        <li id="산부인과" data-order="2">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="산부인과" data-order="6">
+        <i class="fa-solid fa-circle-h" style="color: #0000ff;"></i>
             산부인과
         </li>
-        <li id="신경과" data-order="3">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="신경과" data-order="7">
+        <i class="fa-solid fa-circle-h" style="color: #005d94;"></i>
             신경과
         </li>
-        <li id="안과" data-order="4">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="안과" data-order="8">
+        <i class="fa-solid fa-circle-h" style="color: #b22222;"></i>
             안과
         </li>
-        <li id="이비인후과" data-order="5">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="이비인후과" data-order="9">
+        <i class="fa-solid fa-circle-h" style="color: #8b008b;"></i>
             이비인후과
         </li>
-        <li id="치과" data-order="6">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="치과" data-order="10">
+        <i class="fa-solid fa-circle-h" style="color: #7ae600;"></i>
             치과
         </li>
-        <li id="피부과" data-order="7">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="피부과" data-order="11">
+        <i class="fa-solid fa-circle-h" style="color: #696969;"></i>
             피부과
         </li>
-        <li id="정신건강의학과" data-order="8">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="정신건강의학과" data-order="12">
+        <i class="fa-solid fa-circle-h" style="color: #ffd700;"></i>
             정신건강의학과
         </li>
-        <li id="가정의학과" data-order="9">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="가정의학과" data-order="13">
+        <i class="fa-solid fa-circle-h" style="color: #085e4d;"></i>
             가정의학과
         </li>
-        <li id="결핵과" data-order="10">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="결핵과" data-order="14">
+        <i class="fa-solid fa-circle-h" style="color: #ff083b;"></i>
             결핵과
         </li>
-        <li id="비뇨기과" data-order="11">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="비뇨기과" data-order="15">
+        <i class="fa-solid fa-circle-h" style="color: #884b14;"></i>
             비뇨기과
         </li>
-        <li id="소아청소년과" data-order="12">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="소아청소년과" data-order="16">
+        <i class="fa-solid fa-circle-h" style="color: #320909;"></i>
             소아청소년과
         </li>
-        <li id="재활의학과" data-order="13">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="재활의학과" data-order="17">
+        <i class="fa-solid fa-circle-h" style="color: #121255;"></i>
             재활의학과
         </li>
-        <li id="한방" data-order="14">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="한방" data-order="18">
+        <i class="fa-solid fa-circle-h" style="color: #0f5fb3;"></i>
             한방
         </li>
     </ul>
@@ -108,52 +138,52 @@
         <div>종별 의료기관</div>
     </div>
     <ul id="category2">
-        <li id="종합병원" data-order="15">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="종합병원" data-order="19">
+        <i class="fa-solid fa-circle-h" style="color: #ff319e;"></i>
             종합병원
         </li>
-        <li id="병원" data-order="16">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="병원" data-order="20">
+        <i class="fa-solid fa-circle-h" style="color: #ff80c3;"></i>
             병원
         </li>
-        <li id="의원" data-order="17">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="의원" data-order="21">
+        <i class="fa-solid fa-circle-h" style="color: #00ffd6;"></i>
             의원
         </li>
-        <li id="치과병원" data-order="18">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="치과병원" data-order="22">
+        <i class="fa-solid fa-circle-h" style="color: #7ae600;"></i>
             치과병원
         </li>
-        <li id="치과의원" data-order="19">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="치과의원" data-order="23">
+        <i class="fa-solid fa-circle-h" style="color: #a0ff33;"></i>
             치과의원
         </li>
-        <li id="한방병원" data-order="20">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="한방병원" data-order="24">
+        <i class="fa-solid fa-circle-h" style="color: #0f5fb3;"></i>
             한방병원
         </li>
-        <li id="한의원" data-order="21">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="한의원" data-order="25">
+        <i class="fa-solid fa-circle-h" style="color: #319fff;"></i>
             한의원
         </li>
-        <li id="요양병원" data-order="22">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="요양병원" data-order="26">
+        <i class="fa-solid fa-circle-h" style="color: #ff8c1e;"></i>
             요양병원
         </li>
-        <li id="정신병원" data-order="23">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="정신병원" data-order="27">
+        <i class="fa-solid fa-circle-h" style="color: #ffd700;"></i>
             정신병원
         </li>
-        <li id="보건진료소" data-order="24">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="보건진료소" data-order="28">
+        <i class="fa-solid fa-circle-h" style="color: #d700ff;"></i>
             보건진료소
         </li>
-        <li id="보건지소" data-order="25">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="보건지소" data-order="29">
+        <i class="fa-solid fa-circle-h" style="color: #bb80ff;"></i>
             보건지소
         </li>
-        <li id="약국" data-order="26">
-        <i class="fa-solid fa-circle-h"></i>
+        <li id="약국" data-order="30">
+        <i class="fa-solid fa-circle-h" style="color: #9131ff;"></i>
             약국
         </li>
     </ul>
