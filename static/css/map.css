@@ -5,10 +5,17 @@
         #sidebar:hover {
             width: 170px;
         }
+        /*
         #sidebar ul > li:hover > ul {
             display: block;
             }
-
+        */
+        #sidebar ul > li.clicked > ul {
+            display: block;
+            }
+#sidebar ul > li ul.show {
+    display: block;
+}
 
         #sidebar ul > li > ul {
             width: 200px;
@@ -20,10 +27,12 @@
             border-radius: 5px;
             border: 0.5px solid #909090;
             margin-left: 2px;
+
         }
 
 
         #sidebar ul > li > ul > li {
+            position:relative;
             border-bottom: 1px solid #acacac;
             padding: 13.3px 1px;
             text-align: center;
@@ -56,6 +65,18 @@
             margin-left: 0;
 
         }
+        #sidebar ul > li.clicked{
+            background: #ccc;
+            border-left: 1px solid #acacac;
+            margin-left: 0;
+
+        }
+        #sidebar ul > li.clicked > ul > li:hover {
+            background: #ccc;
+            border-left: 1px solid #acacac;
+            margin-left: 0;
+
+        }
 
         #sidebar ul > li > ul > li:last-child {
             margin-right: 0;
@@ -77,21 +98,34 @@
       width: 27px;
       height: 28px;
 }
+
+
+
+
+
         /*3단!!!*/
+        /*
                  #sidebar ul > li:hover > ul > li:hover > ul {
                     display: block;
                     }
-
-
+*/
+ #sidebar ul > li.clicked > ul > li:hover > ul {
+                    display: block;
+                    }
         #sidebar ul > li > ul > li > ul {
-            width: 200px;
+            position:absolute;
+            width: 175px;
             list-style: none;
             padding: 0;
             height: auto;
             max-height : 290px;
+            overflow-y: hidden;
             border-radius: 5px;
             border: 0.5px solid #909090;
             margin-left: 2px;
+            top: 100%;
+              left: 0;
+              z-index : 1;
         }
 
 
@@ -103,9 +137,8 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            width: 100%;
             position: relative;
-
+            height: 35px;
 
         }
 

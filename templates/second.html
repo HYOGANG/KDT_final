@@ -433,8 +433,8 @@
               }
             }
 
-        var labelList = ['진료 과별 전문의 수', '내과계', '외과계', '지원계']
-        var labelList1 = ['내과계', '외과계', '지원계']
+        var labelList = ['진료 과별 전문의 수', '내과계 전문의 수', '외과계 전문의 수', '지원계 전문의 수']
+        var labelList1 = ['내과계 전문의 수', '외과계 전문의 수', '지원계 전문의 수']
 
         // config 구성 설정
         var config = {
@@ -493,7 +493,7 @@
                 myChart.config.data.labels = aLabels;
                 myChart.config.data.datasets[0].backgroundColor = aColor;
                 myChart.config.data.datasets[0].borderColor = aColor;
-                myChart.config.data.datasets[0].label = Data[index].dep;
+                myChart.config.data.datasets[0].label = Data[index].dep + " 전문의 수";
                 myChart.update();
             }
         }
@@ -517,7 +517,7 @@
             myChart.config.data.labels = bLabels;
             myChart.config.data.datasets[0].backgroundColor = bColor;
             myChart.config.data.datasets[0].borderColor = bColor;
-            myChart.config.data.datasets[0].label = Data[currIndex].depData[index].dep1;
+            myChart.config.data.datasets[0].label = Data[currIndex].depData[index].dep1+ " 전문의 수";
             myChart.update();
         }
 
@@ -580,7 +580,7 @@
             myChart.config.data.datasets[0].backgroundColor = aColor;
             myChart.config.data.datasets[0].borderColor = aColor;
             myChart.config.data.labels = aLabels;
-            myChart.config.data.datasets[0].label = Data[currIndex].dep;
+            myChart.config.data.datasets[0].label = Data[currIndex].dep+ " 전문의 수";
             myChart.config.data.datasets[0].data = aCount;
 
             myChart.update();

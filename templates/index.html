@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <title>Document</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
@@ -82,6 +83,47 @@
             line-height: 37px;
             font-family: 'baeminAir';
             font-size: 35px;
+        }
+         @media only screen and (max-width: 500px) {
+            .container {
+             position: absolute;
+            }
+            footer {
+                position: absolute;
+                bottom: 0;
+                text-align: left;
+            }
+
+            .title {
+                font-size: 25px;
+                margin: 35px 30px;
+            }
+
+            .main_banner {
+                    position: relative;
+                    height: 200px;
+                    width: 315px;
+                    margin: 50px 15px 0px 15px;
+            }
+        .menu_ul {
+            width: 100%;
+            text-align: center;
+            margin: 10px auto 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .menu_li {
+            margin: 10px 0;
+            float: none;
+            width: 100%;
+        }
+
+        .menu_li_txt {
+            font-size: 15px;
+        }
         }
     </style>
 </head>

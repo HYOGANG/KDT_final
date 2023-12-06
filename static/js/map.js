@@ -4,7 +4,7 @@ var types= document.getElementById('type').innerHTML.split(',');
 var deps= document.getElementById('department').innerHTML.split('|');
 
 Category = ['외과','정형외과', '신경외과', '흉부외과', '성형외과', '내과', '산부인과', '신경과', '안과', '이비인후과','치과', '피부과', '정신건강의학과', '가정의학과', '결핵과', '비뇨', '소아청소년과', '재활의학과',   '한방']
-Category2 = ['종합병원', '병원', '의원', '치과병원', '치과의원', '한방병원', '한의원', '요양병원', '정신병원', '보건진료소', '보건지소', '약국']
+Category2 = ['종합병원', '병원', '의원', '치과병원', '치과의원', '한방병원', '한의원', '요양병원', '정신병원', '보건소', '보건지소', '보건진료소', '약국']
 
 
 var currCategory = [];
@@ -51,10 +51,10 @@ function addEventHandle(target, type, callback) {
     }
 }
 
-var img = ['/static/img/dot9.png', '/static/img/dot10.png', '/static/img/dot11.png', '/static/img/dot12.png', '/static/img/dot13.png', '/static/img/dot14.png','/static/img/dot3.png', '/static/img/dot15.png', '/static/img/dot8.png', '/static/img/dot16.png', '/static/img/dot17.png', '/static/img/dot18.png', '/static/img/dot19.png', '/static/img/dot20.png','/static/img/dot5.png']
-var img2 = ['/static/img/dot1.png', '/static/img/dot1-1.png', '/static/img/dot4.png', '/static/img/dot3.png', '/static/img/dot3-3.png', '/static/img/dot5.png', '/static/img/dot5-5.png', '/static/img/dot2.png', '/static/img/dot8.png', '/static/img/dot7.png', '/static/img/dot7-7.png', '/static/img/dot6.png']
+var img = ['/static/img/dot9.png','/static/img/dot9-1.png','/static/img/dot9-2.png','/static/img/dot9-3.png','/static/img/dot9-4.png', '/static/img/dot10.png', '/static/img/dot11.png', '/static/img/dot12.png', '/static/img/dot13.png', '/static/img/dot14.png','/static/img/dot3.png', '/static/img/dot15.png', '/static/img/dot8.png', '/static/img/dot16.png', '/static/img/dot17.png', '/static/img/dot18.png', '/static/img/dot19.png', '/static/img/dot20.png','/static/img/dot5.png']
+var img2 = ['/static/img/dot1.png', '/static/img/dot1-1.png', '/static/img/dot4.png', '/static/img/dot3.png', '/static/img/dot3-3.png', '/static/img/dot5.png', '/static/img/dot5-5.png', '/static/img/dot2.png', '/static/img/dot8.png', '/static/img/dot7.png', '/static/img/dot7-7.png','/static/img/dot7-77.png', '/static/img/dot6.png']
 
-
+/*
 for (let i = 0; i < Category.length; i++) {
     for (let j = 0; j < names.length; j++) {
                 if (deps[j].includes(Category[i])) {
@@ -118,6 +118,7 @@ for (let i = 0; i < Category2.length; i++) {
                  }
            }
       }
+      */
 var currMarker =""
 
 var clusterer = new kakao.maps.MarkerClusterer({
@@ -164,22 +165,20 @@ function displayPlaceInfo (name, coord) {
 
 
 function searchPlaces() {
-
        displayPlaces();
 }
 
-
-
  function displayPlaces(places) {
-
+    clusterer.clear();
     for (var i = 0; i < currCategory.length; i++) {
         var currentCategory = currCategory[i];
         var currentOrder = document.getElementById(currentCategory).getAttribute('data-order');
           for ( var j=0; j < allcoords[currentOrder].length; j++ ) {
             markers[currentOrder][j].setMap(map);
-            clusterer.addMarker(markers[currentOrder][j]);
             }
-        // 모든 마커를 1차원 배열로 변환 후 클러스터에 추가
+            if (currCategory.indexOf(currentCategory) !== -1) {
+            clusterer.addMarkers(markers[currentOrder]);
+        }
 
     }
  }
@@ -188,8 +187,8 @@ function searchPlaces() {
 function removeMarker(order) {
             for (var i = 0; i < markers[order].length; i++) {
                         markers[order][i].setMap(null);
-                        clusterer.removeMarker(markers[order][i]);
                     }
+                    clusterer.removeMarkers(markers[order]);
                 }
 
 
