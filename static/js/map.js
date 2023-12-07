@@ -1,7 +1,18 @@
 var names = document.getElementById('name').innerHTML.split(',')
-var addresses= document.getElementById('address').innerHTML.split(',')
+var addresses= document.getElementById('address').innerHTML.split('|')
 var types= document.getElementById('type').innerHTML.split(',');
 var deps= document.getElementById('department').innerHTML.split('|');
+var latlong= document.getElementById('coord').innerHTML.replace(/\s+/g, '').replace(/\n/g, '').split('|');
+
+
+var latlongArray = latlong.map(function(coordPair) {
+    var latlongs = coordPair.split(',');
+    var lat = parseFloat(latlongs[0]);
+    var long = parseFloat(latlongs[1]);
+    return [lat, long];
+});
+
+
 
 Category = ['외과','정형외과', '신경외과', '흉부외과', '성형외과', '내과', '산부인과', '신경과', '안과', '이비인후과','치과', '피부과', '정신건강의학과', '가정의학과', '결핵과', '비뇨', '소아청소년과', '재활의학과',   '한방']
 Category2 = ['종합병원', '병원', '의원', '치과병원', '치과의원', '한방병원', '한의원', '요양병원', '정신병원', '보건소', '보건지소', '보건진료소', '약국']
@@ -54,16 +65,12 @@ function addEventHandle(target, type, callback) {
 var img = ['/static/img/dot9.png','/static/img/dot9-1.png','/static/img/dot9-2.png','/static/img/dot9-3.png','/static/img/dot9-4.png', '/static/img/dot10.png', '/static/img/dot11.png', '/static/img/dot12.png', '/static/img/dot13.png', '/static/img/dot14.png','/static/img/dot3.png', '/static/img/dot15.png', '/static/img/dot8.png', '/static/img/dot16.png', '/static/img/dot17.png', '/static/img/dot18.png', '/static/img/dot19.png', '/static/img/dot20.png','/static/img/dot5.png']
 var img2 = ['/static/img/dot1.png', '/static/img/dot1-1.png', '/static/img/dot4.png', '/static/img/dot3.png', '/static/img/dot3-3.png', '/static/img/dot5.png', '/static/img/dot5-5.png', '/static/img/dot2.png', '/static/img/dot8.png', '/static/img/dot7.png', '/static/img/dot7-7.png','/static/img/dot7-77.png', '/static/img/dot6.png']
 
-/*
+
 for (let i = 0; i < Category.length; i++) {
     for (let j = 0; j < names.length; j++) {
                 if (deps[j].includes(Category[i])) {
-                    (function (index) {
-                      geocoder.addressSearch(addresses[index], function(result, status) {
 
-                        if (status === kakao.maps.services.Status.OK) {
-
-                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            var coords = new kakao.maps.LatLng(latlongArray[j][0],latlongArray[j][1] );
                             var imageSrc = img[i],
                                 imageSize = new kakao.maps.Size(21, 23);
                             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
@@ -79,21 +86,19 @@ for (let i = 0; i < Category.length; i++) {
                             kakao.maps.event.addListener(marker, 'click', function() {
                             displayPlaceInfo(names[j], coords);
                             });
-                        }
-                     });
-                   })(j);
+
+
                  }
            }
       }
 for (let i = 0; i < Category2.length; i++) {
     for (let j = 0; j < names.length; j++) {
                 if (types[j].trim() === Category2[i]) {
-                    (function (index) {
-                      geocoder.addressSearch(addresses[index], function(result, status) {
 
-                        if (status === kakao.maps.services.Status.OK) {
 
-                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+
+                            var coords = new kakao.maps.LatLng(latlongArray[j][0],latlongArray[j][1]);
 
                             var imageSrc = img2[i],
                                 imageSize = new kakao.maps.Size(21, 23);
@@ -112,13 +117,12 @@ for (let i = 0; i < Category2.length; i++) {
                             displayPlaceInfo(names[j], coords);
                             });
 
-                        }
-                     });
-                   })(j);
+
+
                  }
            }
       }
-      */
+
 var currMarker =""
 
 var clusterer = new kakao.maps.MarkerClusterer({
@@ -128,21 +132,6 @@ var clusterer = new kakao.maps.MarkerClusterer({
 
 });
 
-/*  styles: [{
-        minWidth: '30px',
-        height: '30px',
-        padding: '0px 6px',
-        color: 'rgb(255, 255, 255)',
-        fontSize: '12px',
-        lineHeight: '26px',
-        textAlign: 'center',
-        border: '2px solid rgb(50, 108, 249)',
-        borderRadius: '30px',
-        backgroundColor: 'rgb(50, 108, 249)',
-        whiteSpace: 'nowrap',
-        position: 'relative',
-        zIndex: '2'
-    }]*/
 
 function displayPlaceInfo (name, coord) {
     var content = '<div class="placeinfo">' +
