@@ -2,7 +2,7 @@
 {% block content %}
 <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/board">지역정보</a>
+        <a class="navbar-brand" href="/home">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/board">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/board">지역정보 <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/second">의료자원현황</a>
@@ -37,11 +37,11 @@
             </script>
         </div>
     </nav>
-    <div id="chart_all" class="container-fluid row">
+    <div id="chart_all" class="container-fluid row mb-n3">
         <nav class="col-12 col-md-7 p-0 mx-3">
              <!-- 연령대별 읍면동 분포 -->
             <div id="age_dong"
-                 class="chartBox my-4">
+                 class="chartBox my-2">
                 <canvas id="myChart" width="800" height="300"></canvas>
             </div>
                 <script>
@@ -456,7 +456,7 @@
         </nav>
         <section class="col-5 col-md-3 mx-3 p-0">
                  <!--다빈도상병(입원)-->
-             <div class="chartBox2 my-4">
+             <div class="chartBox2 my-2">
                 <canvas id="inrankPieChart" width="300" height="300"></canvas>
              </div>
             <!--다빈도상병(외래)-->
@@ -631,7 +631,7 @@
         <aside class="col-4 col-md-1 p-0">
                     <!-- 세종시 지역정보데이터 -->
             <div style="display:inline-flex;">
-                <div class="flex-container stretch my-4"
+                <div class="flex-container stretch my-2"
                      style="width:200px;">
                     <div class="status-value" style="margin:0px 10px;">
                         <div id="status-label"
@@ -639,19 +639,19 @@
                             {% load humanize %}
                             {{ total_pop.total__sum | intcomma }}
                      </div>
-                    <div class="status-value" style="margin:20px 10px;">
+                    <div class="status-value" style="margin:30px 10px;">
                         <div id="status-label"
                              style="font-size:20px; padding:10px 0px 0px 0px">의사 수 </div>
                         {% load humanize %}
                         {{ doc_pop.doctor__sum | intcomma }}
                     </div>
-                    <div class="status-value" style="margin:0px 10px;">
+                    <div class="status-value" style="margin:20px 10px;">
                         <div id="status-label"
                              style="font-size:20px; padding:10px 0px 0px 0px">간호사수 </div>
                         {% load humanize %}
                             {{ nur_pop.nurse__sum | intcomma }}
                     </div>
-                    <div class="status-value" style="margin:20px 10px 0px 10px;">
+                    <div class="status-value" style="margin:25px 10px 0px 10px;">
                         <div id="status-label"
                              style="font-size:20px; padding:10px 0px 0px 0px">병상수 </div>
                          {% load humanize %}
