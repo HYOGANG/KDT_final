@@ -37,7 +37,6 @@ class Counts(models.Model):
     dentist = models.IntegerField()
     oriental = models.IntegerField()
 
-
 class Sejong(models.Model):
     #no = models.IntegerField(blank=True, null=True)  # Field name made lowercase.
     name = models.TextField(max_length=100)  # Field renamed to remove unsuitable characters.
@@ -48,6 +47,7 @@ class Sejong(models.Model):
     lat = models.IntegerField()
     long = models.IntegerField()
     department = models.TextField()
+
 
 class Doctor(models.Model):
      department = models.TextField() #진료과목별
