@@ -25,20 +25,45 @@
         {% endfor %}
     </div>
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/board">지역정보</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/board">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/second">의료자원현황</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/map">우리동네병원찾기</a>
+                </li>
+            </ul>
+        </div>
+
+<!--        <div class="title_name"
+        style="font-size:13px ; color:white; font-weight: bold; margin-left:4%;">
+        세종특별자치시 의료이용현황</div>-->
+        <div style="font-size: 14px; color:white;padding-bottom:0; margin:0px 10px; font-weight: bold;">
+            <script type="text/javascript">
+            var today = new Date();
+
+            var year = today.getFullYear();
+            var month = ('0' + (today.getMonth()+1)).slice(-2);
+            var day = ('0' + today.getDate()).slice(-2);
+
+            var dateString = year + '.' + month + '.' + day;
+            document.write("일자 : " + dateString);
+            </script>
+        </div>
+    </nav>
  <div id="sidebar">
      <ul>
-          <li>
-                <div>
-                    <div><a href="/board"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
-                    <div><a href="/board">의료이용현황</a></div>
-                </div>
-         </li>
-         <li>
-                <div>
-                    <div><a href="/second"><i class="fa-solid fa-magnifying-glass-chart"></i></a></div>
-                    <div><a href="/second">의료자원현황</a></div>
-                </div>
-         </li>
+
      <li>
     <div>
         <div><i class="fa-regular fa-map"></i></div>

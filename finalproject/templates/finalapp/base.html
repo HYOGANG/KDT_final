@@ -9,6 +9,7 @@
 <!--    <link rel="stylesheet" type="text/css" href="/static/styles.css">-->
     <link rel="stylesheet" type="text/css" href="/static/graph.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b586ef7f47da27bb2ccaca8f64ee75b9&libraries=services"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
@@ -23,10 +24,10 @@
          #sidebar {
                     list-style: none;
                     position: fixed;
-                    top: 0;
+                    top: 58;
                     left: 0;
                     width: 50px;
-                    height: 250px;
+                    height: 130px;
                     border-radius: 5px;
                     border: 1px solid #909090;
                     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
@@ -150,11 +151,44 @@
         .placeinfo a, .placeinfo a:hover, .placeinfo a:active{color:#fff;text-decoration: none;}
         .placeinfo a, .placeinfo span {display: block;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
         .placeinfo span {margin:5px 5px 0 5px;cursor: default;font-size:13px;}
-        .placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+        .placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #777;background: #777 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
         .placeinfo .tel {color:#0f7833;}
         .placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
 
 
+         #myChart, #tocostChart, #inrankPieChart, #outrankPieChart {
+            border-radius:30px;
+            border: solid 1px #ABB7D4;
+            max-height: 280px;
+            height:auto;
+        }
+        #myChart, #tocostChart {
+            padding:10px 20px;
+        }
+        #inrankPieChart, #outrankPieChart {
+            padding: 0px 0px 5px 0px;
+        }
+
+        #docChart, #hpChart {
+            border-radius:30px;
+            border: solid 1px #ABB7D4;
+            max-height : 280px;
+            height:auto;
+            padding:10px 20px;
+        }
+        #equi, #pic {
+            border-radius:30px;
+            border: solid 1px #ABB7D4;
+            padding: 15px 20px;
+            max-height : 590px;
+        }
+
+        .status-value {
+            font-size:30px; background-color: #F0F8FF;
+            border-radius: 30px;
+            border:solid 0.5px #B6CEFF; height:130;
+            text-align:center;  line-height: 50px;
+        }
 </style>
 </head>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
