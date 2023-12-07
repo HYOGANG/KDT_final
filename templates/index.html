@@ -1,161 +1,299 @@
-<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-    <title>Document</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
     <style>
-        .main {
-            width : 100%;
-            height: 100%;
-        }
-        .container {
-            margin: 0 35px 0 0 ;
-        }
-        .title {
-        font-family: 'baeminAir';
-        font-size: 50px;
-        color: white;
-        margin: 80px 0px 0px 50px;
-        }
-        @font-face {
-            font-family: 'baeminAir';
-            src: url('/static/fonts/BMHANNAAir_ttf.ttf');
-          }
+        * { margin: 0; padding: 0;}
+        ul { list-style: none;}
+        a { text-decoration: none; color: #000;}
+        
 
+        *{
 
-        /* 메뉴 */
-
-        .menu_ul{
-            padding-left: 0px;
-            width: 800px;
-            height: 100px;
-            text-align: center;
-            box-sizing: border-box;
-            margin:50px auto 0 auto;
-
-        }
-        .menu_li{
-            margin: 0px 30px;
-            list-style-type: none;
-            /*width: calc(100% /3.7 );*/
-            height: 100%;
-            float: left;
-
-        }
-        .menu_li >a{
-            text-decoration: none;
-            width: 100%;
-            height: 100%;
-        }
-        .menu_li_imgbox{
-            width: 100%;
-            height: 77%;
-            border-radius: 50%;
-            display: inline-block;
-            opacity: 0.8;
-            transition: all 0.5s;
-
-        }
-        .menu_li_imgbox:hover{
-            opacity: 1;
-
-        }
-        .menu_img1
-        {background:url(/static/img/menu1.jpg)no-repeat center /cover;}
-        .menu_img2
-        {background:url(/static/img/menu2.jpg)no-repeat center /cover;}
-        .menu_img3
-        {background:url(/static/img/menu3.jpg)no-repeat center /cover;}
-
-
-        .menu_li_txt{
-            width: 100%;
-            overflow: auto;
-            float: left;
-            line-height: 37px;
-            font-family: 'baeminAir';
-            font-size: 35px;
-        }
-         @media only screen and (max-width: 500px) {
-            .container {
-             position: absolute;
-            }
-            footer {
-                position: absolute;
-                bottom: 0;
-                text-align: left;
-            }
-
-            .title {
-                font-size: 25px;
-                margin: 35px 30px;
-            }
-
-
-        .menu_ul {
-            width: 100%;
-            text-align: center;
-            margin: 10px auto 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            transition-duration: 0.8s;
         }
 
-
-        .menu_li {
-            margin: 10px 0;
-            float: none;
-            width: 100%;
+        body{
+        background-color: #FAFCFF;
+          margin: 0;
+          padding: 0;
         }
 
-        .menu_li_txt {
-            font-size: 15px;
+        .section{
+          width: 100%;
+          height: 100vh;
+          font-size: 32px;
+          text-align: center;
         }
+
+    .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 8% 3px 3px 3px ;
+    box-sizing: border-box;
         }
+        .page_title {
+            font-size: 50px;
+            padding: 0 10px;
+        }
+        .item_container {
+            padding: 50px 0 0 0;
+            overflow: hidden;
+            margin: 30px 0;
+    }
+
+
+    ul.item_container {
+        overflow: hidden;
+    }
+    li.item {
+        width: calc((100% - (7px * 2 * 3)) / 3 - 0.01px);
+        margin: 7px;
+        float: left;
+        /* padding: 10px 5px; */
+        box-sizing: border-box;
+        border-radius: 5px;
+        box-shadow: 0 1px 4px 0 rgba(0,0,0,.3);
+        overflow: hidden;
+        position: relative;
+    }
+    .page {
+        text-align: center;
+        padding-bottom: 80%;
+        position: relative;
+        overflow: hidden;
+
+        background: #c2c9d1;
+    }
+
+    .page img {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.2)
+
+    }
+
+
+    .size2 img {
+
+        transform: translate(-50%, -50%) scale(1) !important;
+    }
+
+
+    .desc {
+        width: 100%;
+        height: 2.3em;
+        box-sizing: border-box;
+        padding: 0 10px;
+
+        position: absolute;
+        left: 0;
+        bottom: 0;
+
+        cursor: pointer;
+        /*
+        background: linear-gradient(180deg,rgb(255, 255, 255 ,0),#e5e5e5);
+        */
+        background-color: #F6F6FE;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .page_desc {
+        flex-grow: 1;
+      padding: 2.2rem;
+      opacity: 0;
+      transition: opacity 500ms 100ms;
+        line-height: 1.3;
+        /*transition: all 0.3s;*/
+        font-size: 14px;
+    }
+
+    li.item:hover .desc {
+        height: 100%;
+        background: rgba(255,255,255,0.97);
+        padding: 10px 20px;
+    }
+    .name {
+        font-weight: bold;
+        color: #444;
+        font-size: 18px;
+        transition: all 0.3s;
+        margin: 0;
+        display: block;
+        padding: 1rem;
+    }
+    li.item:hover .name {
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    li.item:hover .page_desc {
+        opacity: 1;
+        line-height: 22px;
+        transition: all 0.3s;
+        font-size: 14px;
+    }
+
+    .btn_go {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        /* margin: 0 auto; */
+        /* background: #1596f9; */
+        padding: 10px 0px;
+        border-radius: 10px;
+        /* text-decoration: underline; */
+        font-size: 12px;
+    }
+    .show_at_lg {
+    display: block;
+    }
+    .show_at_sm {
+        display: none;
+    }
+
+@media screen and (max-width: 1024px) {
+    /* li.item > a {
+        pointer-events: none;
+    } */
+}
+
+@media screen and (max-width: 960px) {
+    li.item {
+        width: calc((100% - (5px * 2 * 2)) / 2 - 0.01px);
+        float: left;
+        margin: 10px 5px;
+    }
+}
+@media screen and (max-width: 600px) {
+    li.item:hover .desc {
+        padding: 10px 10px;
+    }
+
+    li.item .name {
+        line-height: 2.5em;
+        font-size: 1em;
+    }
+    li.item:hover .name {
+        font-weight: bold;
+        font-size: 1em;
+    }
+    li.item:hover .page_desc {
+        line-height: 22px;
+        font-size: 0.8em;
+    }
+    .desc {
+        height: 3em;
+    }
+}
+@media screen and (max-width: 480px) {
+    li.item {
+        /* width: 100%; */
+        width: calc((100% - (5px * 2 * 2)) / 2 - 0.01px);
+        margin: 5px;
+    }
+    .desc {
+        height: 2.5em;
+        font-size: 12px;
+    }
+    .btn_go {
+        padding: 0;
+    }
+    .work_day {
+        display: none;
+    }
+    .show_at_lg {
+        display: none;
+    }
+    .show_at_sm {
+        display: block;
+    }
+}
+@media screen and (max-width: 320px) {
+    li.item {
+        width: calc(100% - (2px * 2) - 0.01px);
+        margin: 5px 2px;
+    }
+    .s_name { display: none}
+    li.item:hover .name {
+        font-weight: bold;
+        font-size: 1.3em;
+    }
+    li.item:hover .page_desc {
+        line-height: 22px;
+        font-size: 1em;
+    }
+
+}
     </style>
+
 </head>
 <body>
-<div id="contents" class="main">
-    <div class="container">
+ <!-- <div class="section" style="font-size: 32px; text-align: center;">세종시 의료 정보 포털</div>
+ --> <div class="section" style="font-size: 32px; text-align: center;">
 
-        <div>
-            <p class="title">세종시 의료기관 포털</p>
-        </div>
-        </div>
-        <h2 class="menu">
-            <ul class="menu_ul">
-                <li class="menu_li">
-                    <a href="/board">
-                        <!--<div class="menu_li_imgbox menu_img1"></div>-->
-                        <div class="menu_li_txt">세종시 지역정보</div>
-                    </a>
+  <div class="container">
+      <p class="page_title">세종시 의료 포털</p>
+      <ul class="item_container">
+        <li class="item size2">
+            <div class="page">
+                <img src="/static/img/board.jpeg"></img>
+            </div>
 
-                </li>
-                <li class="menu_li">
-                    <a href="/second">
-                        <!--<div class="menu_li_imgbox menu_img2"></div>-->
-                        <div class="menu_li_txt">의료자원현황</div>
-                    </a>
+            <div class="desc">
+                <a href="/board" target="_blank" class="btn_go">
+                        <p class="name"><span class="s_name">세종시 지역정보</span></p>
+                        <div class="page_desc">
+                            <p class="work_day">지역정보(인구/의료진/병상)</p>
+                            <p class="skills">연령대별 읍면동 분포</p>
+                            <p class="skills">진료 건수와 진료비 추이</p>
+                            <p class="skills">다빈도 상병(입원/외래)</p>
+                        </div>
+                </a>
+            </div>
+        </li>
 
-                </li>
-                <li class="menu_li">
-                    <a href="/map">
-                        <!--<div class="menu_li_imgbox menu_img3"></div>-->
-                        <div class="menu_li_txt">우리동네병원찾기</div>
-                    </a>
+        <li class="item size2">
+            <div class="page">
+                <img src="/static/img/second.jpeg"></img>
+            </div>
+            <div class="desc">
+                <a href="/second" target="_blank" class="btn_go">
+                        <p class="name"><span class="s_name">의료 자원 현황</span></p>
+                        <div class="page_desc">
+                            <p class="work_day">진료 과별 전문의 수</p>
+                            <p class="skills">읍면동별 의료기관 현황</p>
+                            <p class="skills">시설 및 장비현황</p>
+                            <p class="skills">읍면동별 인구대비 병원분포도</p>
+                        </div>
+                </a>
+            </div>
+        </li>
 
-                </li>
-            </ul>
-        </h2>
-    </div>
-
-</div>
-
+        <li class="item size2">
+            <div class="page">
+                <img src="/static/img/map1.jpeg"></img>
+            </div>
+            <div class="desc">
+                <a href="/map" target="_blank" class="btn_go">
+                        <p class="name"><span class="s_name">우리동네 병원찾기</span></p>
+                        <div class="page_desc" >
+                            <p class="work_day">종별 의료기관</p>
+                            <p class="skills">진료과목별 의료기관</p>
+                        </div>
+                </a>
+            </div>
+        </li>
+      </ul>
+  </div>
+  </div>
 </body>
 </html>
