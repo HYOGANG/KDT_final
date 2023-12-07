@@ -95,9 +95,6 @@ for (let i = 0; i < Category2.length; i++) {
     for (let j = 0; j < names.length; j++) {
                 if (types[j].trim() === Category2[i]) {
 
-
-
-
                             var coords = new kakao.maps.LatLng(latlongArray[j][0],latlongArray[j][1]);
 
                             var imageSrc = img2[i],
