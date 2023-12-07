@@ -1,77 +1,55 @@
 {% extends 'base.html' %}
 {% block content %}
- <link rel="stylesheet" type="text/css" href="/static/css/second.css">
 
-    <div class="w3-main" style="margin-left:50px">
-        <div class="sejonginfo_title"
-             style="position:relative;padding:8;">
-                 <div class="title_name"
-                      style="font-size:20px ; color:#555; font-weight: bold; margin-left:4%;"> 세종특별자치시 의료자원현황</div>
-                    <div class="title_date"
-                         style="position:absolute; right:4.5%; bottom:3; font-size:16px; font-weight: bold; color:#0d62ce;">
-                        <script type="text/javascript">
-                            var today = new Date();
-                            var year = today.getFullYear();
-                            var month = ('0' + (today.getMonth()+1)).slice(-2);
-                            var day = ('0' + today.getDate()).slice(-2);
-                            var dateString = year + '.' + month + '.' + day;
-                            document.write("일자 : " + dateString);
-                        </script>
-                    </div>
+    <div id="chart_all" class="container-fluid row">
+        <nav class="col-md-5 p-0 mx-3">
+            <div>
+                <canvas id="docChart" class="my-4"></canvas>
             </div>
-     </div>
+            <div>
+                <canvas id="hpChart"></canvas>
+            </div>
 
-<div class="container" style="max-width: 100%; margin-left:50px">
-  <div style="display: inline-block; width: 600px; height:400px; vertical-align: top; margin-right: 20px;">
-    <div style="width: 100%; border-radius: 30px; border:solid 0.5px #ABB7D4; padding:10px">
-      <canvas id="myChart"></canvas>
+        </nav>
+        <section id="equi" class="col-md-3 mx-3 p-0 my-4">
+            {% if v %}
+                <center><h8 style="color:#808080;" ><b>시설 및 장비현황</b></h8><br></center>
+                <table class="table table-hover" style="font-size: 10px;margin-top:10px; margin-bottom:6px;">
+                <thead>
+                  <tr align="center">
+                    <th>구분</th>
+                    <th>세종시</th>
+                    <th>전국</th>
+                    <th>비율</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for i in v %}
+                    <tr>
+                      <td>{{ i.device }}</td>
+                      <td>{{ i.sejongsi }}</td>
+                      <td>{{ i.korea }}</td>
+                      <td>{{ i.percent }}</td>
+                    </tr>
+                  {% empty %}
+                    <tr>
+                      <td colspan="5">No data available</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                </table>
+            {% else %}
+                <p>No data to display.</p>
+            {% endif %}
+        </section>
+        <aside id="pic" class="col-md-3 mx-3 p-0 my-4" style="margin:5px 0px">
+            <h8 style="color:#808080"><b>&emsp; &emsp; &emsp; &emsp; 읍면동별 인구대비 병원분포도</b></h8><br>
+            <img src="/static/img/map.png" alt="지도" id="map" style="width: 350px; height: 530px;">
+        </aside>
     </div>
-    <div style="width: 100%; margin-top:25px;border-radius: 30px; border:solid 0.5px #ABB7D4; padding:10px">
-      <canvas id="hpChart"></canvas>
-    </div>
-  </div>
-
-  <div style="display: inline-block; width: 380px;  vertical-align: top; margin-right: 20px;
-             border-radius: 30px; border:solid 0.5px #ABB7D4; padding:10px 10px 0px 10px">
-    {% if v %}
-      <center><h8 style="color:#808080;" ><b>시설 및 장비현황</b></h8><br></center>
-      <table class="table table-hover" style="font-size: small;margin-top:10px; margin-bottom:6px;">
-        <thead>
-          <tr>
-            <th>구분</th>
-            <th>세종시</th>
-            <th>전국</th>
-            <th>비율</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for i in v %}
-            <tr>
-              <td>{{ i.device }}</td>
-              <td>{{ i.sejongsi }}</td>
-              <td>{{ i.korea }}</td>
-              <td>{{ i.percent }}</td>
-            </tr>
-          {% empty %}
-            <tr>
-              <td colspan="5">No data available</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>No data to display.</p>
-    {% endif %}
-  </div>
-  <div style="display: inline-block;  padding:15px 5px 27px 5px;
-              border-radius: 30px; border:solid 0.5px #ABB7D4;">
-    <h8 style="position:absolute; right:7.5%; color:#808080"><b>읍면동별 인구대비 병원분포도</b></h8><br><hr>
-    <img src="/static/img/map.png" alt="지도" id="map"
-         style="width: 400px; height: 550px;">
-  </div>
 </div>
 
-    <script>
+<script>
           var coordinate = {
                   top: 0,
                   bottom : 0,
@@ -396,7 +374,7 @@
         var resetButton = {
             id : 'resetButton',
             beforeDraw(chart, args, options){
-                if(myChart.config.data.datasets[0].label !== '진료 과별 전문의 수'){
+                if(docChart.config.data.datasets[0].label !== '진료 과별 전문의 수'){
 
                     var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
                     ctx.save();
@@ -433,8 +411,8 @@
               }
             }
 
-        var labelList = ['진료 과별 전문의 수', '내과계 전문의 수', '외과계 전문의 수', '지원계 전문의 수']
-        var labelList1 = ['내과계 전문의 수', '외과계 전문의 수', '지원계 전문의 수']
+        var labelList = ['진료 과별 전문의 수', '내과계', '외과계', '지원계']
+        var labelList1 = ['내과계', '외과계', '지원계']
 
         // config 구성 설정
         var config = {
@@ -447,7 +425,7 @@
                     }
                 },
                 onHover: (event, chartElement) => {
-                    if(labelList.includes(myChart.config.data.datasets[0].label)) {
+                    if(labelList.includes(docChart.config.data.datasets[0].label)) {
                         event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
                     } else {
                         event.native.target.style.cursor = 'default';
@@ -467,18 +445,18 @@
         };
 
         // render init block
-        var ctx = document.getElementById('myChart');
-        var myChart = new Chart(
+        var ctx = document.getElementById('docChart');
+        var docChart = new Chart(
           ctx,
           config
         );
 
         function changeChart(index){
 
-            if (myChart.config.data.datasets[0].label === '진료 과별 전문의 수') {
+            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수') {
 
-                myChart.config.options.parsing.xAxisKey = 'depData.dep1';
-                myChart.config.options.parsing.yAxisKey = 'depData.count1';
+                docChart.config.options.parsing.xAxisKey = 'depData.dep1';
+                docChart.config.options.parsing.yAxisKey = 'depData.count1';
 
                 var aColor = [];
                 var aUsers = [];
@@ -489,12 +467,12 @@
                     return labels.dep1;
                 })
                 console.log(aLabels);
-                myChart.config.data.datasets[0].data = aUsers;
-                myChart.config.data.labels = aLabels;
-                myChart.config.data.datasets[0].backgroundColor = aColor;
-                myChart.config.data.datasets[0].borderColor = aColor;
-                myChart.config.data.datasets[0].label = Data[index].dep + " 전문의 수";
-                myChart.update();
+                docChart.config.data.datasets[0].data = aUsers;
+                docChart.config.data.labels = aLabels;
+                docChart.config.data.datasets[0].backgroundColor = aColor;
+                docChart.config.data.datasets[0].borderColor = aColor;
+                docChart.config.data.datasets[0].label = Data[index].dep;
+                docChart.update();
             }
         }
 
@@ -502,8 +480,8 @@
         var currIndex1 = ''
 
         function changeChart1(currIndex, index) {
-            myChart.config.options.parsing.xAxisKey = 'doctorData.dep2';
-            myChart.config.options.parsing.yAxisKey = 'doctorData.count2';
+            docChart.config.options.parsing.xAxisKey = 'doctorData.dep2';
+            docChart.config.options.parsing.yAxisKey = 'doctorData.count2';
 
             var bColor = [];
             var bUsers = [];
@@ -513,17 +491,17 @@
                 return labels.dep2;
             })
             //console.log(bLabels)
-            myChart.config.data.datasets[0].data = bUsers;
-            myChart.config.data.labels = bLabels;
-            myChart.config.data.datasets[0].backgroundColor = bColor;
-            myChart.config.data.datasets[0].borderColor = bColor;
-            myChart.config.data.datasets[0].label = Data[currIndex].depData[index].dep1+ " 전문의 수";
-            myChart.update();
+            docChart.config.data.datasets[0].data = bUsers;
+            docChart.config.data.labels = bLabels;
+            docChart.config.data.datasets[0].backgroundColor = bColor;
+            docChart.config.data.datasets[0].borderColor = bColor;
+            docChart.config.data.datasets[0].label = Data[currIndex].depData[index].dep1;
+            docChart.update();
         }
 
         function clickHandlers(click){
-            if (myChart.config.data.datasets[0].label === '진료 과별 전문의 수'){
-                var bar = myChart.getElementsAtEventForMode(click, 'nearest',
+            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수'){
+                var bar = docChart.getElementsAtEventForMode(click, 'nearest',
                     {intersect: true}, true);
                 if(bar.length){
                     //console.log(bar[0].index);
@@ -531,8 +509,8 @@
                     currIndex = bar[0].index
                 }
 
-            } else if (labelList1.includes(myChart.config.data.datasets[0].label)) {
-                var bar = myChart.getElementsAtEventForMode(click, 'nearest',
+            } else if (labelList1.includes(docChart.config.data.datasets[0].label)) {
+                var bar = docChart.getElementsAtEventForMode(click, 'nearest',
                     {intersect: true}, true);
                 //console.log(firstIndex);
                 //console.log(bar);
@@ -547,9 +525,9 @@
         function resetCharts(){
             //console.log('clicked reset button!');
             //console.log(currIndex,currIndex1 );
-            if (labelList1.includes(myChart.config.data.datasets[0].label)) {
-                myChart.config.options.parsing.xAxisKey = 'dep';
-                myChart.config.options.parsing.yAxisKey = 'count';
+            if (labelList1.includes(docChart.config.data.datasets[0].label)) {
+                docChart.config.options.parsing.xAxisKey = 'dep';
+                docChart.config.options.parsing.yAxisKey = 'count';
 
                 var cColor = [];
                 var cCount = [];
@@ -559,15 +537,15 @@
                   return labels.dep;
                 });
 
-                myChart.config.data.datasets[0].backgroundColor = cColor;
-                myChart.config.data.datasets[0].borderColor = cColor;
-                myChart.config.data.labels = cLabels;
-                myChart.config.data.datasets[0].label = '진료 과별 전문의 수';
-                myChart.config.data.datasets[0].data = cCount;
-                myChart.update();
+                docChart.config.data.datasets[0].backgroundColor = cColor;
+                docChart.config.data.datasets[0].borderColor = cColor;
+                docChart.config.data.labels = cLabels;
+                docChart.config.data.datasets[0].label = '진료 과별 전문의 수';
+                docChart.config.data.datasets[0].data = cCount;
+                docChart.update();
             } else {
-                myChart.config.options.parsing.xAxisKey = 'dep1';
-                myChart.config.options.parsing.yAxisKey = 'count1';
+                docChart.config.options.parsing.xAxisKey = 'dep1';
+                docChart.config.options.parsing.yAxisKey = 'count1';
 
                 var aColor = [];
                 var aCount = [];
@@ -577,13 +555,13 @@
                     return labels.dep1;
             });
 
-            myChart.config.data.datasets[0].backgroundColor = aColor;
-            myChart.config.data.datasets[0].borderColor = aColor;
-            myChart.config.data.labels = aLabels;
-            myChart.config.data.datasets[0].label = Data[currIndex].dep+ " 전문의 수";
-            myChart.config.data.datasets[0].data = aCount;
+            docChart.config.data.datasets[0].backgroundColor = aColor;
+            docChart.config.data.datasets[0].borderColor = aColor;
+            docChart.config.data.labels = aLabels;
+            docChart.config.data.datasets[0].label = Data[currIndex].dep;
+            docChart.config.data.datasets[0].data = aCount;
 
-            myChart.update();
+            docChart.update();
           }
         };
 
@@ -592,7 +570,7 @@
           var x = mousemove.offsetX;
           var y = mousemove.offsetY;
 
-          if (!labelList.includes(myChart.config.data.datasets[0].label)){
+          if (!labelList.includes(docChart.config.data.datasets[0].label)){
               if ( x > coordinate.left && x < coordinate.right && y > coordinate.top && y
                    < coordinate.bottom){
                     canvas.style.cursor = 'pointer';
@@ -616,12 +594,12 @@
         ctx.onclick = clickHandlers;
 
         ctx.addEventListener('mousemove', (e) => {
-          myChart.resize();
+          docChart.resize();
           mousemoveHandler(ctx, e);
         });
 
         ctx.addEventListener('click', (e) => {
-          myChart.resize();
+          docChart.resize();
           clickButtonHandler(ctx,e);
         })
 
@@ -702,7 +680,7 @@
               browserData[3].color,
               browserData[4].color
             ],
-            borderWidth: 2
+            borderWidth: 0.3
           }]
         };
 
@@ -875,4 +853,6 @@
           clickButton1Handler(ctx,e);
         })
     </script>
-    {% endblock %}
+
+
+{% endblock %}
