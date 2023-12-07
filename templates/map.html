@@ -22,6 +22,11 @@
                 {{ i.department }}{% if not forloop.last %}|{% endif %}
         {% endfor %}
     </div>
+    <div id="coord" style="display: none">
+        {% for i in sejong %}
+                {{ i.lat }},{{i.long}}{% if not forloop.last %}|{% endif %}
+        {% endfor %}
+    </div>
 
  <div id="sidebar">
      <ul>
