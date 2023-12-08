@@ -267,8 +267,8 @@
                     myChart.config.data.labels = vLabels;
                     myChart.config.data.datasets[0].data = vUsers;
                     myChart.config.data.datasets[1].data = vUsers1;
-                    myChart.config.data.datasets[0].backgroundColor = 'rgba(177, 204, 240, 1)';
-                    myChart.config.data.datasets[1].backgroundColor = 'rgba(255, 192, 203, 1)';
+                    myChart.config.data.datasets[0].backgroundColor = vUsers.map(() => 'rgba(177, 204, 240, 1)');
+                    myChart.config.data.datasets[1].backgroundColor = vUsers.map(() => 'rgba(255, 192, 203, 1)');
                     myChart.config.data.datasets[0].borderColor = 'rgba(177, 204, 240, 1)';
                     myChart.config.data.datasets[1].borderColor = 'rgba(255, 192, 203, 1)';
                     myChart.config.data.datasets[0].label = '남자';
