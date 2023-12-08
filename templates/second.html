@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 
-    <div id="chart_all" class="container-fluid row">
+
+
+    <div id="chart_all" class="container-fluid row" style="margin-bottom:-0.7em; ">
         <nav class="col-md-5 p-0 mx-3">
-            <div>
-                <canvas id="docChart" class="my-4"></canvas>
+            <div class="flex-container stretch">
+                <canvas id="docChart" class="my-2"></canvas>
             </div>
             <div>
                 <canvas id="hpChart"></canvas>
             </div>
 
         </nav>
-        <section id="equi" class="col-md-3 mx-3 p-0 my-4">
+        <div>  &emsp; </div>
+        <section id="equi" class="col-md-3 mx-2 p-0" style="margin-top:0.5em;">
             {% if v %}
-                <center><h8 style="color:#808080;" ><b>시설 및 장비현황</b></h8><br></center>
-                <table class="table table-hover" style="font-size: 10px;margin-top:10px; margin-bottom:6px;">
+                <center style="margin:5px;">
+                    <h8 style="color:#808080;"><b>시설 및 장비현황</b></h8><br>
+                </center>
+                <table class="table table-hover " style="font-size: 11px;">
                 <thead>
                   <tr align="center">
                     <th>구분</th>
@@ -42,9 +47,9 @@
                 <p>No data to display.</p>
             {% endif %}
         </section>
-        <aside id="pic" class="col-md-3 mx-3 p-0 my-4" style="margin:5px 0px">
-            <h8 style="color:#808080"><b>&emsp; &emsp; &emsp; &emsp; 읍면동별 인구대비 병원분포도</b></h8><br>
-            <img src="/static/img/map.png" alt="지도" id="map" style="width: 350px; height: 530px;">
+        <div>  &emsp;</div>
+        <aside id="pic" class="col-md-3 mx-3 p-0 mt-2 ">
+            <img src="/static/img/map.png" alt="인구_병원" class="my-2 ml-3dhk" id="map" style="width: 330px; height: 590px;">
         </aside>
     </div>
 </div>

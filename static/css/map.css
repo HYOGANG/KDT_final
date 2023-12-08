@@ -1,8 +1,12 @@
 
+        .bb{
+            margin:0!important;
+        }
+
          #sidebar {
                     list-style: none;
                     position: fixed;
-                    top: 58px;
+                    top: 70px;
                     left: 0;
                     height: 130px;
                     border-radius: 5px;
@@ -220,7 +224,7 @@
 
 #map {border-radius:10px;}
 .map_wrap, .map_wrap * {margin:0; padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
-.map_wrap { border-radius:10px; border: 1px solid #ccc; position:relative;width:100%;height:80%; margin:0 0 3% 0}
+.map_wrap { border-radius:10px; border: 1px solid #ccc; position:relative;width:100%;height:80%; margin:1% 0 0 0}
 
 /*
 
