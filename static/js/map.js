@@ -27,8 +27,7 @@ var markers = Array.from(
                             () => []);
 
 
-var placeOverlay = new kakao.maps.CustomOverlay({zIndex:1}),
-    contentNode = document.createElement('div')
+
 
 var mapContainer = document.getElementById('map'),
     mapOption = {
@@ -43,14 +42,10 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 
 var geocoder = new kakao.maps.services.Geocoder();
 
-kakao.maps.event.addListener(map, 'idle', searchPlaces);
+kakao.maps.event.addListener(map, 'idle',displayPlaces);
 
-contentNode.className = 'placeinfo_wrap';
 
-addEventHandle(contentNode, 'mousedown', kakao.maps.event.preventMap);
-addEventHandle(contentNode, 'touchstart', kakao.maps.event.preventMap);
 
-placeOverlay.setContent(contentNode);
 
 addCategoryClickEvent();
 
@@ -83,9 +78,11 @@ for (let i = 0; i < Category.length; i++) {
                             allcoords[i].push(coords);
                             markers[i].push(marker);
 
-                            kakao.maps.event.addListener(marker, 'click', function() {
-                            displayPlaceInfo(names[j], coords);
-                            });
+                            (function (marker, coords) {
+                                kakao.maps.event.addListener(marker, 'click', function () {
+                                    displayPlaceInfo(names[j], coords);
+                                });
+                            })(marker, coords);
 
 
                  }
@@ -110,9 +107,13 @@ for (let i = 0; i < Category2.length; i++) {
                             allcoords[i+19].push(coords);
                             markers[i+19].push(marker);
 
-                            kakao.maps.event.addListener(marker, 'click', function() {
-                            displayPlaceInfo(names[j], coords);
-                            });
+
+
+                           (function (marker, coords) {
+                                kakao.maps.event.addListener(marker, 'click', function () {
+                                    displayPlaceInfo(names[j], coords);
+                                });
+                            })(marker, coords);
 
 
 
@@ -129,30 +130,24 @@ var clusterer = new kakao.maps.MarkerClusterer({
 
 });
 
+    var placeOverlay = new kakao.maps.CustomOverlay({
+        zIndex:1
+    });
 
-function displayPlaceInfo (name, coord) {
+function displayPlaceInfo (name, coords) {
     var content = '<div class="placeinfo">' +
-                    '<a href="https://map.kakao.com/link/map/'+name+','+coord.Ma+','+coord.La +'" target="_blank">' +
+                    '<a href="https://map.kakao.com/link/map/'+name+','+coords.Ma+','+coords.La +'" target="_blank">' +
     '<span class="title">'+ name +'</span>'+
     '</a>' +
     '</div>';
 
-    contentNode.innerHTML = content;
-    placeOverlay.setPosition(coord);
+    placeOverlay.setPosition(coords);
+    placeOverlay.setContent(content);
+    placeOverlay.setMap(map);
 
-    if (currMarker === coord) {
-            placeOverlay.setMap(null);
-            currMarker = ""
-    } else{
-            placeOverlay.setMap(map);
-            currMarker = coord;
-            }
 }
 
 
-function searchPlaces() {
-       displayPlaces();
-}
 
  function displayPlaces(places) {
     clusterer.clear();
@@ -202,7 +197,7 @@ function addCategoryClickEvent() {
 function onClickCategory() {
     var id = this.id,
         index = currCategory.indexOf(id);
-    placeOverlay.setMap(null);
+        placeOverlay.setMap(null);
     if (index !== -1) {
 
         currCategory.splice(index, 1);
@@ -212,7 +207,7 @@ function onClickCategory() {
     } else {
         currCategory.push(id);
 
-        searchPlaces();
+        displayPlaces();
     }
 
     changeCategoryClass(this);
