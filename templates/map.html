@@ -9,7 +9,7 @@
     </div>
     <div id="address" style="display: none">
         {% for i in sejong %}
-                {{ i.address }}{% if not forloop.last %},{% endif %}
+                {{ i.address }}{% if not forloop.last %}|{% endif %}
         {% endfor %}
     </div>
     <div id="type" style="display: none">
@@ -25,6 +25,11 @@
     <div id="coord" style="display: none">
         {% for i in sejong %}
                 {{ i.lat }},{{i.long}}{% if not forloop.last %}|{% endif %}
+        {% endfor %}
+    </div>
+    <div id="phone" style="display: none">
+        {% for i in sejong %}
+                {{ i.phone }}{% if not forloop.last %},{% endif %}
         {% endfor %}
     </div>
 

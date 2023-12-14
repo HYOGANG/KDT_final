@@ -3,7 +3,7 @@ var addresses= document.getElementById('address').innerHTML.split('|')
 var types= document.getElementById('type').innerHTML.split(',');
 var deps= document.getElementById('department').innerHTML.split('|');
 var latlong= document.getElementById('coord').innerHTML.replace(/\s+/g, '').replace(/\n/g, '').split('|');
-
+var phones= document.getElementById('phone').innerHTML.split(',');
 
 var latlongArray = latlong.map(function(coordPair) {
     var latlongs = coordPair.split(',');
@@ -80,7 +80,7 @@ for (let i = 0; i < Category.length; i++) {
 
                             (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(names[j], coords);
+                                    displayPlaceInfo(names[j], coords, addresses[j], phones[j]);
                                 });
                             })(marker, coords);
 
@@ -111,7 +111,7 @@ for (let i = 0; i < Category2.length; i++) {
 
                            (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(names[j], coords);
+                                    displayPlaceInfo(names[j], coords, addresses[j], phones[j]);
                                 });
                             })(marker, coords);
 
@@ -134,12 +134,18 @@ var clusterer = new kakao.maps.MarkerClusterer({
         zIndex:1
     });
 
-function displayPlaceInfo (name, coords) {
-    var content = '<div class="placeinfo">' +
-                    '<a href="https://map.kakao.com/link/map/'+name+','+coords.Ma+','+coords.La +'" target="_blank">' +
-    '<span class="title">'+ name +'</span>'+
-    '</a>' +
-    '</div>';
+function displayPlaceInfo (name, coords, address, phone) {
+    var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';
+
+    content += '    <span>' + address + '</span>';
+
+      if (phone) {
+        content += '<span class="tel"><span style="color:black; display:inline-block;">TEL : </span><span style="display:inline-block">' + phone + '</span></span></div>';
+    }  else {
+        content += '<span class="tel">TEL: ' + phone + '</span></div>';
+    }
+
+
 
     placeOverlay.setPosition(coords);
     placeOverlay.setContent(content);
