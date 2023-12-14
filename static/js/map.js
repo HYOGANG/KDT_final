@@ -1,16 +1,18 @@
-var names = document.getElementById('name').innerHTML.split(',')
-var addresses= document.getElementById('address').innerHTML.split('|')
-var types= document.getElementById('type').innerHTML.split(',');
-var deps= document.getElementById('department').innerHTML.split('|');
-var latlong= document.getElementById('coord').innerHTML.replace(/\s+/g, '').replace(/\n/g, '').split('|');
-var phones= document.getElementById('phone').innerHTML.split(',');
+var all= document.getElementById('all').innerHTML.split('||');
 
-var latlongArray = latlong.map(function(coordPair) {
-    var latlongs = coordPair.split(',');
-    var lat = parseFloat(latlongs[0]);
-    var long = parseFloat(latlongs[1]);
-    return [lat, long];
+var allArray = all.map(function(alls){
+    var allPair = alls.split('|');
+    var names = allPair[0];
+    var addresses = allPair[1];
+    var types = allPair[2];
+    var deps = allPair[3];
+    var phones = allPair[4];
+    var latlong = allPair[5].split(',');
+    var lat = parseFloat(latlong[0]);
+    var long = parseFloat(latlong[1]);
+    return [names, addresses, types, deps, phones, [lat, long]];
 });
+
 
 
 
@@ -26,6 +28,8 @@ var markers = Array.from(
                             { length: Category.length + Category2.length },
                             () => []);
 
+var keymarkers = [],
+    pindex = [];
 
 
 
@@ -39,11 +43,7 @@ var mapContainer = document.getElementById('map'),
 var map = new kakao.maps.Map(mapContainer, mapOption);
 
 
-
-var geocoder = new kakao.maps.services.Geocoder();
-
 kakao.maps.event.addListener(map, 'idle',displayPlaces);
-
 
 
 
@@ -58,14 +58,13 @@ function addEventHandle(target, type, callback) {
 }
 
 var img = ['/static/img/dot9.png','/static/img/dot9-1.png','/static/img/dot9-2.png','/static/img/dot9-3.png','/static/img/dot9-4.png', '/static/img/dot10.png', '/static/img/dot11.png', '/static/img/dot12.png', '/static/img/dot13.png', '/static/img/dot14.png','/static/img/dot3.png', '/static/img/dot15.png', '/static/img/dot8.png', '/static/img/dot16.png', '/static/img/dot17.png', '/static/img/dot18.png', '/static/img/dot19.png', '/static/img/dot20.png','/static/img/dot5.png']
-var img2 = ['/static/img/dot1.png', '/static/img/dot1-1.png', '/static/img/dot4.png', '/static/img/dot3.png', '/static/img/dot3-3.png', '/static/img/dot5.png', '/static/img/dot5-5.png', '/static/img/dot2.png', '/static/img/dot8.png', '/static/img/dot7.png', '/static/img/dot7-7.png','/static/img/dot7-77.png', '/static/img/dot6.png']
+var img2 = ['/static/img/dot1.png', '/static/img/dot1-1.png','/static/img/dot4.png', '/static/img/dot3.png', '/static/img/dot3-3.png', '/static/img/dot5.png', '/static/img/dot5-5.png', '/static/img/dot2.png', '/static/img/dot8.png', '/static/img/dot7.png', '/static/img/dot7-7.png','/static/img/dot7-77.png', '/static/img/dot6.png']
 
 
 for (let i = 0; i < Category.length; i++) {
-    for (let j = 0; j < names.length; j++) {
-                if (deps[j].includes(Category[i])) {
-
-                            var coords = new kakao.maps.LatLng(latlongArray[j][0],latlongArray[j][1] );
+    for (let j = 0; j < allArray.length; j++) {
+                if (allArray[j][3].includes(Category[i])) {
+                            var coords = new kakao.maps.LatLng(allArray[j][5][0],allArray[j][5][1] );
                             var imageSrc = img[i],
                                 imageSize = new kakao.maps.Size(21, 23);
                             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize)
@@ -80,7 +79,7 @@ for (let i = 0; i < Category.length; i++) {
 
                             (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(names[j], coords, addresses[j], phones[j]);
+                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4]);
                                 });
                             })(marker, coords);
 
@@ -89,10 +88,10 @@ for (let i = 0; i < Category.length; i++) {
            }
       }
 for (let i = 0; i < Category2.length; i++) {
-    for (let j = 0; j < names.length; j++) {
-                if (types[j].trim() === Category2[i]) {
+    for (let j = 0; j < allArray.length; j++) {
+                if (allArray[j][2].trim() === Category2[i]) {
 
-                            var coords = new kakao.maps.LatLng(latlongArray[j][0],latlongArray[j][1]);
+                            var coords = new kakao.maps.LatLng(allArray[j][5][0],allArray[j][5][1]);
 
                             var imageSrc = img2[i],
                                 imageSize = new kakao.maps.Size(21, 23);
@@ -111,7 +110,7 @@ for (let i = 0; i < Category2.length; i++) {
 
                            (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(names[j], coords, addresses[j], phones[j]);
+                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4]);
                                 });
                             })(marker, coords);
 
@@ -120,6 +119,154 @@ for (let i = 0; i < Category2.length; i++) {
                  }
            }
       }
+
+//검색기능 추가
+function searchPlaces() {
+
+    var keyword = document.getElementById('keyword').value;
+
+    if (!keyword.replace(/^\s+|\s+$/g, '')) {
+        document.getElementById('menu_wrap').style.height = '35px';
+        document.getElementById('menu_wrap').style.overflowY = 'hidden';
+
+        //alert('키워드를 입력해주세요!');
+        document.getElementById('alertMessage').style.display = 'block';
+        setTimeout(function () {
+                    document.getElementById('alertMessage').style.display = 'none';
+                }, 2000);
+
+        return false;
+    }
+
+        // 검색 목록과 마커를 표출합니다
+        displayKewordPlaces(keyword);
+
+        document.getElementById('menu_wrap').style.height = '350px';
+        document.getElementById('menu_wrap').style.overflowY = 'auto';
+}
+
+// 검색 결과 목록과 마커를 표출하는 함수입니다
+function displayKewordPlaces(keyword) {
+
+    var listEl = document.getElementById('placesList'),
+    menuEl = document.getElementById('menu_wrap'),
+    fragment = document.createDocumentFragment(),
+    bounds = new kakao.maps.LatLngBounds(),
+    listStr = '';
+
+    // 검색 결과 목록에 추가된 항목들을 제거합니다
+    removeAllChildNods(listEl);
+
+    // 지도에 표시되고 있는 마커를 제거합니다
+    removePlaceMarker();
+
+    pindex = [];
+
+    // 공백을 기준으로 키워드를 분리합니다
+    var keywords = keyword.split(/\s+/);
+
+    for (let i = 0; i < allArray.length; i++) {
+        // 모든 키워드가 존재하는지 확인합니다
+        if (keywords.every(keyword => all[i].includes(keyword))) {
+            pindex.push(i);
+        }
+    }
+
+    for (let i = 0; i < pindex.length; i++) {
+        var p = pindex[i];
+        // 마커를 생성하고 지도에 표시합니다
+        var placePosition = new kakao.maps.LatLng(allArray[p][5][0], allArray[p][5][1]),
+            marker = addMarker(placePosition, i ),
+            itemEl = getListItem(i, allArray[p]); // 검색 결과 항목 Element를 생성합니다
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        bounds.extend(placePosition);
+
+        // 마커와 검색결과 항목에 mouseover 했을때
+        // 해당 장소에 인포윈도우에 장소명을 표시합니다
+        // mouseout 했을 때는 인포윈도우를 닫습니다
+        (function(name, coords, address, phone) {
+            kakao.maps.event.addListener(marker, 'click', function() {
+                displayPlaceInfo(name, coords, address, phone);
+            });
+
+            itemEl.onmouseover =  function () {
+                displayPlaceInfo(name, coords, address, phone);
+            };
+
+            itemEl.onmouseout =  function () {
+                placeOverlay.setMap(null);
+            };
+        })(allArray[p][0],placePosition, allArray[p][1], allArray[p][4]);
+
+        fragment.appendChild(itemEl);
+    }
+
+    // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+    listEl.appendChild(fragment);
+    menuEl.scrollTop = 0;
+
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+    map.setBounds(bounds);
+}
+
+// 검색결과 항목을 Element로 반환하는 함수입니다
+function getListItem(index, places) {
+
+    var el = document.createElement('li'),
+    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+                '<div class="info">' +
+                '   <h5>' + places[0] + '</h5>';
+
+        itemStr += '    <span>' +  places[1]  + '</span>';
+
+      itemStr += '  <span class="tel">' + places[4]  + '</span>' +
+                '</div>';
+
+    el.innerHTML = itemStr;
+    el.className = 'item';
+
+    return el;
+}
+
+// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+function addMarker(position, idx, title) {
+    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+        imgOptions =  {
+            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        },
+        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+            marker = new kakao.maps.Marker({
+            position: position, // 마커의 위치
+            image: markerImage
+        });
+
+    marker.setMap(map); // 지도 위에 마커를 표출합니다
+    keymarkers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+    return marker;
+}
+
+// 지도 위에 표시되고 있는 마커를 모두 제거합니다
+function removePlaceMarker() {
+    for ( var i = 0; i < keymarkers.length; i++ ) {
+        keymarkers[i].setMap(null);
+    }
+    keymarkers = [];
+}
+
+
+
+ // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+function removeAllChildNods(el) {
+    while (el.hasChildNodes()) {
+        el.removeChild (el.lastChild);
+    }
+}
 
 var currMarker =""
 
@@ -133,8 +280,11 @@ var clusterer = new kakao.maps.MarkerClusterer({
     var placeOverlay = new kakao.maps.CustomOverlay({
         zIndex:1
     });
+    var contentNode = document.createElement('div');
 
-function displayPlaceInfo (name, coords, address, phone) {
+    placeOverlay.setContent(contentNode);
+
+    function displayPlaceInfo (name, coords, address, phone) {
     var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';
 
     content += '    <span>' + address + '</span>';
@@ -145,7 +295,7 @@ function displayPlaceInfo (name, coords, address, phone) {
         content += '<span class="tel">TEL: ' + phone + '</span></div>';
     }
 
-
+    contentNode.innerHTML = content;
 
     placeOverlay.setPosition(coords);
     placeOverlay.setContent(content);
@@ -230,4 +380,8 @@ function changeCategoryClass(el) {
         el.classList.add('on');
     }
 }
+
+kakao.maps.event.addListener(map, 'click', function () {
+                                    placeOverlay.setMap(null);
+                                });
 

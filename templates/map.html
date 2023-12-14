@@ -2,37 +2,25 @@
 {% block content %}
  <link rel="stylesheet" type="text/css" href="/static/css/map.css">
 
- <div id="name" style="display: none">
+    <div id="all" style="display: none">
         {% for i in sejong %}
-                {{ i.name }}{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </div>
-    <div id="address" style="display: none">
-        {% for i in sejong %}
-                {{ i.address }}{% if not forloop.last %}|{% endif %}
-        {% endfor %}
-    </div>
-    <div id="type" style="display: none">
-        {% for i in sejong %}
-                {{ i.type }}{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    </div>
-    <div id="department" style="display: none">
-        {% for i in sejong %}
-                {{ i.department }}{% if not forloop.last %}|{% endif %}
-        {% endfor %}
-    </div>
-    <div id="coord" style="display: none">
-        {% for i in sejong %}
-                {{ i.lat }},{{i.long}}{% if not forloop.last %}|{% endif %}
-        {% endfor %}
-    </div>
-    <div id="phone" style="display: none">
-        {% for i in sejong %}
-                {{ i.phone }}{% if not forloop.last %},{% endif %}
+                {{ i.name }}|{{ i.address }}|{{ i.type }}|{{ i.department }}|{{ i.phone }}|{{ i.lat }},{{i.long}}{% if not forloop.last %}||{% endif %}
         {% endfor %}
     </div>
 
+<div id="menu_wrap" class="bg_white">
+        <div class="option">
+            <div>
+                <form onsubmit="searchPlaces(); return false;">
+                    키워드 : <input type="text" value="" id="keyword" size="9">
+                    <button type="submit">검색</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div id="alertMessage">입력해주세요!</div>
+        <ul id="placesList"></ul>
+    </div>
  <div id="sidebar">
      <ul>
      <li>
@@ -188,6 +176,8 @@
      </li>
      </ul>
 </div>
+
+
 
  <div class="map_wrap">
     <div id="map" style="width:100%;height:100%;position:relative; overflow:hidden;"></div>
