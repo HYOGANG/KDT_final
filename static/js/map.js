@@ -8,8 +8,8 @@ var allArray = all.map(function(alls){
     var deps = allPair[3];
     var phones = allPair[4];
     var latlong = allPair[5].split(',');
-    var lat = parseFloat(latlong[0]);
-    var long = parseFloat(latlong[1]);
+    var lat = parseFloat(latlong[1]);
+    var long = parseFloat(latlong[0]);
     return [names, addresses, types, deps, phones, [lat, long]];
 });
 
@@ -77,6 +77,7 @@ for (let i = 0; i < Category.length; i++) {
                             allcoords[i].push(coords);
                             markers[i].push(marker);
 
+
                             (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
                                     displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4]);
@@ -102,11 +103,8 @@ for (let i = 0; i < Category2.length; i++) {
                                 image: markerImage
                             });
 
-
                             allcoords[i+19].push(coords);
                             markers[i+19].push(marker);
-
-
 
                            (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
@@ -130,18 +128,16 @@ function searchPlaces() {
         document.getElementById('menu_wrap').style.overflowY = 'hidden';
 
         //alert('키워드를 입력해주세요!');
-        document.getElementById('alertMessage').style.display = 'block';
-        setTimeout(function () {
-                    document.getElementById('alertMessage').style.display = 'none';
-                }, 2000);
+
+
 
         return false;
     }
 
         // 검색 목록과 마커를 표출합니다
         displayKewordPlaces(keyword);
-
-        document.getElementById('menu_wrap').style.height = '350px';
+        document.getElementById('sidebar').style.top = '365px';
+        document.getElementById('menu_wrap').style.height = '294px';
         document.getElementById('menu_wrap').style.overflowY = 'auto';
 }
 
@@ -187,6 +183,11 @@ function displayKewordPlaces(keyword) {
         // 해당 장소에 인포윈도우에 장소명을 표시합니다
         // mouseout 했을 때는 인포윈도우를 닫습니다
         (function(name, coords, address, phone) {
+
+            marker.onmouseover =  function () {
+                displayName(name);
+            };
+
             kakao.maps.event.addListener(marker, 'click', function() {
                 displayPlaceInfo(name, coords, address, phone);
             });
@@ -195,9 +196,10 @@ function displayKewordPlaces(keyword) {
                 displayPlaceInfo(name, coords, address, phone);
             };
 
-            itemEl.onmouseout =  function () {
-                placeOverlay.setMap(null);
-            };
+
+
+
+
         })(allArray[p][0],placePosition, allArray[p][1], allArray[p][4]);
 
         fragment.appendChild(itemEl);
@@ -232,17 +234,8 @@ function getListItem(index, places) {
 
 // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
 function addMarker(position, idx, title) {
-    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-        imgOptions =  {
-            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-        },
-        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-            marker = new kakao.maps.Marker({
-            position: position, // 마커의 위치
-            image: markerImage
+    var marker = new kakao.maps.Marker({
+        position: position, // 마커의 위치
         });
 
     marker.setMap(map); // 지도 위에 마커를 표출합니다
@@ -283,6 +276,15 @@ var clusterer = new kakao.maps.MarkerClusterer({
     var contentNode = document.createElement('div');
 
     placeOverlay.setContent(contentNode);
+
+    function displayName (name) {
+    var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';
+    contentNode.innerHTML = content;
+
+    placeOverlay.setPosition(coords);
+    placeOverlay.setContent(content);
+    placeOverlay.setMap(map);
+    }
 
     function displayPlaceInfo (name, coords, address, phone) {
     var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';

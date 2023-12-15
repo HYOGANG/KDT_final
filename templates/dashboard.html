@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
     <div id="chart_all" class="container-fluid row mb-n3">
         <nav class="col-12 col-md-7 p-0 mx-3">
              <!-- 연령대별 읍면동 분포 -->
@@ -195,7 +194,7 @@
                         console.log(coordinates)
                         coordinates.top = 5;
                         coordinates.bottom = 25;
-                        coordinates.left = right-(textWidth+1+10);
+                        coordinates.left = right-(textWidth+1+35);
                         coordinates.right = right;
 
                         ctx.restore();
@@ -211,6 +210,15 @@
                     plugins: {
                         tooltip: {
                             yAlign: 'bottom'
+                        },
+                        legend : {
+                            labels : {
+                                color : '#808080',
+                                font : {
+                                    size:16,
+                                    weight: 'bold',
+                                }
+                            }
                         }
                     },
                     onHover: (event, chartElement) => {
@@ -408,15 +416,21 @@
                     title: {
                         display: true,
                         text: '진료 건수와 진료비 추이',
+                        color : '#808080',
                         padding: {
                             top: 10,
-                            bottom: 10
+                            bottom: 3
+                        },
+                        font : {
+                            size:16,
+                            weight: 'bold',
                         }
-                    }
+                    },
                 }
             }
             });
             };
+
             </script>
         </nav>
         <section class="col-5 col-md-3 mx-3 p-0">
@@ -498,11 +512,16 @@
         plugins: {
           legend: {
             display: false,
-            position: 'bottom'
+            position: 'bottom',
           },
           title: {
             display: true,
-            text: '다빈도 상병(입원)'
+            text: '다빈도 상병(입원)',
+            color : '#808080',
+            font : {
+                size:16,
+                weight: 'bold',
+            }
           },
           layout: {
             padding: 10
@@ -516,7 +535,8 @@
           },
           tooltip: {
             enabled:false
-          }
+          },
+
         }
       },
       plugins: [hoverLabel]
@@ -572,7 +592,12 @@
           },
           title: {
             display: true,
-            text: '다빈도 상병(외래)'
+            text: '다빈도 상병(외래)',
+            color : '#808080',
+            font : {
+                size:16,
+                weight: 'bold',
+            }
           },
           layout: {
             padding: 10
@@ -600,25 +625,25 @@
                      style="width:200px;">
                     <div class="status-value" style="margin:0px 10px;">
                         <div id="status-label"
-                             style="font-size:20px; padding:10px 0px 0px 0px">총 인구 수</div>
+                             style="font-size:20px; padding:10px 0px 0px 0px; font-weight:bold; ">총 인구 수</div>
                             {% load humanize %}
                             {{ total_pop.total__sum | intcomma }}
                      </div>
                     <div class="status-value" style="margin:30px 10px;">
                         <div id="status-label"
-                             style="font-size:20px; padding:10px 0px 0px 0px">의사 수 </div>
+                             style="font-size:20px; padding:10px 0px 0px 0px ; font-weight:bold;">의사 수 </div>
                         {% load humanize %}
                         {{ doc_pop.doctor__sum | intcomma }}
                     </div>
                     <div class="status-value" style="margin:20px 10px;">
                         <div id="status-label"
-                             style="font-size:20px; padding:10px 0px 0px 0px">간호사수 </div>
+                             style="font-size:20px; padding:10px 0px 0px 0px ; font-weight:bold;">간호사수 </div>
                         {% load humanize %}
                             {{ nur_pop.nurse__sum | intcomma }}
                     </div>
                     <div class="status-value" style="margin:25px 10px 0px 10px;">
                         <div id="status-label"
-                             style="font-size:20px; padding:10px 0px 0px 0px">병상수 </div>
+                             style="font-size:20px; padding:10px 0px 0px 0px ; font-weight:bold;">병상수 </div>
                          {% load humanize %}
                             {{ pat_pop.patient__sum | intcomma }}
                     </div>

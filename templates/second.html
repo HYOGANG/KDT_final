@@ -6,10 +6,10 @@
     <div id="chart_all" class="container-fluid row" style="margin-bottom:-0.7em; ">
         <nav class="col-md-5 p-0 mx-3">
             <div class="flex-container stretch">
-                <canvas id="docChart" class="my-2"></canvas>
+                <canvas id="hpChart" class="my-2"></canvas>
             </div>
             <div>
-                <canvas id="hpChart"></canvas>
+                <canvas id="docChart"></canvas>
             </div>
 
         </nav>
@@ -408,7 +408,7 @@
                     //console.log(coordinate);
                     coordinate.top = 5;
                     coordinate.bottom = 25;
-                    coordinate.left = right - (textWidth + 1 + 10);
+                    coordinate.left = right - (textWidth + 1 + 35);
                     coordinate.right = right;
 
                     ctx.restore();
@@ -427,6 +427,15 @@
                 plugins : {
                     tooltip : {
                         yAlign : 'bottom'
+                    },
+                    legend : {
+                        labels : {
+                            color : '#808080',
+                            font : {
+                                size:16,
+                                weight: 'bold',
+                            }
+                        }
                     }
                 },
                 onHover: (event, chartElement) => {
@@ -578,7 +587,7 @@
           if (!labelList.includes(docChart.config.data.datasets[0].label)){
               if ( x > coordinate.left && x < coordinate.right && y > coordinate.top && y
                    < coordinate.bottom){
-                    canvas.style.cursor = 'pointer';
+                    canvas.style.cursor = 'grab';
                    } else {
                     canvas.style.cursor = 'default';
                   };
@@ -719,7 +728,7 @@
                 console.log(coordinates)
                 coordinates.top = 5;
                 coordinates.bottom = 25;
-                coordinates.left = right - (textWidth + 1 + 10);
+                coordinates.left = right - (textWidth + 1 + 35);
                 coordinates.right = right;
 
                 ctx.restore();
@@ -735,6 +744,15 @@
             plugins : {
               tooltip : {
                 yAlign : 'bottom'
+              },
+              legend : {
+                labels : {
+                    color : '#808080',
+                    font : {
+                        size:16,
+                        weight: 'bold',
+                    }
+                }
               }
             },
             onHover: (event, chartElement) => {

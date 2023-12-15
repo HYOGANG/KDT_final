@@ -64,12 +64,14 @@
             text-align:center;  line-height: 50px;
         }
 
+
+
 </style>
 </head>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <body>
-<div>
+<div class="he">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
         <a class="navbar-brand" href="/home" style="color:black!important;">HOME</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -93,7 +95,7 @@
 <!--        <div class="title_name"
         style="font-size:13px ; color:white; font-weight: bold; margin-left:4%;">
         세종특별자치시 의료이용현황</div>-->
-        <div style="font-size: 14px; color:black;p adding-bottom:0; margin:0px 10px; font-weight: bold;">
+        <div style="font-size: 14px; color:black;padding-bottom:0; margin:0px 10px; font-weight: bold;">
             <script type="text/javascript">
             var today = new Date();
 
@@ -111,15 +113,35 @@
 {% block content %}
 {% endblock %}
 </div>
-     <footer class="mt-3" style="height:8%; text-align:center; width:100%; position:absolute; bottom:0;">
-     <nav class="mx-3">
-        <a href="/board" class="text-muted">Home</a> |
-        <a href="https://github.com/HYOGANG/KDT_final" target="_blank" class="text-muted">Github</a>
-     </nav>
-     <p style="font-size:11px; my-2; margin-block-end: 0!important;">
-         <span class="mx-3"><i class="fa-regular fa-copyright my-n2"></i>&nbsp;헬스위키</span><br/>
-         <span class="mx-3">이메일&nbsp;:&nbsp;kdthrd@hongik.ac.kr</span> <br/>
-     </p>
+ <footer class="d-flex flex-wrap justify-content-between align-items-center" style="height:8%; text-align:center; width:100%; position:absolute; bottom:0;">
+     <div class="col-md-4 d-flex align-items-center">
+        <a href="/home" class="mb-3 me-2 mb-md-0 mx-3 text-muted" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+              <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+            </svg>
+         </a>
+         <span style="font-size:13px;"><i class="fa-regular fa-copyright my-n2"></i>&nbsp;2023. 헬스위키</span>
+     </div>
+     <div class="nav col-md-4 justify-content-end list-unstyled d-flex">
+         <li class="ms-3">
+             <a href="https://github.com/HYOGANG/KDT_final" target="_blank" class="text-muted"><img src="/static/img/git_g.png" style="width:30; height:30;"></a>
+         </li>
+         <li class="ms-3">
+             <a href="/map" class="mb-3 me-2 mb-md-0 mx-3 text-muted">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-pin-map" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8l3-4z"/>
+                  <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
+                </svg>
+            </a>
+         </li>
+         <li class="ms-3">
+             <a href="##" class="mb-3 me-2 mb-md-0 mx-3 text-muted">
+             </a>
+         </li>
+
+     </div>
+
  </footer>
+
 </body>
 </html>
