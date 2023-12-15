@@ -7,10 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 <!--    <link rel="stylesheet" type="text/css" href="/static/styles.css">-->
-    <link rel="stylesheet" type="text/css" href="/static/graph.css">
+    <!--<link rel="stylesheet" type="text/css" href="/static/graph.css">-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b586ef7f47da27bb2ccaca8f64ee75b9&libraries=services"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=65ebde6ef56b62ee5550e04abf379f36&libraries=services,clusterer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -20,141 +20,15 @@
     <script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
 
     <style>
-
-         #sidebar {
-                    list-style: none;
-                    position: fixed;
-                    top: 58;
-                    left: 0;
-                    width: 50px;
-                    height: 130px;
-                    border-radius: 5px;
-                    border: 1px solid #909090;
-                    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
-                    background: #fff;
-                    overflow: hidden;
-                    z-index: 2;
-                    /*transition: width 0.3s ease;*/
-                    transition: .5s;
+        body {
+            height:100%;
+            background-color:white;
         }
-        a {
-          color: inherit;
-          text-decoration: none;
-            }
-        ul {list-style: none;
-            padding-inline-start: 0px;
-            }
-        #sidebar:hover {
-            width: 250px;
-            overflow: visible;
-        }
-
-        #sidebar ul > li:hover > div {
-            background-color: #ccc
-            }
-
-        #sidebar ul > li:hover > ul {
-            display: block;
-            }
-
-
-        #sidebar ul > li > div {
-            padding: 10px;
-            cursor: pointer;
-              color: black;
-              white-space: nowrap;
-        }
-        #sidebar ul > li > div > div:last-child {
-                opacity: 0;
-                transition: .5s .1s;
-            }
-
-        #sidebar:hover > ul > li > div > div:last-child {
-        opacity: 1;
-        }
-
-        #sidebar ul > li > ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        #sidebar ul > li > ul > li {
-            border-bottom: 1px solid #acacac;
-            padding: 13.3px 1px;
-            text-align: center;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            width: 100%;
-            position: relative;
-        }
-
-        ul ul {
-                  display: none;
-                  position: absolute;
-                  top: 0;
-                  left: 100%;
-                  width: 100%;
-                  background-color: #fff;
-        }
-
-        #sidebar ul > li > ul > li.on {
-            background: #eee;
-        }
-
-        #sidebar ul > li > ul > li:hover {
-            background: #ccc;
-            border-left: 1px solid #acacac;
-            margin-left: 0;
-        }
-
-        #sidebar ul > li > ul > li:last-child {
-            margin-right: 0;
-            border-right: 0;
-            border-bottom: 0;
-        }
-
-        /*아이콘 넣어보기...!!!!!!!!!!*/
-        #sidebar ul > li > div {
-            color : inherit;
-            text-decoration: none;
-        }
-
-        .map_wrap, .map_wrap * {margin:0; padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
-        .map_wrap {position:relative;width:100%;height:700px;}
-
-        #sidebar ul > li > ul > li span {
-          display: block;
-          margin: 0 auto 3px;
-          width: 27px;
-          height: 28px;
-          margin-right: 8px;
-          margin-left: 30px;
-        }
-
-        #sidebar ul > li > ul > li .category_bg {
-          background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png) no-repeat;
-        }
-
-        #sidebar ul > li > ul > li .pharmacy {
-          background-position: -10px -72px;
-        }
-
-        #sidebar ul > li > ul > li.on .category_bg {
-          background-position-x: -46px;
-        }
-        .placeinfo_wrap {position:absolute;bottom:28px;left:-150px;width:300px;}
-        .placeinfo {position:relative;width:100%;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;padding-bottom: 10px;background: #fff;}
-        .placeinfo:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-        .placeinfo_wrap .after {content:'';position:relative;margin-left:-12px;left:50%;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-        .placeinfo a, .placeinfo a:hover, .placeinfo a:active{color:#fff;text-decoration: none;}
-        .placeinfo a, .placeinfo span {display: block;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-        .placeinfo span {margin:5px 5px 0 5px;cursor: default;font-size:13px;}
-        .placeinfo .title {font-weight: bold; font-size:14px;border-radius: 6px 6px 0 0;margin: -1px -1px 0 -1px;padding:10px; color: #fff;background: #777;background: #777 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
-        .placeinfo .tel {color:#0f7833;}
-        .placeinfo .jibun {color:#999;font-size:11px;margin-top:0;}
-
+    /*body {
+            background: url("/static/img/bg.png") no-repeat center;
+             background-size: cover;
+    }*/
+        .bg-dark { background-color:#edf1f7!important;}
 
          #myChart, #tocostChart, #inrankPieChart, #outrankPieChart {
             border-radius:30px;
@@ -191,24 +65,83 @@
         }
 
 
+
 </style>
 </head>
 <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<body style="height:100%; background-color:#F8F8FF;">
+<body>
+<div class="he">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+        <a class="navbar-brand" href="/home" style="color:black!important;">HOME</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/board" style="color:black!important;">세종시 지역정보</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/second" style="color:black!important;">의료자원현황</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/map" style="color:black!important;">우리동네병원찾기</a>
+                </li>
+            </ul>
+        </div>
+
+<!--        <div class="title_name"
+        style="font-size:13px ; color:white; font-weight: bold; margin-left:4%;">
+        세종특별자치시 의료이용현황</div>-->
+        <div style="font-size: 14px; color:black;padding-bottom:0; margin:0px 10px; font-weight: bold;">
+            <script type="text/javascript">
+            var today = new Date();
+
+            var year = today.getFullYear();
+            var month = ('0' + (today.getMonth()+1)).slice(-2);
+            var day = ('0' + today.getDate()).slice(-2);
+
+            var dateString = year + '.' + month + '.' + day;
+            document.write("일자 : " + dateString);
+            </script>
+        </div>
+    </nav>
+</div>
+<div class="bb" style="margin: 0 0 1.7% 0; height:calc(100% - 9rem);">
 {% block content %}
-
 {% endblock %}
+</div>
+ <footer class="d-flex flex-wrap justify-content-between align-items-center" style="height:8%; text-align:center; width:100%; position:absolute; bottom:0;">
+     <div class="col-md-4 d-flex align-items-center">
+        <a href="/home" class="mb-3 me-2 mb-md-0 mx-3 text-muted" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+              <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+            </svg>
+         </a>
+         <span style="font-size:13px;"><i class="fa-regular fa-copyright my-n2"></i>&nbsp;2023. 헬스위키</span>
+     </div>
+     <div class="nav col-md-4 justify-content-end list-unstyled d-flex">
+         <li class="ms-3">
+             <a href="https://github.com/HYOGANG/KDT_final" target="_blank" class="text-muted"><img src="/static/img/git_g.png" style="width:30; height:30;"></a>
+         </li>
+         <li class="ms-3">
+             <a href="/map" class="mb-3 me-2 mb-md-0 mx-3 text-muted">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-pin-map" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8l3-4z"/>
+                  <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
+                </svg>
+            </a>
+         </li>
+         <li class="ms-3">
+             <a href="##" class="mb-3 me-2 mb-md-0 mx-3 text-muted">
+             </a>
+         </li>
 
- <footer class="mt-3" style="background-color:#E1DDE3; height:3.9em;">
-     <nav class="mx-3">
-        <a href="/board">Home</a> |
-        <a href="https://github.com/HYOGANG/KDT_final" target="_blank">Github</a>
-     </nav>
-     <p style="font-size:11px; my-2">
-         <span class="mx-3"><i class="fa-regular fa-copyright my-n2" ></i>&nbsp;헬스위키</span><br/>
-         <span class="mx-3">이메일&nbsp;:&nbsp;kdthrd@hongik.ac.kr</span> <br/>
-     </p>
+     </div>
+
  </footer>
+
 </body>
 </html>

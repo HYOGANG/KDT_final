@@ -1,49 +1,15 @@
-{% extends 'finalapp/base.html' %}
+{% extends 'base.html' %}
 {% block content %}
-<div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/home">Home</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/board">지역정보 <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/second">의료자원현황</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/map">우리동네병원찾기</a>
-                </li>
-            </ul>
-        </div>
 
-<!--        <div class="title_name"
-        style="font-size:13px ; color:white; font-weight: bold; margin-left:4%;">
-        세종특별자치시 의료이용현황</div>-->
-        <div style="font-size: 14px; color:white;padding-bottom:0; margin:0px 10px; font-weight: bold;">
-            <script type="text/javascript">
-            var today = new Date();
 
-            var year = today.getFullYear();
-            var month = ('0' + (today.getMonth()+1)).slice(-2);
-            var day = ('0' + today.getDate()).slice(-2);
 
-            var dateString = year + '.' + month + '.' + day;
-            document.write("일자 : " + dateString);
-            </script>
-        </div>
-    </nav>
     <div id="chart_all" class="container-fluid row" style="margin-bottom:-0.7em; ">
         <nav class="col-md-5 p-0 mx-3">
             <div class="flex-container stretch">
-                <canvas id="docChart" class="my-2"></canvas>
+                <canvas id="hpChart" class="my-2"></canvas>
             </div>
             <div>
-                <canvas id="hpChart"></canvas>
+                <canvas id="docChart"></canvas>
             </div>
 
         </nav>
@@ -83,7 +49,7 @@
         </section>
         <div>  &emsp;</div>
         <aside id="pic" class="col-md-3 mx-3 p-0 mt-2 ">
-            <img src="static/img/map.png" alt="인구_병원" class="my-2 ml-3dhk" id="map" style="width: 330px; height: 590px;">
+            <img src="/static/img/map.png" alt="인구_병원" class="my-2 ml-3dhk" id="map" style="width: 330px; height: 590px;">
         </aside>
     </div>
 </div>
@@ -442,7 +408,7 @@
                     //console.log(coordinate);
                     coordinate.top = 5;
                     coordinate.bottom = 25;
-                    coordinate.left = right - (textWidth + 1 + 10);
+                    coordinate.left = right - (textWidth + 1 + 35);
                     coordinate.right = right;
 
                     ctx.restore();
@@ -461,6 +427,15 @@
                 plugins : {
                     tooltip : {
                         yAlign : 'bottom'
+                    },
+                    legend : {
+                        labels : {
+                            color : '#808080',
+                            font : {
+                                size:16,
+                                weight: 'bold',
+                            }
+                        }
                     }
                 },
                 onHover: (event, chartElement) => {
@@ -612,7 +587,7 @@
           if (!labelList.includes(docChart.config.data.datasets[0].label)){
               if ( x > coordinate.left && x < coordinate.right && y > coordinate.top && y
                    < coordinate.bottom){
-                    canvas.style.cursor = 'pointer';
+                    canvas.style.cursor = 'grab';
                    } else {
                     canvas.style.cursor = 'default';
                   };
@@ -753,7 +728,7 @@
                 console.log(coordinates)
                 coordinates.top = 5;
                 coordinates.bottom = 25;
-                coordinates.left = right - (textWidth + 1 + 10);
+                coordinates.left = right - (textWidth + 1 + 35);
                 coordinates.right = right;
 
                 ctx.restore();
@@ -769,6 +744,15 @@
             plugins : {
               tooltip : {
                 yAlign : 'bottom'
+              },
+              legend : {
+                labels : {
+                    color : '#808080',
+                    font : {
+                        size:16,
+                        weight: 'bold',
+                    }
+                }
               }
             },
             onHover: (event, chartElement) => {
