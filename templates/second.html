@@ -358,7 +358,7 @@
         // setup 기본 데이터 설정-> data, label 자주쓰이는 config.data.datasets[0].label여기 있음
         var data = {
             datasets: [{
-                label: '진료 과별 전문의 수',
+                label: '진료 과별 전문의 수(명)',
                 data: Data,
                 backgroundColor: [
                   Data[0].color,
@@ -379,7 +379,7 @@
         var resetButton = {
             id : 'resetButton',
             beforeDraw(chart, args, options){
-                if(docChart.config.data.datasets[0].label !== '진료 과별 전문의 수'){
+                if(docChart.config.data.datasets[0].label !== '진료 과별 전문의 수(명)'){
 
                     var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
                     ctx.save();
@@ -416,7 +416,7 @@
               }
             }
 
-        var labelList = ['진료 과별 전문의 수', '내과계', '외과계', '지원계']
+        var labelList = ['진료 과별 전문의 수(명)', '내과계', '외과계', '지원계']
         var labelList1 = ['내과계', '외과계', '지원계']
 
         // config 구성 설정
@@ -467,7 +467,7 @@
 
         function changeChart(index){
 
-            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수') {
+            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수(명)') {
 
                 docChart.config.options.parsing.xAxisKey = 'depData.dep1';
                 docChart.config.options.parsing.yAxisKey = 'depData.count1';
@@ -514,7 +514,7 @@
         }
 
         function clickHandlers(click){
-            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수'){
+            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수(명)'){
                 var bar = docChart.getElementsAtEventForMode(click, 'nearest',
                     {intersect: true}, true);
                 if(bar.length){
@@ -554,7 +554,7 @@
                 docChart.config.data.datasets[0].backgroundColor = cColor;
                 docChart.config.data.datasets[0].borderColor = cColor;
                 docChart.config.data.labels = cLabels;
-                docChart.config.data.datasets[0].label = '진료 과별 전문의 수';
+                docChart.config.data.datasets[0].label = '진료 과별 전문의 수(명)';
                 docChart.config.data.datasets[0].data = cCount;
                 docChart.update();
             } else {
