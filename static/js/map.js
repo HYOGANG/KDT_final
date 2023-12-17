@@ -136,8 +136,8 @@ function searchPlaces() {
 
         // 검색 목록과 마커를 표출합니다
         displayKewordPlaces(keyword);
-        document.getElementById('sidebar').style.top = '365px';
-        document.getElementById('menu_wrap').style.height = '294px';
+        document.getElementById('sidebar').style.top = '350px';
+        document.getElementById('menu_wrap').style.height = '280px';
         document.getElementById('menu_wrap').style.overflowY = 'auto';
 }
 
