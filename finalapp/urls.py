@@ -8,6 +8,5 @@ urlpatterns = [
     path('board/', views.dashboard_view, name='dashboard'),
     path('second/', views.second_view, name='second'),
     path('map/', views.map),
-    path('test/', views.test),
 
 ]

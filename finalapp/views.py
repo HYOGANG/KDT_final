@@ -83,9 +83,6 @@ def map(request):
     sejong = Sejong.objects.all()
     return render(request, 'map.html', {'sejong' : sejong})
 
-def test(request):
-    test = Test.objects.all()
-    return render(request, 'test.html', {'test' : test})
 
 def second_view(request):
 
