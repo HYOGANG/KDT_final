@@ -99,3 +99,10 @@ class Outpatrank(models.Model):
     disease = models.TextField()
     count = models.IntegerField()
     percent = models.IntegerField()
+
+class Test(models.Model):
+    region = models.TextField()
+    hos = models.IntegerField()
+    pop = models.IntegerField()
+    total = models.IntegerField()
+    code = models.IntegerField()

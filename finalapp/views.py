@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong, NumTre,ToCost, Regionpop, Doctor,  Inpatrank, Outpatrank
+from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong, NumTre,ToCost, Regionpop, Doctor,  Inpatrank, Outpatrank, Test
 from django.db.models import F,Sum
 import pandas as pd
 import json
@@ -82,6 +82,10 @@ def map(request):
     sejong = Sejong.objects.all()
     return render(request, 'map.html', {'sejong' : sejong})
 
+def test(request):
+    test = Test.objects.all()
+    return render(request, 'test.html', {'test' : test})
+
 def second_view(request):
 
     counts = Counts.objects.all().order_by('region')
@@ -108,6 +112,7 @@ def second_view(request):
     doctorc = Doctor.objects.filter(id__in=[9, 17, 18, 16, 23, 24, 19, 21])
 
     doctor = Doctor.objects.all()
+    test = Test.objects.all()
 
     try:
         df3 = pd.read_csv("static/csv/devices.csv")
@@ -139,6 +144,7 @@ def second_view(request):
         'doctora': doctora,
         'doctorb': doctorb,
         'doctorc': doctorc,
+        'test':test,
     }
     return render(request, 'second.html', context)
 

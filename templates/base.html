@@ -18,7 +18,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://unpkg.com/chart.js-plugin-labels-dv/dist/chartjs-plugin-labels.min.js"></script>
-
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/color-legend-element@1.0.3/build/color-legend-element.umd.js"></script>
     <style>
         body {
             height:100%;
@@ -49,12 +50,14 @@
             max-height : 300px;
             height:auto;
             padding:10px 20px;
+
         }
         #equi, #pic {
             border-radius:30px;
             border: solid 1px #ABB7D4;
             padding: 0px 20px;
             max-height : 625px;
+            position: relative;
         }
 
         .status-value {
@@ -63,7 +66,50 @@
             border:solid 0.5px #B6CEFF; height:130;
             text-align:center;  line-height: 50px;
         }
+        .legend {
+            position: absolute;
+            bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        #legend {
+            position: absolute;
+            bottom: 10px;
+            left: 30px;
+        }
 
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            margin-left: 20px;
+            font-size: 13px;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+        }
+
+        .tooltip1 {
+            position: absolute;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #ccc;
+            display: none;
+            z-index: 2; /* 툴팁이 다른 요소 위에 오도록 설정 */
+            font-size: 13.5px;
+        }
+
+        .graph-title {
+                color: #808080;
+                font-weight: bold;
+                text-align: center;
+                position: absolute;
+                top: 15px;
+                left: 65px;
+        }
 
 
 </style>

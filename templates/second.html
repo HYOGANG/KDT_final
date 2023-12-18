@@ -3,6 +3,8 @@
 
 
 
+
+
     <div id="chart_all" class="container-fluid row" style="margin-bottom:-0.7em; ">
         <nav class="col-md-5 p-0 mx-3">
             <div class="flex-container stretch">
@@ -47,9 +49,192 @@
                 <p>No data to display.</p>
             {% endif %}
         </section>
-        <div>  &emsp;</div>
+
         <aside id="pic" class="col-md-3 mx-3 p-0 mt-2 ">
-            <img src="/static/img/map.png" alt="인구_병원" class="my-2 ml-3dhk" id="map" style="width: 330px; height: 590px;">
+            <div class="my-2 ml-3dhk" id="map" style="width: 330px; height: 450px;">
+                <div class="legend" id="legend"></div>
+            <div id="test" style="display: none">
+                {% for i in test %}
+                    {{ i.code }}|{{ i.region }}|{{ i.hos }}|{{ i.pop }}{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            </div>
+                <div class="tooltip1" id="tooltip1"></div>
+            <script>
+                        // 데이터 가져오기
+            var test = document.getElementById('test').innerText.split(',').map(function (test) {
+                var testPair = test.split('|');
+                return { code: Number(testPair[0]), region: testPair[1], hos: testPair[2], pop: testPair[3], total : Number(testPair[3]/testPair[2]) };
+            });
+
+    // 그래프 제목 추가
+            const graphTitle = d3.select('#map')
+                .append('div')
+                .attr('class', 'graph-title')
+                .text('읍면동별 의료기관 대비 인구 수');
+
+    // 가상의 행정구역 경계 GeoJSON 데이터, 실제로는 서버에서 파일을 로드해야 합니다.
+    const geojsonUrl = '/static/sejong.geojson';
+
+    // 지도의 크기와 중심 좌표 설정
+    const width = 400;
+    const height = 550;
+    const center = [127.289, 36.580]; // 조절 필요
+    const scale = 60000; // 조절 필요
+
+    // 투영 함수 설정
+    const projection = d3.geoMercator()
+        .center(center)
+        .scale(scale)
+        .translate([width / 2, height / 2]);
+
+    // 경로 생성기 설정
+    const path = d3.geoPath().projection(projection);
+
+    // SVG 요소 생성
+    const svg = d3.select('#map')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
+
+
+    // 범례 추가
+            const legendContainer = d3.select('#pic') // 수정된 부분: #pic을 선택하도록 변경
+                .append('div') // 수정된 부분: #pic 안에 div를 추가
+                .attr('id', 'legend'); // 수정된 부분: id를 legend로 설정
+
+            /*
+                const legendContainer = d3.select('#pic') // 수정된 부분: #pic을 선택하도록 변경
+                    .append('color-legend')
+                    .attr('titletext','기관당 담당 인구(명)')
+                    .attr('scaletype',"continuous")
+                    .attr('domain','[4589,164]')
+                    .attr('id', 'legend') // 수정된 부분: id를 legend로 설정
+                    .attr('background','linear-gradient(to right, #F4EEEE, RED)');
+            */
+
+    // 최솟값과 최댓값 설정
+    const minPopulationRatio = d3.min(test, item => item.total);
+    const maxPopulationRatio = d3.max(test, item => item.total);
+
+    // 색상 스케일 동적 계산
+    const colorScale = d3.scaleLinear()
+        .domain([minPopulationRatio, maxPopulationRatio])
+        .range(['#F4EEEE', 'RED']);
+
+    console.log("Min Population Ratio:", minPopulationRatio);
+    console.log("Max Population Ratio:", maxPopulationRatio);
+
+    // 툴팁 요소 추가
+    const tooltip1 = d3.select('#tooltip1');
+    let selectedFeature = null;
+
+
+    // 행정구역 경계를 그리기 위해 GeoJSON 데이터 로드
+    d3.json(geojsonUrl).then(geojson => {
+        // 행정구역 경계를 그림
+        svg.selectAll('path')
+            .data(geojson.features)
+            .enter()
+            .append('path')
+            .attr('d', path)
+            .attr('fill', (d, i) => {
+                var jsonCode = d.properties.adm_cd; // json 파일의 코드
+                var dataItem = test.find(item => item.code === Number(jsonCode));
+
+                if (dataItem) {
+                    // 일치하는 코드가 있으면 해당 행정구역에 데이터 할당
+                    d.population_ratio = dataItem.total;
+
+                    return colorScale(d.population_ratio);
+                } else {
+                    console.log('Not Found:', jsonCode);
+                    return '#ccc';
+                }
+            })
+            .attr('stroke', '#000')
+            .attr('stroke-width', 0.3)
+            .on('click', handleFeatureClick) // 클릭 이벤트 리스너 추가
+            .on('mouseout', handleMouseOut)
+            .on('mouseover', handleMouseOver); // 마우스 오버 이벤트 리스너 추가
+
+             function handleMouseOver(d, i) {
+                    // 마우스를 올렸을 때 커서 스타일 변경
+                    d3.select(this)
+                        .style('cursor', 'pointer')
+                        .attr('stroke-width', 1.5); // 테두리 두께 변경
+                }
+
+                function handleMouseOut(d, i) {
+                    // 마우스가 벗어났을 때 테두리 두께 초기값으로 변경
+                    d3.select(this).attr('stroke-width', 0.3);
+                }
+
+                        // 범례 제목 추가
+                        legendContainer.append('div')
+                            .attr('class', 'legend-title')
+                            .attr('style', 'font-size:13px; white-space: nowrap; text-align:center; margin-bottom: 5px') // white-space 속성을 사용하여 텍스트가 길어져도 한 줄에 표시되도록 설정
+                            .text('기관당 담당 인구(명)');
+
+                        // 범례 내용 추가
+                        const legend = legendContainer.append('div')
+                            .attr('class', 'legend-item')
+                            .style('display', 'flex') // Flexbox를 사용하여 가로 정렬
+                            .style('align-items', 'center') // 수직 가운데 정렬
+                            .style('white-space', 'nowrap'); // 텍스트가 길어져도 한 줄에 표시되도록 설정
+
+                        // 범례 텍스트 추가 (왼쪽)
+                        legend.append('div')
+                            .attr('class', 'legend-text')
+                            .style('margin-left', '0') // 왼쪽에 텍스트 표시
+                            .style('flex-grow', '1') // 남은 공간을 모두 사용하도록 설정
+                            .text(`${164}`);
+
+                        // 그라데이션을 나타내는 가로 바 추가
+                        legend.append('div')
+                            .attr('class', 'legend-gradient')
+                            .style('background', 'linear-gradient(to right, #F4EEEE, RED)') // 그라데이션 설정
+                            .style('width', '200px') // 바의 너비 설정
+                            .style('height', '20px') // 바의 높이 설정
+                            .style('margin-left', '10px');
+
+
+
+                        // 범례 텍스트 추가 (오른쪽)
+                        legend.append('div')
+                            .attr('class', 'legend-text')
+                            .style('margin-left', '5px') // 오른쪽에 텍스트 표시
+                            .style('flex', '1') // 남은 공간을 모두 사용하도록 설정
+                            .style('text-align', 'right') // 오른쪽 정렬
+                            .text(`${4589}`);
+
+
+
+
+function handleFeatureClick(d, i) {
+    const t = test.find(item => item.code === Number(d.properties.adm_cd));
+
+    // 클릭한 요소가 이미 선택된 경우에는 툴팁을 닫음
+    if (selectedFeature === d) {
+        tooltip1.style('display', 'none');
+        selectedFeature = null; // 선택 상태 해제
+    } else {
+        // 클릭한 요소의 위치 가져오기
+        const [x, y] = path.centroid(d);
+
+        // 툴팁 내용 표시
+        tooltip1.html(`<strong>구분:</strong> ${t.region}<br><strong>의료기관 수:</strong> ${t.hos}개소 <br><strong>인구 수:</strong> ${t.pop}명 <br><strong>기관 당 담당 인구 수:</strong> ${parseInt(t.pop / t.hos)}명 `)
+            .style('left', (x + 10) + 'px')
+            .style('top', (y - 10) + 'px')
+            .style('display', 'block');
+
+        selectedFeature = d; // 선택 상태 설정
+    }
+}
+
+    });
+
+    </script>
+            </div>
         </aside>
     </div>
 </div>

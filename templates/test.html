@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <style>
+
+
+        .legend {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #ccc;
+            display: none;
+            z-index: 1; /* 툴팁이 다른 요소 위에 오도록 설정 */
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="legend" id="legend"></div>
+    <div id="test" style="display: none">
+        {% for i in test %}
+            {{ i.code }}|{{ i.total }}|{{ i.region }}|{{ i.hos }}|{{ i.pop }}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    </div>
+    <div class="tooltip" id="tooltip"></div>
+<script>
+    // 데이터 가져오기
+    var test = document.getElementById('test').innerText.split(',').map(function (test) {
+        var testPair = test.split('|');
+        return { code: Number(testPair[0]), total: Number(testPair[1]), region: testPair[2], hos: testPair[3], pop: testPair[4] };
+    });
+
+    // 가상의 행정구역 경계 GeoJSON 데이터, 실제로는 서버에서 파일을 로드해야 합니다.
+    const geojsonUrl = '/static/sejong.geojson';
+
+    // 지도의 크기와 중심 좌표 설정
+    const width = 600;
+    const height = 400;
+    const center = [127.289, 36.615]; // 조절 필요
+    const scale = 45000; // 조절 필요
+
+    // 투영 함수 설정
+    const projection = d3.geoMercator()
+        .center(center)
+        .scale(scale)
+        .translate([width / 2, height / 2]);
+
+    // 경로 생성기 설정
+    const path = d3.geoPath().projection(projection);
+
+    // SVG 요소 생성
+    const svg = d3.select('#map')
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height);
+
+    // 범례 추가
+    const legend = d3.select('#legend');
+    // 최솟값과 최댓값 설정
+    const minPopulationRatio = d3.min(test, item => item.total);
+    const maxPopulationRatio = d3.max(test, item => item.total);
+
+    // 색상 스케일 동적 계산
+    const colorScale = d3.scaleLinear()
+        .domain([minPopulationRatio, maxPopulationRatio])
+        .range(['white', 'blue']);
+
+    console.log("Min Population Ratio:", minPopulationRatio);
+    console.log("Max Population Ratio:", maxPopulationRatio);
+
+    // 툴팁 요소 추가
+    const tooltip = d3.select('#tooltip');
+
+    // 행정구역 경계를 그리기 위해 GeoJSON 데이터 로드
+    d3.json(geojsonUrl).then(geojson => {
+        // 행정구역 경계를 그림
+        svg.selectAll('path')
+            .data(geojson.features)
+            .enter()
+            .append('path')
+            .attr('d', path)
+            .attr('fill', (d, i) => {
+                var jsonCode = d.properties.adm_cd; // json 파일의 코드
+                var dataItem = test.find(item => item.code === Number(jsonCode));
+
+                if (dataItem) {
+                    // 일치하는 코드가 있으면 해당 행정구역에 데이터 할당
+                    d.population_ratio = dataItem.total;
+
+                    return colorScale(d.population_ratio);
+                } else {
+                    console.log('Not Found:', jsonCode);
+                    return '#ccc';
+                }
+            })
+            .attr('stroke', '#000')
+            .attr('stroke-width', 0.3)
+            .on('click', handleFeatureClick); // 클릭 이벤트 리스너 추가
+
+        // 범례 추가
+        legend.selectAll('.legend-item')
+            .data(d3.range(5).map(i => i / 5))
+            .enter()
+            .append('div')
+            .attr('class', 'legend-item')
+            .html((d, i) => `
+                <div class="legend-color" style="background-color: ${colorScale(minPopulationRatio + d * (maxPopulationRatio - minPopulationRatio)).toString()};"></div>
+                ${164 +(4425*(1/5))*i } - ${164 + (4425*(1/5))*(i+1)}
+            `);
+
+        // 클릭 이벤트 핸들러 함수
+        function handleFeatureClick(d, i) {
+            const t = test.find(item => item.code === Number(d.properties.adm_cd));
+            // 툴팁 또는 다른 요소에 total 데이터 표시
+            tooltip.html(`<strong>구분:</strong> ${t.region}<br><strong>의료기관 수:</strong> ${t.hos}<br><strong>인구 수:</strong> ${t.pop}`)
+                .style('left', (d3.event.pageX + 10) + 'px')
+                .style('top', (d3.event.pageY - 10) + 'px')
+                .style('display', 'block');
+        }
+    });
+</script>
+</body>
+</html>
