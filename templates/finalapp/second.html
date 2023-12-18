@@ -675,7 +675,7 @@
         // setup
         var data = {
           datasets: [{
-            label: '의료기관 수(개)',
+            label: '의료기관 수(개소)',
             data: browserData,
             backgroundColor: [
               browserData[0].color,
@@ -699,7 +699,7 @@
         var resethpButton = {
           id : 'resethpButton',
           beforeDraw(chart, args, options){
-            if(hpChart.config.data.datasets[0].label !== '의료기관 수(개)'){
+            if(hpChart.config.data.datasets[0].label !== '의료기관 수(개소)'){
 
                 var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
                 ctx.save();
@@ -751,7 +751,7 @@
               }
             },
             onHover: (event, chartElement) => {
-                if(hpChart.config.data.datasets[0].label === '의료기관 수(개)')
+                if(hpChart.config.data.datasets[0].label === '의료기관 수(개소)')
                 {
                 event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
             } else {
@@ -795,12 +795,12 @@
             hpChart.config.data.labels = dLabels;
             hpChart.config.data.datasets[0].backgroundColor = dColor;
             hpChart.config.data.datasets[0].borderColor = dColor;
-            hpChart.config.data.datasets[0].label = browserData[browser].browser+'(개)';
+            hpChart.config.data.datasets[0].label = browserData[browser].browser+'(개소)';
             hpChart.update();
         }
 
         function click1Handler(click){
-            if (hpChart.config.data.datasets[0].label === '의료기관 수(개)'){
+            if (hpChart.config.data.datasets[0].label === '의료기관 수(개소)'){
 
             var bar = hpChart.getElementsAtEventForMode(click, 'nearest',
                 {intersect: true}, true);
@@ -828,7 +828,7 @@
           hpChart.config.data.datasets[0].backgroundColor = eColor;
           hpChart.config.data.datasets[0].borderColor = eColor;
           hpChart.config.data.labels = eLabels;
-          hpChart.config.data.datasets[0].label = '의료기관 수(개)';
+          hpChart.config.data.datasets[0].label = '의료기관 수(개소)';
           hpChart.config.data.datasets[0].data = eMarketshare;
           hpChart.update();
         };
@@ -838,7 +838,7 @@
           var x = mousemove.offsetX;
           var y = mousemove.offsetY;
 
-          if(hpChart.config.data.datasets[0].label !== '의료기관 수(개)'){
+          if(hpChart.config.data.datasets[0].label !== '의료기관 수(개소)'){
               if ( x > coordinates.left && x < coordinates.right && y > coordinates.top && y
                    < coordinates.bottom){
                     canvas.style.cursor = 'pointer';
