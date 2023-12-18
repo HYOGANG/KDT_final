@@ -52,7 +52,7 @@ def dashboard_view(request):
     fage60s = regionpop.aggregate(Sum('fage60s'))['fage60s__sum']
     mage70s = regionpop.aggregate(Sum('mage70s'))['mage70s__sum']
     fage70s = regionpop.aggregate(Sum('fage70s'))['fage70s__sum']
-
+    total = regionpop.aggregate(Sum('total'))['total__sum']
 
     context = {
         'table': table,
@@ -73,7 +73,8 @@ def dashboard_view(request):
         'mage10s': mage10s, 'fage10s': fage10s, 'mage20s': mage20s, 'fage20s': fage20s,
         'mage30s': mage30s, 'fage30s': fage30s, 'mage40s': mage40s, 'fage40s': fage40s,
         'mage50s': mage50s, 'fage50s': fage50s, 'mage60s': mage60s, 'fage60s': fage60s, 'mage70s': mage70s,
-        'fage70s': fage70s
+        'fage70s': fage70s,
+        'total': total,
     }
 
     return render(request, 'dashboard.html', context)

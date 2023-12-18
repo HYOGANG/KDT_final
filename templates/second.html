@@ -70,7 +70,7 @@
             const graphTitle = d3.select('#map')
                 .append('div')
                 .attr('class', 'graph-title')
-                .text('읍면동별 의료기관 대비 인구 수');
+                .text('읍면동별 인구 대비 의료기관 분포도');
 
     // 가상의 행정구역 경계 GeoJSON 데이터, 실제로는 서버에서 파일을 로드해야 합니다.
     const geojsonUrl = '/static/sejong.geojson';
@@ -121,8 +121,8 @@
         .domain([minPopulationRatio, maxPopulationRatio])
         .range(['#F4EEEE', 'RED']);
 
-    console.log("Min Population Ratio:", minPopulationRatio);
-    console.log("Max Population Ratio:", maxPopulationRatio);
+    //console.log("Min Population Ratio:", minPopulationRatio);
+    //console.log("Max Population Ratio:", maxPopulationRatio);
 
     // 툴팁 요소 추가
     const tooltip1 = d3.select('#tooltip1');
@@ -147,7 +147,7 @@
 
                     return colorScale(d.population_ratio);
                 } else {
-                    console.log('Not Found:', jsonCode);
+                    //console.log('Not Found:', jsonCode);
                     return '#ccc';
                 }
             })
@@ -543,7 +543,7 @@ function handleFeatureClick(d, i) {
         // setup 기본 데이터 설정-> data, label 자주쓰이는 config.data.datasets[0].label여기 있음
         var data = {
             datasets: [{
-                label: '진료 과별 전문의 수(명)',
+                label: '전문의 수(명)',
                 data: Data,
                 backgroundColor: [
                   Data[0].color,
@@ -564,7 +564,7 @@ function handleFeatureClick(d, i) {
         var resetButton = {
             id : 'resetButton',
             beforeDraw(chart, args, options){
-                if(docChart.config.data.datasets[0].label !== '진료 과별 전문의 수(명)'){
+                if(docChart.config.data.datasets[0].label !== '전문의 수(명)'){
 
                     var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
                     ctx.save();
@@ -614,12 +614,14 @@ function handleFeatureClick(d, i) {
                         yAlign : 'bottom'
                     },
                     legend : {
-                        labels : {
-                            color : '#808080',
-                            font : {
-                                size:16,
-                                weight: 'bold',
-                            }
+                        display: false
+                    },
+                    title:{
+                        display: true,
+                        text: '진료 과별 전문의 수',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
                         }
                     }
                 },
@@ -652,10 +654,11 @@ function handleFeatureClick(d, i) {
 
         function changeChart(index){
 
-            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수(명)') {
+            if (docChart.config.data.datasets[0].label === '전문의 수(명)') {
 
                 docChart.config.options.parsing.xAxisKey = 'depData.dep1';
                 docChart.config.options.parsing.yAxisKey = 'depData.count1';
+                docChart.config.options.plugins.legend.display = true;
 
                 var aColor = [];
                 var aUsers = [];
@@ -665,7 +668,7 @@ function handleFeatureClick(d, i) {
                     aUsers.push(labels.count1);
                     return labels.dep1;
                 })
-                console.log(aLabels);
+                //console.log(aLabels);
                 docChart.config.data.datasets[0].data = aUsers;
                 docChart.config.data.labels = aLabels;
                 docChart.config.data.datasets[0].backgroundColor = aColor;
@@ -681,6 +684,7 @@ function handleFeatureClick(d, i) {
         function changeChart1(currIndex, index) {
             docChart.config.options.parsing.xAxisKey = 'doctorData.dep2';
             docChart.config.options.parsing.yAxisKey = 'doctorData.count2';
+            docChart.config.options.plugins.legend.display = true;
 
             var bColor = [];
             var bUsers = [];
@@ -699,7 +703,7 @@ function handleFeatureClick(d, i) {
         }
 
         function clickHandlers(click){
-            if (docChart.config.data.datasets[0].label === '진료 과별 전문의 수(명)'){
+            if (docChart.config.data.datasets[0].label === '전문의 수(명)'){
                 var bar = docChart.getElementsAtEventForMode(click, 'nearest',
                     {intersect: true}, true);
                 if(bar.length){
@@ -727,6 +731,9 @@ function handleFeatureClick(d, i) {
             if (labelList1.includes(docChart.config.data.datasets[0].label)) {
                 docChart.config.options.parsing.xAxisKey = 'dep';
                 docChart.config.options.parsing.yAxisKey = 'count';
+                docChart.config.options.plugins.legend.display = false;
+
+
 
                 var cColor = [];
                 var cCount = [];
@@ -739,12 +746,14 @@ function handleFeatureClick(d, i) {
                 docChart.config.data.datasets[0].backgroundColor = cColor;
                 docChart.config.data.datasets[0].borderColor = cColor;
                 docChart.config.data.labels = cLabels;
-                docChart.config.data.datasets[0].label = '진료 과별 전문의 수(명)';
+                docChart.config.data.datasets[0].label = '전문의 수(명)';
                 docChart.config.data.datasets[0].data = cCount;
                 docChart.update();
             } else {
                 docChart.config.options.parsing.xAxisKey = 'dep1';
                 docChart.config.options.parsing.yAxisKey = 'count1';
+                docChart.config.options.plugins.legend.display = true;
+
 
                 var aColor = [];
                 var aCount = [];
@@ -863,7 +872,7 @@ function handleFeatureClick(d, i) {
         // setup
         var data = {
           datasets: [{
-            label: '읍면동별 의료기관 현황',
+            label: '의료기관 수(개소)',
             data: browserData,
             backgroundColor: [
               browserData[0].color,
@@ -887,7 +896,7 @@ function handleFeatureClick(d, i) {
         var resethpButton = {
           id : 'resethpButton',
           beforeDraw(chart, args, options){
-            if(hpChart.config.data.datasets[0].label !== '읍면동별 의료기관 현황'){
+            if(hpChart.config.data.datasets[0].label !== '의료기관 수(개소)'){
 
                 var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
                 ctx.save();
@@ -910,7 +919,7 @@ function handleFeatureClick(d, i) {
                 ctx.strokeStyle = '	#E1DDE3';
                 ctx.strokeRect(right - (textWidth + 1 + 10), 5, textWidth + 10 , 20);
 
-                console.log(coordinates)
+                //console.log(coordinates)
                 coordinates.top = 5;
                 coordinates.bottom = 25;
                 coordinates.left = right - (textWidth + 1 + 35);
@@ -930,18 +939,21 @@ function handleFeatureClick(d, i) {
               tooltip : {
                 yAlign : 'bottom'
               },
-              legend : {
-                labels : {
-                    color : '#808080',
-                    font : {
-                        size:16,
-                        weight: 'bold',
-                    }
+              title:{
+                display: true,
+                text: '읍면동별 의료기관 현황',
+                color : '#808080',
+                font : {
+                    size:16,
+                    weight: 'bold',
                 }
+              },
+              legend : {
+                display: false
               }
             },
             onHover: (event, chartElement) => {
-                if(hpChart.config.data.datasets[0].label === '읍면동별 의료기관 현황')
+                if(hpChart.config.data.datasets[0].label === '의료기관 수(개소)')
                 {
                 event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
             } else {
@@ -972,6 +984,7 @@ function handleFeatureClick(d, i) {
 
             hpChart.config.options.parsing.xAxisKey = 'versionData.version';
             hpChart.config.options.parsing.yAxisKey = 'versionData.users';
+            hpChart.config.options.plugins.legend.display = true;
 
             var dColor = [];
             var dUsers = [];
@@ -980,7 +993,7 @@ function handleFeatureClick(d, i) {
                 dUsers.push(labels.users);
                 return labels.version;
             })
-            console.log(dLabels)
+            //console.log(dLabels)
             hpChart.config.data.datasets[0].data = dUsers;
             hpChart.config.data.labels = dLabels;
             hpChart.config.data.datasets[0].backgroundColor = dColor;
@@ -990,13 +1003,13 @@ function handleFeatureClick(d, i) {
         }
 
         function click1Handler(click){
-            if (hpChart.config.data.datasets[0].label === '읍면동별 의료기관 현황'){
+            if (hpChart.config.data.datasets[0].label === '의료기관 수(개소)'){
 
             var bar = hpChart.getElementsAtEventForMode(click, 'nearest',
                 {intersect: true}, true);
-            console.log(bar);
+            //console.log(bar);
             if(bar.length){
-                console.log(bar[0].index);
+                //console.log(bar[0].index);
                 changehpChart(bar[0].index);
             }
           }
@@ -1006,6 +1019,7 @@ function handleFeatureClick(d, i) {
           // console.log('clicked reset button!');
           hpChart.config.options.parsing.xAxisKey = 'browser';
           hpChart.config.options.parsing.yAxisKey = 'marketshare';
+          hpChart.config.options.plugins.legend.display = false;
 
           var eColor = [];
           var eMarketshare = [];
@@ -1018,7 +1032,7 @@ function handleFeatureClick(d, i) {
           hpChart.config.data.datasets[0].backgroundColor = eColor;
           hpChart.config.data.datasets[0].borderColor = eColor;
           hpChart.config.data.labels = eLabels;
-          hpChart.config.data.datasets[0].label = '읍면동별 의료기관 현황';
+          hpChart.config.data.datasets[0].label = '의료기관 수(개소)';
           hpChart.config.data.datasets[0].data = eMarketshare;
           hpChart.update();
         };
@@ -1028,7 +1042,7 @@ function handleFeatureClick(d, i) {
           var x = mousemove.offsetX;
           var y = mousemove.offsetY;
 
-          if(hpChart.config.data.datasets[0].label !== '읍면동별 의료기관 현황'){
+          if(hpChart.config.data.datasets[0].label !== '의료기관 수(개소)'){
               if ( x > coordinates.left && x < coordinates.right && y > coordinates.top && y
                    < coordinates.bottom){
                     canvas.style.cursor = 'pointer';
