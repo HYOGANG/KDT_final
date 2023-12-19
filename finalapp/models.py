@@ -106,3 +106,9 @@ class Test(models.Model):
     pop = models.IntegerField()
     total = models.IntegerField()
     code = models.IntegerField()
+
+class Test2(models.Model):
+    name = models.TextField()
+    big = models.TextField()
+    small = models.TextField()
+    count = models.IntegerField()

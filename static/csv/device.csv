@@ -1,0 +1,14 @@
+,device,sejongsi,korea,percent,image_path
+0,엑스선촬영투시장치(X-ray),147,24773,0.59,/static/device/엑스선촬영투시장치.jpg
+1,치과용방사선촬영장치,147,23930,0.61,/static/device/치과용방사선촬영장치.jpg
+2,골밀도검사기,78,14401,0.54,/static/device/골밀도검사기.jpg
+3,이동형 투시장치(C-ARM),40,7771,0.51,/static/device/이동형투시장치.jpg
+4,유방촬영용장치,34,3811,0.89,/static/device/유방촬영용장치.jpg
+5,치과방사선파노라마장치,16,4370,0.37,/static/device/치과방사선파노라마장치.jpg
+6,전산화단층촬영장치(CT),13,2331,0.56,/static/device/전산화단층촬영장치.jpg
+7,자기공명영상진단기(MRI),6,2000,0.3,/static/device/자기공명영상진단기(MRI).jpg
+8,체외충격파쇄석기,6,992,0.6,/static/device/체외충격파쇄석기.jpg
+9,혈관조영촬영장치,3,819,0.37,/static/device/혈관조영촬영장치.jpg
+10,감마카메라,2,312,0.64,/static/device/감마카메라.jpg
+11,방사선 치료기,2,354,0.56,/static/device/방사선치료기.jpg
+12,양전자단층촬영장치(PET),1,173,0.58,/static/device/양전자단층촬영장치.jpg

@@ -1,8 +1,7 @@
+
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-
-
-
 
 
     <div id="chart_all" class="container-fluid row" style="margin-bottom:-0.7em; ">
@@ -16,77 +15,52 @@
 
         </nav>
         <div>  &emsp; </div>
-
         <section id="equi" class="col-md-3 mx-2 p-0" style="margin-top:0.5em;">
-
-            {% if v %}
-                <center style="margin:8px;">
-                    <h8 style="color:#808080;"><b>시설 및 장비현황</b></h8><br>
-                </center>
-                <table class="table table-hover " style="font-size: 11px;">
+           {% if v %}
+            <center style="margin:5px;">
+                <h8 style="color:#808080;"><b>시설 및 장비현황</b></h8><br>
+            </center>
+            <table class="table table-hover " style="font-size: 11px;">
                 <thead>
-                  <tr align="center">
-                    <th>구분</th>
-                    <th>세종시</th>
-                    <th>전국</th>
-                    <th>비율</th>
-                  </tr>
-                </thead>
-                <tbody class="clickable-rows">
-                  {% for i in v %}
-                    <tr onclick="showModal('{{ i.image_path }}')" class="clicktr">
-                      <td>{{ i.device }}</td>
-                      <td>{{ i.sejongsi }}</td>
-                      <td>{{ i.korea }}</td>
-                      <td>{{ i.percent }}</td>
+                    <tr>
+                        <th>구분</th>
+                        <th>세종시</th>
+                        <th>전국</th>
+                        <th>비율</th>
                     </tr>
-                  {% endfor %}
+                </thead>
+                <tbody>
+                    {% for i in v %}
+                        <tr>
+                            <td onclick="showModal('{{ i.image_path }}')">{{ i.device }}</td>
+                            <td>{{ i.sejongsi }}</td>
+                            <td>{{ i.korea }}</td>
+                            <td>{{ i.percent }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
-                </table>
-            {% else %}
-                <p>No data to display.</p>
-            {% endif %}
+            </table>
+        {% else %}
+            <p>No data to display.</p>
+        {% endif %}
 
             <div id="myModal" class="modal">
                 <span class="close">&times;</span>
-                <div class="modal_img">
-                 <img class="modal_img1" id="img01">
-                </div>
-                <div class="modal_content">
-                    <table class="table" style="font-size: 11px;">
-                <thead>
-                  <tr align="center">
-                    <th>의료시설 명</th>
-                    <th>상세 분류</th>
-                    <th>보유 수</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    {% for i in test2 %}
-                    {% if "골밀도" in i.big %}
-                    <tr>
-                      <td>{{ i.name }}</td>
-                      <td>{{ i.small }}</td>
-                      <td>{{ i.count }}</td>
-                    </tr>
-                    {% endif %}
-                  {% endfor %}
-                </tbody>
-                    </table>
-                </div>
+             <img class="modal-content" id="img01">
+            <div id="caption"></div>
             </div>
             <script>
                 var modal = document.getElementById("myModal");
 
             // 모달에 표시될 이미지를 가져옵니다
             var modalImg = document.getElementById("img01");
-
+            var captionText = document.getElementById("caption");
 
             // 이미지와 캡션 텍스트를 모달에 표시하는 함수
             function showModal(imagePath) {
                 modal.style.display = "block";
                 modalImg.src = imagePath;
-
+                captionText.innerHTML = imagePath.split('/').pop(); // 파일 이름을 캡션으로 사용
             }
 
             // 모달의 <span> 요소 (x 버튼)를 가져옵니다
@@ -99,10 +73,8 @@
             </script>
         </section>
 
-
-
         <aside id="pic" class="col-md-3 mx-3 p-0 mt-2 ">
-            <div class="my-2 ml-3dhk" id="map" style="width: 330px; height: 550px;">
+            <div class="my-2 ml-3dhk" id="map" style="width: 330px; height: 450px;">
                 <div class="legend" id="legend"></div>
             <div id="test" style="display: none">
                 {% for i in test %}
@@ -111,7 +83,7 @@
             </div>
                 <div class="tooltip1" id="tooltip1"></div>
             <script>
-                        // 데이터 가져오기
+                // 데이터 가져오기
             var test = document.getElementById('test').innerText.split(',').map(function (test) {
                 var testPair = test.split('|');
                 return { code: Number(testPair[0]), region: testPair[1], hos: testPair[2], pop: testPair[3], total : Number(testPair[3]/testPair[2]) };
@@ -121,7 +93,7 @@
             const graphTitle = d3.select('#map')
                 .append('div')
                 .attr('class', 'graph-title')
-                .text('읍면동별 인구 대비 의료시설 분포도');
+                .text('읍면동별 인구 대비 의료기관 분포도');
 
     // 가상의 행정구역 경계 GeoJSON 데이터, 실제로는 서버에서 파일을 로드해야 합니다.
     const geojsonUrl = '/static/sejong.geojson';
@@ -153,6 +125,15 @@
                 .append('div') // 수정된 부분: #pic 안에 div를 추가
                 .attr('id', 'legend'); // 수정된 부분: id를 legend로 설정
 
+            /*
+                const legendContainer = d3.select('#pic') // 수정된 부분: #pic을 선택하도록 변경
+                    .append('color-legend')
+                    .attr('titletext','기관당 담당 인구(명)')
+                    .attr('scaletype',"continuous")
+                    .attr('domain','[4589,164]')
+                    .attr('id', 'legend') // 수정된 부분: id를 legend로 설정
+                    .attr('background','linear-gradient(to right, #F4EEEE, RED)');
+            */
 
     // 최솟값과 최댓값 설정
     const minPopulationRatio = d3.min(test, item => item.total);
@@ -169,26 +150,7 @@
     // 툴팁 요소 추가
     const tooltip1 = d3.select('#tooltip1');
     let selectedFeature = null;
-var modal = document.getElementById("myModal");
 
-            // 모달에 표시될 이미지를 가져옵니다
-            var modalImg = document.getElementById("img01");
-            var captionText = document.getElementById("caption");
-
-            // 이미지와 캡션 텍스트를 모달에 표시하는 함수
-            function showModal(imagePath) {
-                modal.style.display = "block";
-                modalImg.src = imagePath;
-                captionText.innerHTML = imagePath.split('/').pop(); // 파일 이름을 캡션으로 사용
-            }
-
-            // 모달의 <span> 요소 (x 버튼)를 가져옵니다
-            var span = document.getElementsByClassName("close")[0];
-
-            // x 버튼을 클릭하면 모달을 닫습니다
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
 
     // 행정구역 경계를 그리기 위해 GeoJSON 데이터 로드
     d3.json(geojsonUrl).then(geojson => {
@@ -271,26 +233,26 @@ var modal = document.getElementById("myModal");
 
 
 
-            function handleFeatureClick(d, i) {
-                const t = test.find(item => item.code === Number(d.properties.adm_cd));
+function handleFeatureClick(d, i) {
+    const t = test.find(item => item.code === Number(d.properties.adm_cd));
 
-                // 클릭한 요소가 이미 선택된 경우에는 툴팁을 닫음
-                if (selectedFeature === d) {
-                    tooltip1.style('display', 'none');
-                    selectedFeature = null; // 선택 상태 해제
-                } else {
-                    // 클릭한 요소의 위치 가져오기
-                    const [x, y] = path.centroid(d);
+    // 클릭한 요소가 이미 선택된 경우에는 툴팁을 닫음
+    if (selectedFeature === d) {
+        tooltip1.style('display', 'none');
+        selectedFeature = null; // 선택 상태 해제
+    } else {
+        // 클릭한 요소의 위치 가져오기
+        const [x, y] = path.centroid(d);
 
-                    // 툴팁 내용 표시
-                    tooltip1.html(`<strong>구분:</strong> ${t.region}<br><strong>의료시설 수:</strong> ${t.hos}개소 <br><strong>인구 수:</strong> ${t.pop}명 <br><strong>기관 당 담당 인구 수:</strong> ${parseInt(t.pop / t.hos)}명 `)
-                        .style('left', (x + 10) + 'px')
-                        .style('top', (y - 10) + 'px')
-                        .style('display', 'block');
+        // 툴팁 내용 표시
+        tooltip1.html(`<strong>구분:</strong> ${t.region}<br><strong>의료기관 수:</strong> ${t.hos}개소 <br><strong>인구 수:</strong> ${t.pop}명 <br><strong>기관 당 담당 인구 수:</strong> ${parseInt(t.pop / t.hos)}명 `)
+            .style('left', (x + 10) + 'px')
+            .style('top', (y - 10) + 'px')
+            .style('display', 'block');
 
-                    selectedFeature = d; // 선택 상태 설정
-                }
-            }
+        selectedFeature = d; // 선택 상태 설정
+    }
+}
 
     });
 
@@ -933,7 +895,7 @@ var modal = document.getElementById("myModal");
         // setup
         var data = {
           datasets: [{
-            label: '의료시설 수(개소)',
+            label: '의료기관 수(개소)',
             data: browserData,
             backgroundColor: [
               browserData[0].color,
@@ -957,7 +919,7 @@ var modal = document.getElementById("myModal");
         var resethpButton = {
           id : 'resethpButton',
           beforeDraw(chart, args, options){
-            if(hpChart.config.data.datasets[0].label !== '의료시설 수(개소)'){
+            if(hpChart.config.data.datasets[0].label !== '의료기관 수(개소)'){
 
                 var { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
                 ctx.save();
@@ -1002,7 +964,7 @@ var modal = document.getElementById("myModal");
               },
               title:{
                 display: true,
-                text: '읍면동별 의료시설 현황',
+                text: '읍면동별 의료기관 현황',
                 color : '#808080',
                 font : {
                     size:16,
@@ -1014,7 +976,7 @@ var modal = document.getElementById("myModal");
               }
             },
             onHover: (event, chartElement) => {
-                if(hpChart.config.data.datasets[0].label === '의료시설 수(개소)')
+                if(hpChart.config.data.datasets[0].label === '의료기관 수(개소)')
                 {
                 event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
             } else {
@@ -1064,7 +1026,7 @@ var modal = document.getElementById("myModal");
         }
 
         function click1Handler(click){
-            if (hpChart.config.data.datasets[0].label === '의료시설 수(개소)'){
+            if (hpChart.config.data.datasets[0].label === '의료기관 수(개소)'){
 
             var bar = hpChart.getElementsAtEventForMode(click, 'nearest',
                 {intersect: true}, true);
@@ -1093,7 +1055,7 @@ var modal = document.getElementById("myModal");
           hpChart.config.data.datasets[0].backgroundColor = eColor;
           hpChart.config.data.datasets[0].borderColor = eColor;
           hpChart.config.data.labels = eLabels;
-          hpChart.config.data.datasets[0].label = '의료시설 수(개소)';
+          hpChart.config.data.datasets[0].label = '의료기관 수(개소)';
           hpChart.config.data.datasets[0].data = eMarketshare;
           hpChart.update();
         };
@@ -1103,7 +1065,7 @@ var modal = document.getElementById("myModal");
           var x = mousemove.offsetX;
           var y = mousemove.offsetY;
 
-          if(hpChart.config.data.datasets[0].label !== '의료시설 수(개소)'){
+          if(hpChart.config.data.datasets[0].label !== '의료기관 수(개소)'){
               if ( x > coordinates.left && x < coordinates.right && y > coordinates.top && y
                    < coordinates.bottom){
                     canvas.style.cursor = 'pointer';

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong, NumTre,ToCost, Regionpop, Doctor,  Inpatrank, Outpatrank, Test
+from .models import Hospital, Medicine, Population, Medicalinfo, Counts, Sejong, NumTre,ToCost, Regionpop, Doctor,  Inpatrank, Outpatrank, Test, Test2
 from django.db.models import F,Sum
 import pandas as pd
 import json
@@ -111,9 +111,10 @@ def second_view(request):
 
     doctor = Doctor.objects.all()
     test = Test.objects.all()
+    test2 = Test2.objects.all()
 
     try:
-        df3 = pd.read_csv("static/csv/devices.csv")
+        df3 = pd.read_csv("static/csv/device.csv")
         json_records = df3.reset_index().to_json(orient='records')
         v = json.loads(json_records)
     except Exception as e:
@@ -143,6 +144,7 @@ def second_view(request):
         'doctorb': doctorb,
         'doctorc': doctorc,
         'test':test,
+        'test2': test2,
     }
     return render(request, 'second.html', context)
 
