@@ -308,42 +308,51 @@
 
 
             function handleFeatureClick(d, i) {
-    const t = test.find(item => item.code === Number(d.properties.adm_cd));
+                const t = test.find(item => item.code === Number(d.properties.adm_cd));
 
-    // 클릭한 요소가 이미 선택된 경우에는 툴팁을 닫음
-    if (selectedFeature === d) {
-        closeTooltip(); // 닫기 함수 호출
-    } else {
-        // 클릭한 요소의 위치 가져오기
-        const [x, y] = path.centroid(d);
+                // 클릭한 요소가 이미 선택된 경우에는 툴팁을 닫음
+                if (selectedFeature === d) {
+                    closeTooltip(); // 닫기 함수 호출
+                } else {
+                    // 클릭한 요소의 위치 가져오기
+                    const [x, y] = path.centroid(d);
 
-        // 툴팁 내용 표시
-        const tooltipContent = `<strong>구분:</strong> ${t.region}<br><strong>의료시설 수:</strong> ${t.hos}개소 <br><strong>인구 수:</strong> ${t.pop}명 <br><strong>기관 당 담당 인구 수:</strong> ${parseInt(t.pop / t.hos)}명 `;
+                    // 툴팁 내용 표시
+                    const tooltipContent = `<strong>구분:</strong> ${t.region}<br><strong>의료시설 수:</strong> ${t.hos}개소 <br><strong>인구 수:</strong> ${t.pop}명 <br><strong>기관 당 담당 인구 수:</strong> ${parseInt(t.pop / t.hos)}명 `;
 
-        // 닫기 버튼을 추가한 툴팁 내용 표시
-        tooltip1.html(`${tooltipContent}<span class="close-tooltip" style="cursor:pointer">[닫기]</span>`)
-            .style('left', (x + 10) + 'px')
-            .style('top', (y - 10) + 'px')
-            .style('display', 'block');
+                    // 닫기 버튼을 추가한 툴팁 내용 표시
+                    tooltip1.html(`${tooltipContent}<span class="close-tooltip" style="cursor:pointer; font-size:20px;">&times;</span>`)
+                        .style('left', (x + 10) + 'px')
+                        .style('top', (y - 10) + 'px')
+                        .style('display', 'block');
 
-        selectedFeature = d; // 선택 상태 설정
+                    selectedFeature = d; // 선택 상태 설정
 
-        // 닫기 버튼에 클릭 이벤트 리스너 추가
-        tooltip1.select('.close-tooltip')
-            .style('position', 'absolute')
-            .style('top', '0')
-            .style('right', '0')
-            .on('click', closeTooltip);
-    }
-}
+                    // 닫기 버튼에 클릭 이벤트 리스너 추가
+                    tooltip1.select('.close-tooltip')
+                        .style('position', 'absolute')
+                        .style('top', '0')
+                        .style('right', '5px')
+                        .on('click', closeTooltip);
+                }
+            }
 
-// 닫기 버튼을 눌렀을 때 툴팁을 닫는 함수
-function closeTooltip() {
-    tooltip1.style('display', 'none');
-    selectedFeature = null; // 선택 상태 해제
-}
+                    // 닫기 버튼을 눌렀을 때 툴팁을 닫는 함수
+                    function closeTooltip() {
+                        tooltip1.style('display', 'none');
+                        selectedFeature = null; // 선택 상태 해제
+                    }
+            // 문서 전체에 대한 클릭 이벤트 리스너 추가
+            document.addEventListener('click', function (event) {
+                // 클릭된 요소가 툴팁 내부에 있는지 확인
+                const isClick = svg.node().contains(event.target);
 
-    });
+                // 클릭된 요소가 툴팁 내부에 없는 경우 툴팁 닫기
+                if (!isClick) {
+                    closeTooltip();
+                }
+            });
+             });
 
     </script>
             </div>
