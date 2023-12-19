@@ -145,17 +145,24 @@
 
         /* 모달 내부 이미지 */
         .modal_img1 {
-
+            height: 70%;
             position: absolute;
             margin: auto;
             overflow: hidden;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -60%);
             max-width: 100%; /* 이미지가 컨테이너의 너비를 초과하지 않도록 설정합니다 */
             max-height: 100%; /* 이미지가 컨테이너의 높이를 초과하지 않도록 설정합니다 */
             display: block;
 
+        }
+
+        #caption {
+            text-align: center;
+            position: absolute;
+            width: 100%;
+            bottom: 10%;
         }
 
         .modal_content {

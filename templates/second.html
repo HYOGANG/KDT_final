@@ -34,7 +34,7 @@
                 </thead>
                 <tbody class="clickable-rows">
                   {% for i in v %}
-                    <tr onclick="showModal('{{ i.image_path }}')" class="clicktr">
+                    <tr onclick="showModal('{{ i.image_path }}', '{{i.id}}')" class="clicktr">
                       <td>{{ i.device }}</td>
                       <td>{{ i.sejongsi }}</td>
                       <td>{{ i.korea }}</td>
@@ -46,12 +46,19 @@
             {% else %}
                 <p>No data to display.</p>
             {% endif %}
-
+            <div id="test2" style="display: none">
+                        {% for i in test2 %}
+                                {{ i.name }}|{{ i.big }}|{{ i.small }}|{{ i.count }}{% if not forloop.last %}||{% endif %}
+                        {% endfor %}
+            </div>
             <div id="myModal" class="modal">
                 <span class="close">&times;</span>
                 <div class="modal_img">
                  <img class="modal_img1" id="img01">
+                <div id="caption"></div>
                 </div>
+                <div id="word" style="display: none;"></div>
+
                 <div class="modal_content">
                     <table class="table" style="font-size: 11px;">
                 <thead>
@@ -61,32 +68,49 @@
                     <th>보유 수</th>
                   </tr>
                 </thead>
-                <tbody>
-                    {% for i in test2 %}
-                    {% if "골밀도" in i.big %}
-                    <tr>
-                      <td>{{ i.name }}</td>
-                      <td>{{ i.small }}</td>
-                      <td>{{ i.count }}</td>
-                    </tr>
-                    {% endif %}
-                  {% endfor %}
+                <tbody id="modalContentBody">
+
                 </tbody>
+
+
                     </table>
                 </div>
+
             </div>
             <script>
+
+                var test2= document.getElementById('test2').innerHTML.split('||');
+
+                var test2Array = test2.map(function(test22){
+                    var test2Pair = test22.split('|');
+                    var names = test2Pair[0];
+                    var bigs = test2Pair[1];
+                    var smalls = test2Pair[2];
+                    var counts = test2Pair[3];
+
+
+                    return [names, bigs, smalls, counts];
+                });
+
                 var modal = document.getElementById("myModal");
+                var searchKeyword = '';
 
             // 모달에 표시될 이미지를 가져옵니다
             var modalImg = document.getElementById("img01");
-
+            var captionText = document.getElementById("caption");
 
             // 이미지와 캡션 텍스트를 모달에 표시하는 함수
-            function showModal(imagePath) {
+            function showModal(imagePath, id) {
+
                 modal.style.display = "block";
                 modalImg.src = imagePath;
+                captionText.innerHTML = imagePath.split('/').pop().split('.').slice(0, -1); // 파일 이름을 캡션으로 사용
 
+                var listS =['일반엑스선','치과용','골밀도', 'C-A', '유방촬', '치과방','전산화단층','자기공명','체외충격','혈관','감마', '방사선 ', '양전자'];
+                // 여기서 id를 사용하여 검색어를 설정합니다.
+                searchKeyword = listS[id];
+
+                createDynamicTable();
             }
 
             // 모달의 <span> 요소 (x 버튼)를 가져옵니다
@@ -96,6 +120,38 @@
             span.onclick = function() {
                 modal.style.display = "none";
             }
+
+            // 동적으로 테이블 내용을 생성하는 함수
+    function createDynamicTable() {
+        // 테이블의 tbody 요소 가져오기
+        var tbody = document.getElementById("modalContentBody");
+
+        // tbody 초기화
+        tbody.innerHTML = '';
+
+
+        for (var i = 0; i < test2Array.length; i++) {
+            if (  test2Array[i][1].includes(searchKeyword) ) {
+                var row = tbody.insertRow();
+
+                // 행에 셀 추가
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+
+                // 각 셀에 데이터 추가
+                cell1.innerHTML = test2Array[i][0]; // test2Array[0]
+                cell2.innerHTML = test2Array[i][2]; // test2Array[2]
+                cell3.innerHTML = test2Array[i][3]; // test2Array[3]
+
+                cell1.classList.add("text-center");
+                cell2.classList.add("text-center");
+                cell3.classList.add("text-center");
+            }
+        }
+
+    }
+
             </script>
         </section>
 
@@ -169,26 +225,6 @@
     // 툴팁 요소 추가
     const tooltip1 = d3.select('#tooltip1');
     let selectedFeature = null;
-var modal = document.getElementById("myModal");
-
-            // 모달에 표시될 이미지를 가져옵니다
-            var modalImg = document.getElementById("img01");
-            var captionText = document.getElementById("caption");
-
-            // 이미지와 캡션 텍스트를 모달에 표시하는 함수
-            function showModal(imagePath) {
-                modal.style.display = "block";
-                modalImg.src = imagePath;
-                captionText.innerHTML = imagePath.split('/').pop(); // 파일 이름을 캡션으로 사용
-            }
-
-            // 모달의 <span> 요소 (x 버튼)를 가져옵니다
-            var span = document.getElementsByClassName("close")[0];
-
-            // x 버튼을 클릭하면 모달을 닫습니다
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
 
     // 행정구역 경계를 그리기 위해 GeoJSON 데이터 로드
     d3.json(geojsonUrl).then(geojson => {
@@ -234,7 +270,7 @@ var modal = document.getElementById("myModal");
                         legendContainer.append('div')
                             .attr('class', 'legend-title')
                             .attr('style', 'font-size:13px; white-space: nowrap; text-align:center; margin-bottom: 5px') // white-space 속성을 사용하여 텍스트가 길어져도 한 줄에 표시되도록 설정
-                            .text('기관당 담당 인구(명)');
+                            .text('시설당 담당 인구(명)');
 
                         // 범례 내용 추가
                         const legend = legendContainer.append('div')
@@ -272,25 +308,40 @@ var modal = document.getElementById("myModal");
 
 
             function handleFeatureClick(d, i) {
-                const t = test.find(item => item.code === Number(d.properties.adm_cd));
+    const t = test.find(item => item.code === Number(d.properties.adm_cd));
 
-                // 클릭한 요소가 이미 선택된 경우에는 툴팁을 닫음
-                if (selectedFeature === d) {
-                    tooltip1.style('display', 'none');
-                    selectedFeature = null; // 선택 상태 해제
-                } else {
-                    // 클릭한 요소의 위치 가져오기
-                    const [x, y] = path.centroid(d);
+    // 클릭한 요소가 이미 선택된 경우에는 툴팁을 닫음
+    if (selectedFeature === d) {
+        closeTooltip(); // 닫기 함수 호출
+    } else {
+        // 클릭한 요소의 위치 가져오기
+        const [x, y] = path.centroid(d);
 
-                    // 툴팁 내용 표시
-                    tooltip1.html(`<strong>구분:</strong> ${t.region}<br><strong>의료시설 수:</strong> ${t.hos}개소 <br><strong>인구 수:</strong> ${t.pop}명 <br><strong>기관 당 담당 인구 수:</strong> ${parseInt(t.pop / t.hos)}명 `)
-                        .style('left', (x + 10) + 'px')
-                        .style('top', (y - 10) + 'px')
-                        .style('display', 'block');
+        // 툴팁 내용 표시
+        const tooltipContent = `<strong>구분:</strong> ${t.region}<br><strong>의료시설 수:</strong> ${t.hos}개소 <br><strong>인구 수:</strong> ${t.pop}명 <br><strong>기관 당 담당 인구 수:</strong> ${parseInt(t.pop / t.hos)}명 `;
 
-                    selectedFeature = d; // 선택 상태 설정
-                }
-            }
+        // 닫기 버튼을 추가한 툴팁 내용 표시
+        tooltip1.html(`${tooltipContent}<span class="close-tooltip" style="cursor:pointer">[닫기]</span>`)
+            .style('left', (x + 10) + 'px')
+            .style('top', (y - 10) + 'px')
+            .style('display', 'block');
+
+        selectedFeature = d; // 선택 상태 설정
+
+        // 닫기 버튼에 클릭 이벤트 리스너 추가
+        tooltip1.select('.close-tooltip')
+            .style('position', 'absolute')
+            .style('top', '0')
+            .style('right', '0')
+            .on('click', closeTooltip);
+    }
+}
+
+// 닫기 버튼을 눌렀을 때 툴팁을 닫는 함수
+function closeTooltip() {
+    tooltip1.style('display', 'none');
+    selectedFeature = null; // 선택 상태 해제
+}
 
     });
 

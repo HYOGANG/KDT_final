@@ -1,4 +1,4 @@
-,device,sejongsi,korea,percent,image_path
+id,device,sejongsi,korea,percent,image_path
 0,엑스선촬영투시장치(X-ray),147,24773,0.59,/static/device/엑스선촬영투시장치.jpg
 1,치과용방사선촬영장치,147,23930,0.61,/static/device/치과용방사선촬영장치.jpg
 2,골밀도검사기,78,14401,0.54,/static/device/골밀도검사기.jpg
