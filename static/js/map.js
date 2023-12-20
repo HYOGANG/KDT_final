@@ -80,7 +80,7 @@ for (let i = 0; i < Category.length; i++) {
 
                             (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4],allArray[j][3] );
+                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4], allArray[j][3] );
                                 });
                             })(marker, coords);
 
@@ -108,7 +108,7 @@ for (let i = 0; i < Category2.length; i++) {
 
                            (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4],allArray[j][3]);
+                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4], allArray[j][3]);
                                 });
                             })(marker, coords);
 
@@ -182,11 +182,11 @@ function displayKewordPlaces(keyword) {
         // 마커와 검색결과 항목에 mouseover 했을때
         // 해당 장소에 인포윈도우에 장소명을 표시합니다
         // mouseout 했을 때는 인포윈도우를 닫습니다
-        (function(name, coords, address, phone) {
+        (function(name, coords, address, phone, dep) {
 
-            /*marker.onmouseover =  function () {
+            marker.onmouseover =  function () {
                 displayName(name);
-            };*/
+            };
 
             kakao.maps.event.addListener(marker, 'click', function() {
                 displayPlaceInfo(name, coords, address, phone, dep);
@@ -200,7 +200,7 @@ function displayKewordPlaces(keyword) {
 
 
 
-        })(allArray[p][0],placePosition, allArray[p][1], allArray[p][4]);
+        })(allArray[p][0],placePosition, allArray[p][1], allArray[p][4], allArray[p][3]);
 
         fragment.appendChild(itemEl);
     }
@@ -277,14 +277,14 @@ var clusterer = new kakao.maps.MarkerClusterer({
 
     placeOverlay.setContent(contentNode);
 
-    /*function displayName (name) {
+    function displayName (name) {
     var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';
     contentNode.innerHTML = content;
 
     placeOverlay.setPosition(coords);
     placeOverlay.setContent(content);
     placeOverlay.setMap(map);
-    }*/
+    }
 
     function displayPlaceInfo (name, coords, address, phone, dep) {
     var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';
