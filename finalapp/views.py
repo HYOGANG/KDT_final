@@ -149,7 +149,8 @@ def second_view(request):
     return render(request, 'second.html', context)
 
 
-
+def review(request):
+    return render(request, 'review.html')
 
 
 

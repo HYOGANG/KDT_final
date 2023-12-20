@@ -5,7 +5,7 @@ var allArray = all.map(function(alls){
     var names = allPair[0];
     var addresses = allPair[1];
     var types = allPair[2];
-    var deps = allPair[3];
+    var deps = allPair[3].slice(0,-1);
     var phones = allPair[4];
     var latlong = allPair[5].split(',');
     var lat = parseFloat(latlong[1]);
@@ -80,7 +80,7 @@ for (let i = 0; i < Category.length; i++) {
 
                             (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4]);
+                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4],allArray[j][3] );
                                 });
                             })(marker, coords);
 
@@ -108,7 +108,7 @@ for (let i = 0; i < Category2.length; i++) {
 
                            (function (marker, coords) {
                                 kakao.maps.event.addListener(marker, 'click', function () {
-                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4]);
+                                    displayPlaceInfo(allArray[j][0], coords, allArray[j][1], allArray[j][4],allArray[j][3]);
                                 });
                             })(marker, coords);
 
@@ -184,16 +184,16 @@ function displayKewordPlaces(keyword) {
         // mouseout 했을 때는 인포윈도우를 닫습니다
         (function(name, coords, address, phone) {
 
-            marker.onmouseover =  function () {
+            /*marker.onmouseover =  function () {
                 displayName(name);
-            };
+            };*/
 
             kakao.maps.event.addListener(marker, 'click', function() {
-                displayPlaceInfo(name, coords, address, phone);
+                displayPlaceInfo(name, coords, address, phone, dep);
             });
 
             itemEl.onmouseover =  function () {
-                displayPlaceInfo(name, coords, address, phone);
+                displayPlaceInfo(name, coords, address, phone, dep);
             };
 
 
@@ -277,25 +277,26 @@ var clusterer = new kakao.maps.MarkerClusterer({
 
     placeOverlay.setContent(contentNode);
 
-    function displayName (name) {
+    /*function displayName (name) {
     var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';
     contentNode.innerHTML = content;
 
     placeOverlay.setPosition(coords);
     placeOverlay.setContent(content);
     placeOverlay.setMap(map);
-    }
+    }*/
 
-    function displayPlaceInfo (name, coords, address, phone) {
+    function displayPlaceInfo (name, coords, address, phone, dep) {
     var content = '<div class="placeinfo"><span class="title">'+ name +'</span></a><hr>';
 
     content += '    <span>' + address + '</span>';
-
-      if (phone) {
-        content += '<span class="tel"><span style="color:black; display:inline-block;">TEL : </span><span style="display:inline-block">' + phone + '</span></span></div>';
+    if (dep != 0) {
+        content += '<span class="dep">진료과(전문의 有): ' + dep + '</span>';
     }  else {
-        content += '<span class="tel">TEL: ' + phone + '</span></div>';
+        content += '';
     }
+    content += '<span class="tel"><span style="color:black; display:inline-block;">TEL : </span><span style="display:inline-block">' + phone + '</span></span></div>';
+
 
     contentNode.innerHTML = content;
 
